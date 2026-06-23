@@ -1,0 +1,5 @@
+/* Keep this override separate so a stale theme stylesheet cannot restore bg.svg. */
+.first-screen-container,
+.dark-mode .first-screen-container {
+  background-image: url("/images/first-screen.png");
+}
