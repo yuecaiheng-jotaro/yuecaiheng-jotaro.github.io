@@ -1,1 +1,61 @@
-{"version":1,"generatedAt":null,"annotations":[]}
+{
+  "version": 1,
+  "generatedAt": "2026-07-29T05:54:36.038Z",
+  "annotations": [
+    {
+      "id": "gh-1",
+      "number": 1,
+      "path": "/2026/07/29/ai-agent-intent-recognition-notes/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/1",
+      "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
+      "text": "一个",
+      "comment": "test",
+      "createdAt": "2026-07-29T05:37:29Z",
+      "updatedAt": "2026-07-29T05:37:29Z"
+    },
+    {
+      "id": "gh-2",
+      "number": 2,
+      "path": "/2026/07/29/ai-agent-intent-recognition-notes/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/2",
+      "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
+      "text": "一个分",
+      "comment": "这是啥",
+      "createdAt": "2026-07-29T05:42:50Z",
+      "updatedAt": "2026-07-29T05:42:50Z"
+    },
+    {
+      "id": "gh-3",
+      "number": 3,
+      "path": "/2026/07/29/ai-agent-intent-recognition-notes/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/3",
+      "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
+      "text": "输入贴一个分",
+      "comment": "这啥",
+      "createdAt": "2026-07-29T05:43:51Z",
+      "updatedAt": "2026-07-29T05:43:51Z"
+    },
+    {
+      "id": "gh-4",
+      "number": 4,
+      "path": "/2026/07/29/ai-agent-intent-recognition-notes/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/4",
+      "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
+      "text": "案套路、",
+      "comment": "这啥",
+      "createdAt": "2026-07-29T05:44:45Z",
+      "updatedAt": "2026-07-29T05:44:45Z"
+    },
+    {
+      "id": "gh-5",
+      "number": 5,
+      "path": "/2026/07/29/ai-agent-intent-recognition-notes/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/5",
+      "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
+      "text": "个分类标",
+      "comment": "这是",
+      "createdAt": "2026-07-29T05:47:35Z",
+      "updatedAt": "2026-07-29T05:47:35Z"
+    }
+  ]
+}
