@@ -1,0 +1,89 @@
+name: Sync selection comments
+
+on:
+  issues:
+    types: [opened, edited, reopened, closed, deleted]
+  issue_comment:
+    types: [created, edited, deleted]
+  push:
+    branches: [master]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 */6 * * *"
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: sync-selection-comments
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build selection-comments.json
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const marker = '<!-- jotaro-selection-comment -->';
+            const annotations = [];
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100
+            });
+
+            for (const issue of issues) {
+              if (issue.pull_request || !issue.body || !issue.body.includes(marker)) continue;
+              const match = issue.body.match(/```json\s*([\s\S]*?)\s*```/);
+              if (!match) continue;
+
+              try {
+                const payload = JSON.parse(match[1]);
+                if (!payload.path || !payload.text || !payload.comment) continue;
+
+                annotations.push({
+                  id: `gh-${issue.number}`,
+                  number: issue.number,
+                  path: String(payload.path),
+                  url: issue.html_url,
+                  title: String(payload.title || issue.title || ''),
+                  text: String(payload.text).slice(0, 240),
+                  comment: String(payload.comment),
+                  createdAt: issue.created_at,
+                  updatedAt: issue.updated_at
+                });
+              } catch (error) {
+                core.warning(`Failed to parse issue #${issue.number}: ${error.message}`);
+              }
+            }
+
+            annotations.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            fs.writeFileSync('selection-comments.json', `${JSON.stringify({
+              version: 1,
+              generatedAt: new Date().toISOString(),
+              annotations
+            }, null, 2)}\n`);
+
+      - name: Commit selection comments
+        run: |
+          if git diff --quiet -- selection-comments.json; then
+            echo "selection-comments.json is already up to date"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add selection-comments.json
+          git commit -m "Update selection comments"
+          git push
