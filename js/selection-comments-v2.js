@@ -245,6 +245,7 @@
 
   function parseStaticAnnotation(item) {
     if (!item || item.path !== pagePath()) return null;
+    if (item.state === 'closed' && item.stateReason === 'not_planned') return null;
     if (!item.text || !item.comment) return null;
 
     return {
@@ -271,8 +272,7 @@
   }
 
   function fetchStaticAnnotations() {
-    const url = githubConfig.staticDataUrl + '?v=' + Date.now();
-    return fetch(url, { headers: { Accept: 'application/json' }, cache: 'no-store' })
+    return fetch(githubConfig.staticDataUrl, { headers: { Accept: 'application/json' } })
       .then(function (response) {
         if (!response.ok) throw new Error('静态批注文件不存在，状态码：' + response.status);
         return response.json();
@@ -281,6 +281,14 @@
         const items = Array.isArray(data) ? data : (data.annotations || []);
         applyRemoteAnnotations(items.map(parseStaticAnnotation).filter(Boolean));
       });
+  }
+
+  function scheduleRemoteAnnotations() {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(loadRemoteAnnotations, { timeout: 1800 });
+      return;
+    }
+    window.setTimeout(loadRemoteAnnotations, 600);
   }
 
   function fetchGitHubAnnotations() {
@@ -452,7 +460,7 @@
     renderMarks();
     renderPanel();
     bindEvents();
-    loadRemoteAnnotations();
+    scheduleRemoteAnnotations();
   }
 
   if (document.querySelector(articleSelector)) {
