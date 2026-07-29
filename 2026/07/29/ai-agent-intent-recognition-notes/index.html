@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="JotaroRD">
+    
+    <title>
+        
+            AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 |
+        
+        Jotaro Space
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/site-avatar.png">
+    
+    
+<link rel="stylesheet" href="/font/css/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/regular.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/solid.min.css">
+
+    
+<link rel="stylesheet" href="/font/css/brands.min.css">
+
+    
+        
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/first-screen-jotaro.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"yuecaiheng-jotaro.github.io","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Jotaro Space","author":"JotaroRD","avatar":"/images/site-avatar.png","logo":"/images/site-avatar.png","favicon":"/images/site-avatar.png"},"menu":{"home":"/","archives":"/archives","categories":"/categories","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/first-screen.png","background_img_dark":"/images/first-screen.png","description":"Talk is Cheap","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":false,"post_datetime":"updated"},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":false,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":false,"preload":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":false,"provider":"cdnjs"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":false,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":true,"css":[null,"/css/first-screen-jotaro.css"],"js":[null]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/site-avatar.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Jotaro Space
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                CATEGORIES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                            CATEGORIES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        AI Agent 系统设计面试现场：意图识别 4 讲学习笔记
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/site-avatar.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">JotaroRD</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-07-29 13:30:00</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Wed Jul 29 2026 13:20:46 GMT+0800">2026-07-29 13:20:46</span>
+                </span>
+            
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/AI/">AI</a></li>
+                        
+                    
+                            <li class="category-item">&nbsp;<i class="icon fas fa-angle-right"></i>&nbsp;<a href="/categories/AI/Agent/">Agent</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/AI-Agent/">AI Agent</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/">意图识别</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E9%9D%A2%E8%AF%95/">面试</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>这篇是极客时间《AI Agent 系统设计面试现场》中“第一章：意图识别”4 讲的学习笔记。它不是逐字稿，而是按照我自己的理解，把课程里的工程问题、方案套路、面试表达和可落地清单重新组织了一遍。</p>
+<p>原课程地址：<a class="link"   target="_blank" rel="noopener" href="https://time.geekbang.org/column/intro/101171101?tab=catalog" >AI Agent 系统设计面试现场<i class="fas fa-external-link-alt"></i></a></p>
+<h2 id="总览：意图识别到底在-Agent-里解决什么"><a href="#总览：意图识别到底在-Agent-里解决什么" class="headerlink" title="总览：意图识别到底在 Agent 里解决什么"></a>总览：意图识别到底在 Agent 里解决什么</h2><p>意图识别不是给用户输入贴一个分类标签，而是在决定 Agent 后续应该怎么工作：加载哪套 Prompt 或 Spec、组织哪些上下文、调用哪些工具、进入哪个业务流程，以及是否需要拒识或澄清。</p>
+<p>如果把 Agent 看成一个“会做事的系统”，意图识别就是需求分析入口。用户说话天然是松散的，可能省略主语、临时改口、使用指代词、使用业务黑话，也可能一句话里包含多个目标。一个成熟 Agent 不能指望用户按接口文档说话，而要先把自然语言里的目标、参数和约束整理出来。</p>
+<p><img   src="/images/agent-intent-notes/intent-pipeline.svg"  alt="Agent 意图识别流水线"></p>
+<p>我把这 4 讲串成一条主线：</p>
+<ol>
+<li>第 1 讲先处理“用户到底说了什么”，也就是输入规范化。</li>
+<li>第 2 讲回答“用户想干什么”，建立意图识别、Slot Filling、拒识、澄清和评估。</li>
+<li>第 3 讲解决“为什么识别不准”，给出层次意图、检索、动态 few-shot、正交化、多意图、向量兜底等高级策略。</li>
+<li>第 4 讲把这些能力包装成面试竞争力：简历怎么写、项目怎么讲、v0&#x2F;v1&#x2F;v2 怎么组织。</li>
+</ol>
+<h2 id="01：用户输入规范化"><a href="#01：用户输入规范化" class="headerlink" title="01：用户输入规范化"></a>01：用户输入规范化</h2><p>第一讲的核心观点是：在识别意图前，系统往往得先理解用户输入。用户输入规范化也可以叫输入归一化、输入理解，本质是把“随口说的话”转成后续模块能稳定消费的表达。</p>
+<h3 id="常见输入问题"><a href="#常见输入问题" class="headerlink" title="常见输入问题"></a>常见输入问题</h3><p>课程里把用户输入问题分成几类，我理解成 6 个桶：</p>
+<ul>
+<li>指代问题：用户用“这个”“那个”“第二个”“刚才那个”等词代替具体对象。</li>
+<li>缺失问题：句子里缺主语、宾语、动作对象或关键约束。</li>
+<li>表达问题：口语化、病句、倒装、跳跃、临时改口。</li>
+<li>词义问题：同义词、缩写、内部代号、行业黑话、多义词。</li>
+<li>主观判断问题：例如“最划算”“高级一点”“适合生产”，标准不天然明确。</li>
+<li>外部事实问题：例如“最近更火”“现在最便宜”，需要实时数据或工具结果才能确定。</li>
+</ul>
+<p>这里最值得警惕的是：有些问题看起来像模型推理不强，其实是系统没有把上下文召回、关键事实管理、指代消解这些基本活儿做好。比如用户上一轮聊某家公司，下一轮问“市场占有率如何”，系统如果只回答整个市场，而不结合上一轮公司主体，就说明输入规范化和上下文管理都出了问题。</p>
+<h3 id="规范化的时机"><a href="#规范化的时机" class="headerlink" title="规范化的时机"></a>规范化的时机</h3><p>输入规范化不是只能放在一个固定位置。课程给出的三个时机很实用：</p>
+<ul>
+<li>意图识别之前：适合通用 Agent、C 端 Agent。先把用户输入整理干净，再进入意图识别，工程边界最清楚。</li>
+<li>和意图识别一起：适合用户输入比较规范、场景比较收敛的专属 Agent。</li>
+<li>执行过程中处理：适合依赖工具结果或深层上下文的问题，比如“最有性价比”这类评价，往往只有检索商品、价格、质量等信息后才能量化。</li>
+</ul>
+<p>我的理解是，实际系统里常常是“两段式”：前置阶段先处理明显的指代、省略、黑话和病句；执行阶段再处理依赖检索、计算、实时数据和业务规则的深层规范化。</p>
+<h3 id="Prompt-职责边界"><a href="#Prompt-职责边界" class="headerlink" title="Prompt 职责边界"></a>Prompt 职责边界</h3><p>输入规范化的 Prompt 最容易犯的错，是让模型“顺手把后面的事也做了”。所以它必须有清晰职责边界。</p>
+<p>它应该做：</p>
+<ul>
+<li>指代消解。</li>
+<li>省略句补全。</li>
+<li>病句修正。</li>
+<li>术语标准化。</li>
+<li>黑话解释。</li>
+<li>多义词消歧。</li>
+<li>判断是否需要澄清。</li>
+<li>判断是否需要搜索或工具补充事实。</li>
+</ul>
+<p>它不应该做：</p>
+<ul>
+<li>直接回答用户问题。</li>
+<li>直接执行工具。</li>
+<li>做最终推荐或完整方案。</li>
+<li>擅自判断业务意图。</li>
+<li>强行补充低置信事实。</li>
+<li>伪造实时信息。</li>
+</ul>
+<p>一个比较稳的输出 Schema 可以这样设计：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;normalized_query&quot;</span><span class="punctuation">:</span> <span class="string">&quot;用户希望在上一轮 TCC 方案基础上增强项目面试表达&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;resolved_references&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span><span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;刚才那个方案&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;target&quot;</span><span class="punctuation">:</span> <span class="string">&quot;TCC 方案&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;confidence&quot;</span><span class="punctuation">:</span> <span class="number">0.92</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;standardized_terms&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span><span class="attr">&quot;text&quot;</span><span class="punctuation">:</span> <span class="string">&quot;太 CRUD&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;meaning&quot;</span><span class="punctuation">:</span> <span class="string">&quot;项目技术含量看起来偏低&quot;</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;missing_information&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;need_clarification&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;need_search&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这份输出最好成为本轮对话的“关键事实”，贯穿后续意图识别、Plan、工具调用和回答生成。</p>
+<h3 id="进阶方案"><a href="#进阶方案" class="headerlink" title="进阶方案"></a>进阶方案</h3><p>第一讲最有价值的部分，是把输入规范化和上下文深度绑定起来。</p>
+<p>第一个方案是结合用户画像和关键事实。用户长期讨论某个语境时，同一个词应该优先按这个语境解释。比如同一个缩写在 IT、医疗、金融里含义不同，系统不能脱离行业和用户历史强行解释。</p>
+<p>第二个方案是“属性 + 检索”。当用户说“你上次推荐的看樱花那个地方”时，系统不只是找“那个”，还要根据“看樱花”“旅游”“上次推荐”这些属性去历史对话里召回候选，再让模型推断目标对象。</p>
+<p>第三个方案是行业画像和词汇表。把黑话、缩写、项目代号沉淀到词汇表里，并区分公共词汇表和用户个人词汇表。词汇表可以来自人工整理，也可以来自离线分析：当某个词被多人、多次、连续讨论时，标记为候选词，再进入审核或自动沉淀。</p>
+<p>第四个方案是量化主观词。比如“性价比”不能粗暴等同于“便宜”。在电商里，它可能是同价位质量更好，也可能是同质量价格更低，还可能和品牌、售后、配置、活动相关。凡是不能量化的形容词，都会让 Agent 输出漂移。</p>
+<h2 id="02：三层意图识别机制"><a href="#02：三层意图识别机制" class="headerlink" title="02：三层意图识别机制"></a>02：三层意图识别机制</h2><p>第二讲回答的是基础工程问题：什么是意图识别，为什么要独立做，Prompt 怎么写，识别不出来怎么办，如何结合 Slot Filling，以及怎么评估效果。</p>
+<h3 id="意图识别不是一个-intent-字段"><a href="#意图识别不是一个-intent-字段" class="headerlink" title="意图识别不是一个 intent 字段"></a>意图识别不是一个 intent 字段</h3><p>最简化的意图识别，是从候选枚举里选出一个 intent。但真实系统通常需要两部分输出：</p>
+<ul>
+<li>intent classification：用户要进入哪个业务流程。</li>
+<li>Slot Filling：这个流程需要哪些关键参数。</li>
+</ul>
+<p>例如“帮我推荐一台适合写代码的轻薄本”，不只是识别为商品推荐，还要抽取类目、用途、偏好、预算缺失等信息。否则后续流程仍然不知道怎么行动。</p>
+<h3 id="为什么要独立做意图识别"><a href="#为什么要独立做意图识别" class="headerlink" title="为什么要独立做意图识别"></a>为什么要独立做意图识别</h3><p>一个常见追问是：既然后面有 ReAct 或 TAO，为什么不让 Agent 在循环里自己判断？</p>
+<p>课程给出的工程理由很扎实：</p>
+<ul>
+<li>意图影响 Prompt &#x2F; Spec 加载。售前推荐和售后退款的业务规范完全不同。</li>
+<li>意图影响上下文组织。售前需要用户画像、商品候选、偏好；售后需要订单、物流、退款政策。</li>
+<li>意图影响工具选择。商品检索、订单查询、退款申请、文档生成本来就是不同工具链。</li>
+</ul>
+<p>所以独立意图识别的价值不是“多一个分类步骤”，而是让后面的 Agent 主流程更可控、更可调试、更可评估。</p>
+<h3 id="意图识别-Prompt-怎么写"><a href="#意图识别-Prompt-怎么写" class="headerlink" title="意图识别 Prompt 怎么写"></a>意图识别 Prompt 怎么写</h3><p>一个可用 Prompt 至少包含 4 类信息：</p>
+<ul>
+<li>候选意图：系统支持哪些意图，不允许模型自造 intent。</li>
+<li>意图边界：容易混淆的意图必须写清区别。</li>
+<li>槽位定义：每个意图要抽哪些参数，哪些必填，哪些可选。</li>
+<li>few-shot：覆盖最容易混淆的例子，必要时加入正反例。</li>
+</ul>
+<p>还要给模型两个出口：</p>
+<ul>
+<li>unsupported：用户意图超出系统能力，拒识。</li>
+<li>unclear：用户信息不足或边界不清，澄清。</li>
+</ul>
+<p>这两个出口非常重要。很多系统为了“显得聪明”，会把任何输入强行归到某个意图上，结果后续越做越错。成熟系统应该允许自己说“不支持”或“我需要再确认一下”。</p>
+<h3 id="三层机制"><a href="#三层机制" class="headerlink" title="三层机制"></a>三层机制</h3><p>课程推荐的三层意图识别机制是：</p>
+<ul>
+<li>第一层：代码层。包括按钮、页面状态、关键字、正则、规则引擎、上下文状态判断。特点是快、准、便宜、稳定。</li>
+<li>第二层：轻量模型。适合明确但不好写死规则的输入，比如普通商品推荐、订单查询、文档生成。</li>
+<li>第三层：深度推理模型。处理复杂表达、强上下文依赖、多轮切换、多意图、隐含信息补全。</li>
+</ul>
+<p>关键是第二层如何判断“没识别出来”。不能只让模型输出 intent，还要输出置信度，并结合规则命中、向量相似度、历史表现等信号。置信度高可以直接接受，中间区间可以仲裁或澄清，低置信度则进入深度模型。</p>
+<h3 id="Slot-Filling-与约束"><a href="#Slot-Filling-与约束" class="headerlink" title="Slot Filling 与约束"></a>Slot Filling 与约束</h3><p>Slot Filling 不只是抽参数，还要识别缺失项、硬约束和软偏好。</p>
+<ul>
+<li>missing_slots：流程启动前还缺什么。</li>
+<li>hard_constraints：必须满足，比如预算上限、不能修改某文件、必须使用某工具。</li>
+<li>soft_preferences：尽量满足，比如更轻、更好看、更适合面试表达。</li>
+</ul>
+<p>我觉得这一点非常关键：约束应该贯穿本轮对话，而不是在意图识别阶段用完就丢。很多 Agent 令人恼火，就是因为它识别到了用户约束，却在工具调用或最终回答里无视它。</p>
+<h3 id="评估指标"><a href="#评估指标" class="headerlink" title="评估指标"></a>评估指标</h3><p>第二讲的评估部分可以直接变成面试回答模板：</p>
+<ul>
+<li>Top1 Accuracy：第一候选是否命中标准答案。</li>
+<li>Top-K Accuracy：标准答案是否出现在前 K 个候选里。</li>
+<li>分意图准确率：避免高频意图掩盖低频但重要意图。</li>
+<li>拒识准确率、误拒率、漏拒率。</li>
+<li>澄清触发准确率、澄清后收敛率。</li>
+<li>槽位准确率、槽位召回率、必填槽位完整率、槽位更新准确率。</li>
+<li>约束识别准确率。</li>
+<li>端到端任务成功率。</li>
+</ul>
+<p>测试集要覆盖标准表达、口语化表达、槽位缺失、拒识、容易混淆样本。进阶测试还要覆盖跨轮补充、约束识别、意图切换和多意图输入。</p>
+<h2 id="03：提高准确率的五类问题与解法"><a href="#03：提高准确率的五类问题与解法" class="headerlink" title="03：提高准确率的五类问题与解法"></a>03：提高准确率的五类问题与解法</h2><p>第三讲的重点是：意图识别不准，不要只怪模型。很多时候是意图体系设计、上下文管理、候选召回、边界定义和仲裁机制出了问题。</p>
+<p><img   src="/images/agent-intent-notes/intent-problems.svg"  alt="意图识别常见问题与工程解法"></p>
+<h3 id="为什么不准"><a href="#为什么不准" class="headerlink" title="为什么不准"></a>为什么不准</h3><p>课程总结了几个根因：</p>
+<ul>
+<li>意图太多：需求一来就加意图，候选集合越来越大，Prompt 放不下，模型也更容易混淆。</li>
+<li>边界重叠：比如推荐和比较并不总是正交，比较往往是为了做购买决策。</li>
+<li>用户表达不标准：口语、黑话、行业暗语无法直接映射到标准意图。</li>
+<li>一句话多目标：既要优化项目，又要生成面试追问。</li>
+<li>多轮时间线复杂：用户可能补充参数、修改需求、取消任务、切换任务、恢复任务。</li>
+</ul>
+<h3 id="解法一：层次意图"><a href="#解法一：层次意图" class="headerlink" title="解法一：层次意图"></a>解法一：层次意图</h3><p>层次意图就是把意图组织成菜单或决策树：先识别一级领域，再识别二级任务，最后定位最小意图。它的优点是降低单次分类难度，结构清晰，准确率较高；缺点是可能需要多轮模型调用，性能较差。</p>
+<p>适合场景：意图数量多、层级天然清晰、准确性比延迟更重要。</p>
+<h3 id="解法二：先检索候选意图"><a href="#解法二：先检索候选意图" class="headerlink" title="解法二：先检索候选意图"></a>解法二：先检索候选意图</h3><p>如果意图很多，不要把所有候选都塞进 Prompt。可以先用检索缩小候选集合，只把最相关的 N 个意图交给模型精排。</p>
+<p>N 可以动态调整：上下文窗口空闲时多给一些，识别失败重试时扩大候选范围。也可以用轻量模型先粗筛，再用深度模型做最终判断。</p>
+<p>这个思路本质上是“动态上下文”：不同阶段放进窗口里的东西不同，不要把所有信息一股脑塞进去。</p>
+<h3 id="解法三：动态-few-shot"><a href="#解法三：动态-few-shot" class="headerlink" title="解法三：动态 few-shot"></a>解法三：动态 few-shot</h3><p>few-shot 不是越多越好。固定 few-shot 适合描述必须遵守的规则，比如 unclear 和 unsupported 怎么处理；动态 few-shot 则应该根据当前输入检索最相关案例。</p>
+<p>可以把历史 few-shot 存在普通数据库、搜索引擎或向量数据库里。每次拼 Prompt 前，检索最相关的正例和反例注入进去，减少无关示例对模型的干扰。</p>
+<h3 id="解法四：意图正交化"><a href="#解法四：意图正交化" class="headerlink" title="解法四：意图正交化"></a>解法四：意图正交化</h3><p>如果两个意图重叠，有两个处理办法：</p>
+<ul>
+<li>拆分新意图：把 A、B 和 A&#x2F;B 重叠部分拆成三个互斥意图。</li>
+<li>合并意图，把差异下沉为参数：不要所有差异都建模成新意图，有些差异应该是槽位或参数值，再用代码判断。</li>
+</ul>
+<p>这条很有工程味：能用确定性代码处理的不确定问题，就不要全丢给大模型。</p>
+<h3 id="解法五：多意图处理要克制"><a href="#解法五：多意图处理要克制" class="headerlink" title="解法五：多意图处理要克制"></a>解法五：多意图处理要克制</h3><p>多意图输出可以设计成：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;intents&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span><span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A&quot;</span><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span><span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;B&quot;</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;relations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span><span class="attr">&quot;src&quot;</span><span class="punctuation">:</span> <span class="string">&quot;A&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;dst&quot;</span><span class="punctuation">:</span> <span class="string">&quot;B&quot;</span><span class="punctuation">,</span> <span class="attr">&quot;constraints&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>但课程提醒：不是所有看起来有多个动作的输入都是真多意图。比如“查询上个月数据并导出 Excel”，核心意图可能是导出，查询只是过程步骤。</p>
+<p>真正多意图会带来性能、上下文、并发控制和依赖分析问题。更务实的策略是：每次先做一件事，完成后询问用户是否继续处理下一件。这样交互更自然，也更省成本。</p>
+<h3 id="解法六：向量匹配兜底"><a href="#解法六：向量匹配兜底" class="headerlink" title="解法六：向量匹配兜底"></a>解法六：向量匹配兜底</h3><p>把典型的“用户输入 -&gt; 意图”样本向量化，线上输入来了以后做相似度匹配。相似度足够高，就直接命中对应意图。</p>
+<p>这适合两种场景：</p>
+<ul>
+<li>专属领域 Agent，用户输入模式有限。</li>
+<li>有大量业务黑话、内部表达、奇怪输入，需要长期沉淀兜底样本。</li>
+</ul>
+<p>向量样本可以来自离线分析、用户反馈、人工排障和线上误判复盘。这个机制很适合面试，因为它体现了业务经验沉淀和反馈闭环。</p>
+<h3 id="解法七：不识别，后回滚"><a href="#解法七：不识别，后回滚" class="headerlink" title="解法七：不识别，后回滚"></a>解法七：不识别，后回滚</h3><p>这是偏效率优化的策略：如果大部分多轮对话意图稳定，可以先复用上一轮意图，跳过识别；如果后续执行发现不对，再回滚并触发意图识别。</p>
+<p>它适合用户很少切换任务的系统。面试里这个点比较特别，能体现你不是只会堆模型，而是会根据用户行为优化链路。</p>
+<h3 id="解法八：多识别器仲裁"><a href="#解法八：多识别器仲裁" class="headerlink" title="解法八：多识别器仲裁"></a>解法八：多识别器仲裁</h3><p>可以引入多个识别器：规则、向量、轻量模型、深度模型。它们分别输出意图和置信度，再投票或加权仲裁。票数相同或分数接近时触发澄清。</p>
+<p>这个方案理论上完整，但实践性价比未必高。适合拿来讲复杂系统设计，不适合所有小 Agent 都硬上。</p>
+<h3 id="解法九：微调"><a href="#解法九：微调" class="headerlink" title="解法九：微调"></a>解法九：微调</h3><p>微调也能提升意图识别准确率，但它是双刃剑。面试官会追问数据准备、标注策略、评估方法、参数调优和线上回归。没准备好时，不如先讲向量兜底、动态 few-shot 和意图正交。</p>
+<h2 id="04：简历和面试表达"><a href="#04：简历和面试表达" class="headerlink" title="04：简历和面试表达"></a>04：简历和面试表达</h2><p>第四讲把前三讲的技术内容转成求职表达。</p>
+<h3 id="简历不要单写“意图识别”"><a href="#简历不要单写“意图识别”" class="headerlink" title="简历不要单写“意图识别”"></a>简历不要单写“意图识别”</h3><p>意图识别本身太小，不适合单独作为个人技能。更好的写法是把它放进 Agent 工程化能力里，例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">具备 Agent 工程化经验，熟悉用户输入规范化、分层意图识别、Slot Filling、拒识澄清、动态 few-shot 和意图识别准确率优化。</span><br></pre></td></tr></table></figure>
+
+<p>这句话的目的不是堆术语，而是给面试官留下可追问入口。</p>
+<h3 id="项目贡献的写法"><a href="#项目贡献的写法" class="headerlink" title="项目贡献的写法"></a>项目贡献的写法</h3><p>项目贡献可以按这个公式写：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">基于 A，结合 B，并通过 C，提升 / 优化 / 完善了 D、E、F，最终指标达到 X。</span><br></pre></td></tr></table></figure>
+
+<p>A 是核心技术方案，必须有技术含量，面试官大致能理解。B 和 C 是你希望被追问的亮点。D、E、F 是效果指标。X 最好同时包含绝对值和相对提升。</p>
+<p>示例可以写成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">基于分层意图识别与 Intent + Slot Filling 机制，结合动态 few-shot 和向量兜底，并通过拒识澄清、槽位补全和反馈闭环，提升核心意图 Top1 准确率，同时控制平均识别耗时。</span><br></pre></td></tr></table></figure>
+
+<p>注意：简历里一旦写数字，就要准备好解释数字来源。比如测试集怎么构造、标注标准是什么、样本量多少、线上数据如何采集、指标为什么高或为什么低。</p>
+<h3 id="用-v0-v1-v2-讲方案演进"><a href="#用-v0-v1-v2-讲方案演进" class="headerlink" title="用 v0&#x2F;v1&#x2F;v2 讲方案演进"></a>用 v0&#x2F;v1&#x2F;v2 讲方案演进</h3><p>课程给的面试结构非常好用：</p>
+<ul>
+<li>v0：只有一次大模型调用，没有输入规范化，没有效率优化，没有准确率统计，边缘输入处理差。</li>
+<li>v1：分阶段优化。先引入轻量模型处理标准输入，再引入规则或向量兜底，最后加入动态 few-shot、输入规范化、拒识澄清、反馈沉淀。</li>
+<li>v2：未来规划。可以考虑多意图、微调、离线分析、在线复盘、根据下一轮用户反馈评估上一轮识别效果。</li>
+</ul>
+<p>这种表达的好处是有成长轨迹：你不是一上来就端出一个复杂架构，而是从问题出发，逐步演进。</p>
+<h2 id="我自己的落地模板"><a href="#我自己的落地模板" class="headerlink" title="我自己的落地模板"></a>我自己的落地模板</h2><p>如果让我设计一个面试项目里的意图识别模块，我会用这个版本：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;normalized_input&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="string">&quot;规范化后的用户问题&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;resolved_refs&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;standardized_terms&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;need_search_for_normalization&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;intent_result&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;intent&quot;</span><span class="punctuation">:</span> <span class="string">&quot;project_experience_optimization&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;confidence&quot;</span><span class="punctuation">:</span> <span class="number">0.86</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;slots&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;target&quot;</span><span class="punctuation">:</span> <span class="string">&quot;后端项目经历&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;goal&quot;</span><span class="punctuation">:</span> <span class="string">&quot;提升面试表达竞争力&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;missing_slots&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;hard_constraints&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;soft_preferences&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;更像核心项目&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;need_clarification&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;unsupported&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;routing&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;spec&quot;</span><span class="punctuation">:</span> <span class="string">&quot;project_optimization_spec&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;tools&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;resume_analyzer&quot;</span><span class="punctuation">,</span> <span class="string">&quot;interview_question_generator&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;next_action&quot;</span><span class="punctuation">:</span> <span class="string">&quot;plan&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>对应链路是：</p>
+<ol>
+<li>先做输入规范化，解决指代、省略、黑话、主观词。</li>
+<li>规则和向量先跑，命中强规则或高相似样本就直接返回。</li>
+<li>轻量模型处理标准输入。</li>
+<li>深度模型处理复杂上下文、多轮切换、多意图。</li>
+<li>低置信度进入澄清，高风险 unsupported 直接拒识。</li>
+<li>输出 intent、slots、constraints、confidence 和 next_action。</li>
+<li>线上误判回流，沉淀动态 few-shot 和向量兜底样本。</li>
+</ol>
+<h2 id="最终复盘"><a href="#最终复盘" class="headerlink" title="最终复盘"></a>最终复盘</h2><p>这 4 讲给我的最大提醒是：意图识别不是一个模型调用点，而是一套工程体系。它前面连接输入规范化，后面连接 Prompt &#x2F; Spec、上下文、工具、Plan 和评估反馈。</p>
+<p>面试里真正有区分度的回答，不是“我让大模型判断用户意图”，而是能说清楚：</p>
+<ul>
+<li>用户输入不规范怎么办。</li>
+<li>候选意图太多怎么办。</li>
+<li>意图边界重叠怎么办。</li>
+<li>参数缺失和约束怎么处理。</li>
+<li>识别失败时拒识还是澄清。</li>
+<li>多轮任务切换怎么识别。</li>
+<li>准确率怎么测，错例怎么回流。</li>
+</ul>
+<p>如果只记一个判断标准，我会记这个：好的意图识别系统，不追求每次都猜，而是追求让后续执行走在正确轨道上。该确认时确认，该拒识时拒识，该回滚时回滚，这才是工程上的成熟。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/AI-Agent/">AI Agent</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%84%8F%E5%9B%BE%E8%AF%86%E5%88%AB/">意图识别</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1/">系统设计</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E9%9D%A2%E8%AF%95/">面试</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2026/04/18/hello-world/"
+                                   title="我的第一篇文章"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">我的第一篇文章</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">JotaroRD</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/header-shrink.js"></script>
+
+<script src="/js/back2top.js"></script>
+
+<script src="/js/toggle-theme.js"></script>
+
+<script src="/js/code-block.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+
+<!-- local search -->
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        
+<script src="/js/post/post-helper.js"></script>
+
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+    
+        
+    
+
+</body>
+</html>
