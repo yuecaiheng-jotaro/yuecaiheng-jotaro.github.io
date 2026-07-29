@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="JotaroRD">
+    
+    <title>
+        
+            Agent 设计模式之美｜18｜复杂度路由：一件事该消耗多少推理 |
+        
+        Jotaro Space
+    </title>
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/css/style.css">
+
+    
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/site-avatar.png">
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/brands.min.css">
+    
+        
+            
+        
+            
+                
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/css/first-screen-jotaro.css">
+
+            
+        
+            
+                
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/css/selection-comments.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"yuecaiheng-jotaro.github.io","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Jotaro Space","author":"JotaroRD","avatar":"/images/site-avatar.png","logo":"/images/site-avatar.png","favicon":"/images/site-avatar.png"},"menu":{"home":"/","archives":"/archives","categories":"/categories","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/first-screen.png","background_img_dark":"/images/first-screen.png","description":"Talk is Cheap","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":false,"post_datetime":"updated"},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":false,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":false,"preload":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":true,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":false,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":true,"css":[null,"/css/first-screen-jotaro.css","/css/selection-comments.css"],"js":[null,"/js/selection-comments-v2.js"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/site-avatar.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Jotaro Space
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                CATEGORIES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                            CATEGORIES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Agent 设计模式之美｜18｜复杂度路由：一件事该消耗多少推理
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/site-avatar.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">JotaroRD</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-07-29 21:49:00</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Wed Jul 29 2026 21:06:19 GMT+0800">2026-07-29 21:06:19</span>
+                </span>
+            
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/AI/">AI</a></li>
+                        
+                    
+                            <li class="category-item">&nbsp;<i class="icon fas fa-angle-right"></i>&nbsp;<a href="/categories/AI/Agent/">Agent</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Agent/">Agent</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/">极客时间</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E9%80%90%E8%AE%B2%E7%AC%94%E8%AE%B0/">逐讲笔记</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%AD%A3%E6%96%87%E7%B2%BE%E8%AF%BB/">正文精读</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8E%A8%E7%90%86%EF%BC%9A%E6%BC%94%E5%8C%96%E4%B9%8B%E7%BE%8E%EF%BC%885%E8%AE%B2%EF%BC%89/">推理：演化之美（5讲）</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>这篇是极客时间《Agent 设计模式之美》的逐讲学习笔记，来源课程地址：<a class="link"   target="_blank" rel="noopener" href="https://time.geekbang.org/column/intro/101162601" >Agent 设计模式之美<i class="fas fa-external-link-alt"></i></a>，本讲原文入口：<a class="link"   target="_blank" rel="noopener" href="https://time.geekbang.org/column/article/995335" >18｜复杂度路由：一件事该消耗多少推理<i class="fas fa-external-link-alt"></i></a>。</p>
+<blockquote>
+<p>本文基于已登录后可访问的课程正文做原创整理，不包含课程逐字稿；重点沉淀问题、机制、工程抓手和复习线索。</p>
+</blockquote>
+<h2 id="学习目标"><a href="#学习目标" class="headerlink" title="学习目标"></a>学习目标</h2><ul>
+<li>这一讲的重点是把 <code>复杂度路由：一件事该消耗多少推理</code> 从概念名词变成可落地的 Agent 工程模式：它解决哪类失败，依赖哪些状态，怎样观测，如何恢复。</li>
+<li>读完后要能回答：这个模式位于感知、记忆、推理、行动还是协作层；它改变的是信息流、控制流、工具边界，还是评估闭环。</li>
+<li>复习时可以把每个模式写成一张工程卡片：适用场景、输入输出、关键状态、失败样例、观测指标和上线风险。</li>
+</ul>
+<h2 id="全文脉络"><a href="#全文脉络" class="headerlink" title="全文脉络"></a>全文脉络</h2><ul>
+<li>一句话里混着四类任务</li>
+<li>复杂度路由模式的定义</li>
+<li>先把模糊请求拆成任务原子</li>
+<li>四个路由信号：意图 &#x2F; 证据 &#x2F; 执行 &#x2F; 风险</li>
+<li>第一个信号：任务意图（intent）</li>
+<li>第二个信号：证据状态（evidence_state）</li>
+<li>第三个信号：执行对象状态（mechanical_ready）</li>
+<li>第四个信号：动作风险 risk</li>
+</ul>
+<p>这一讲可以按一条主线复习：先抓住作者提出的问题，再看正文如何把问题拆成机制，最后把机制落到工程里的观测和动作。我的复习抓手是：</p>
+<ul>
+<li><strong>观察入口</strong>：输入摘要、上下文来源、工具调用、模型判断、记忆命中、失败类型、成本和耗时。</li>
+<li><strong>机制还原</strong>：把 Agent 行为拆成感知、记忆、推理、行动、协作和治理几个可调试模块。</li>
+<li><strong>行动顺序</strong>：先界定失败模式，再设计状态、工具准入、恢复点和评估集。</li>
+<li><strong>主要风险</strong>：只调 Prompt，不沉淀状态、证据链、工具边界和评估闭环。</li>
+</ul>
+<h2 id="逐节精读"><a href="#逐节精读" class="headerlink" title="逐节精读"></a>逐节精读</h2><h3 id="一句话里混着四类任务"><a href="#一句话里混着四类任务" class="headerlink" title="一句话里混着四类任务"></a>一句话里混着四类任务</h3><ul>
+<li><strong>讲什么</strong>：这一节围绕 <code>一句话里混着四类任务</code> 展开，重点是把一个 Agent 设计模式落成可观测、可恢复、可评估的工程结构。</li>
+<li><strong>涉及概念</strong>：<code>Agent</code>、<code>推理</code>。</li>
+<li><strong>怎么理解</strong>：理解这一节时，要把它放回 Agent 生命周期：输入如何进入、状态如何保存、判断如何产生、工具如何执行。</li>
+<li><strong>实践动作</strong>：落地时先定义输入输出和失败类型，再补观测字段；没有可观测性，模式上线后很难复盘。</li>
+<li><strong>容易踩坑</strong>：常见误区是把模式当成架构名词，而没有对应的状态字段、工具准入规则和评估样本。</li>
+</ul>
+<h3 id="复杂度路由模式的定义"><a href="#复杂度路由模式的定义" class="headerlink" title="复杂度路由模式的定义"></a>复杂度路由模式的定义</h3><ul>
+<li><strong>讲什么</strong>：这一节属于 Agent 的决策治理：要控制推理深度、探索宽度和证据收敛方式，让模型的判断能被检查、比较和回滚。</li>
+<li><strong>涉及概念</strong>：<code>Agent</code>、<code>Prompt</code>、<code>Router</code>、<code>推理</code>、<code>工具</code>。</li>
+<li><strong>怎么理解</strong>：理解这一节时，要把它放回 Agent 生命周期：输入如何进入、状态如何保存、判断如何产生、工具如何执行。</li>
+<li><strong>实践动作</strong>：落地时先定义输入输出和失败类型，再补观测字段；没有可观测性，模式上线后很难复盘。</li>
+<li><strong>容易踩坑</strong>：常见误区是把模式当成架构名词，而没有对应的状态字段、工具准入规则和评估样本。</li>
+</ul>
+<h3 id="先把模糊请求拆成任务原子"><a href="#先把模糊请求拆成任务原子" class="headerlink" title="先把模糊请求拆成任务原子"></a>先把模糊请求拆成任务原子</h3><ul>
+<li><strong>讲什么</strong>：这一节围绕 <code>先把模糊请求拆成任务原子</code> 展开，重点是把一个 Agent 设计模式落成可观测、可恢复、可评估的工程结构。</li>
+<li><strong>涉及概念</strong>：<code>Task</code>、<code>推理</code>。</li>
+<li><strong>怎么理解</strong>：理解这一节时，要把它放回 Agent 生命周期：输入如何进入、状态如何保存、判断如何产生、工具如何执行。</li>
+<li><strong>实践动作</strong>：落地时先定义输入输出和失败类型，再补观测字段；没有可观测性，模式上线后很难复盘。</li>
+<li><strong>容易踩坑</strong>：常见误区是把模式当成架构名词，而没有对应的状态字段、工具准入规则和评估样本。</li>
+</ul>
+<h3 id="四个路由信号：意图-证据-执行-风险"><a href="#四个路由信号：意图-证据-执行-风险" class="headerlink" title="四个路由信号：意图 &#x2F; 证据 &#x2F; 执行 &#x2F; 风险"></a>四个路由信号：意图 &#x2F; 证据 &#x2F; 执行 &#x2F; 风险</h3><ul>
+<li><strong>讲什么</strong>：这一节属于 Agent 的决策治理：要控制推理深度、探索宽度和证据收敛方式，让模型的判断能被检查、比较和回滚。</li>
+<li><strong>涉及概念</strong>：<code>Agent</code>、<code>推理</code>、<code>工具</code>。</li>
+<li><strong>怎么理解</strong>：理解这一节时，要把它放回 Agent 生命周期：输入如何进入、状态如何保存、判断如何产生、工具如何执行。</li>
+<li><strong>实践动作</strong>：落地时先定义输入输出和失败类型，再补观测字段；没有可观测性，模式上线后很难复盘。</li>
+<li><strong>容易踩坑</strong>：常见误区是把模式当成架构名词，而没有对应的状态字段、工具准入规则和评估样本。</li>
+</ul>
+<h3 id="第一个信号：任务意图（intent）"><a href="#第一个信号：任务意图（intent）" class="headerlink" title="第一个信号：任务意图（intent）"></a>第一个信号：任务意图（intent）</h3><ul>
+<li><strong>讲什么</strong>：这一节围绕 <code>第一个信号：任务意图（intent）</code> 展开，重点是把一个 Agent 设计模式落成可观测、可恢复、可评估的工程结构。</li>
+<li><strong>涉及概念</strong>：本节概念。</li>
+<li><strong>怎么理解</strong>：理解这一节时，要把它放回 Agent 生命周期：输入如何进入、状态如何保存、判断如何产生、工具如何执行。</li>
+<li><strong>实践动作</strong>：落地时先定义输入输出和失败类型，再补观测字段；没有可观测性，模式上线后很难复盘。</li>
+<li><strong>容易踩坑</strong>：常见误区是把模式当成架构名词，而没有对应的状态字段、工具准入规则和评估样本。</li>
+</ul>
+<h3 id="第二个信号：证据状态（evidence-state）"><a href="#第二个信号：证据状态（evidence-state）" class="headerlink" title="第二个信号：证据状态（evidence_state）"></a>第二个信号：证据状态（evidence_state）</h3><ul>
+<li><strong>讲什么</strong>：这一节围绕 <code>第二个信号：证据状态（evidence_state）</code> 展开，重点是把一个 Agent 设计模式落成可观测、可恢复、可评估的工程结构。</li>
+<li><strong>涉及概念</strong>：本节概念。</li>
+<li><strong>怎么理解</strong>：理解这一节时，要把它放回 Agent 生命周期：输入如何进入、状态如何保存、判断如何产生、工具如何执行。</li>
+<li><strong>实践动作</strong>：落地时先定义输入输出和失败类型，再补观测字段；没有可观测性，模式上线后很难复盘。</li>
+<li><strong>容易踩坑</strong>：常见误区是把模式当成架构名词，而没有对应的状态字段、工具准入规则和评估样本。</li>
+</ul>
+<h3 id="第三个信号：执行对象状态（mechanical-ready）"><a href="#第三个信号：执行对象状态（mechanical-ready）" class="headerlink" title="第三个信号：执行对象状态（mechanical_ready）"></a>第三个信号：执行对象状态（mechanical_ready）</h3><ul>
+<li><strong>讲什么</strong>：这一节属于 Agent 的执行治理：工具调用不是让模型随便点按钮，而是要有候选选择、准入条件、副作用控制和失败恢复。</li>
+<li><strong>涉及概念</strong>：<code>复制</code>、<code>Agent</code>、<code>上下文</code>。</li>
+<li><strong>怎么理解</strong>：理解这一节时，要把它放回 Agent 生命周期：输入如何进入、状态如何保存、判断如何产生、工具如何执行。</li>
+<li><strong>实践动作</strong>：落地时先定义输入输出和失败类型，再补观测字段；没有可观测性，模式上线后很难复盘。</li>
+<li><strong>容易踩坑</strong>：常见误区是把模式当成架构名词，而没有对应的状态字段、工具准入规则和评估样本。</li>
+</ul>
+<h3 id="第四个信号：动作风险-risk"><a href="#第四个信号：动作风险-risk" class="headerlink" title="第四个信号：动作风险 risk"></a>第四个信号：动作风险 risk</h3><ul>
+<li><strong>讲什么</strong>：这一节围绕 <code>第四个信号：动作风险 risk</code> 展开，重点是把一个 Agent 设计模式落成可观测、可恢复、可评估的工程结构。</li>
+<li><strong>涉及概念</strong>：<code>Task</code>、<code>Agent</code>、<code>Router</code>、<code>上下文</code>、<code>推理</code>、<code>工具</code>、<code>评估</code>。</li>
+<li><strong>怎么理解</strong>：理解这一节时，要把它放回 Agent 生命周期：输入如何进入、状态如何保存、判断如何产生、工具如何执行。</li>
+<li><strong>实践动作</strong>：落地时先定义输入输出和失败类型，再补观测字段；没有可观测性，模式上线后很难复盘。</li>
+<li><strong>容易踩坑</strong>：常见误区是把模式当成架构名词，而没有对应的状态字段、工具准入规则和评估样本。</li>
+</ul>
+<h2 id="核心概念表"><a href="#核心概念表" class="headerlink" title="核心概念表"></a>核心概念表</h2><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>复习角度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Task</code></td>
+<td>看它属于 Agent 的输入、状态、决策、工具、协作还是治理。</td>
+</tr>
+<tr>
+<td><code>复制</code></td>
+<td>看它属于 Agent 的输入、状态、决策、工具、协作还是治理。</td>
+</tr>
+<tr>
+<td><code>Agent</code></td>
+<td>看它属于 Agent 的输入、状态、决策、工具、协作还是治理。</td>
+</tr>
+<tr>
+<td><code>Prompt</code></td>
+<td>看它属于 Agent 的输入、状态、决策、工具、协作还是治理。</td>
+</tr>
+<tr>
+<td><code>Router</code></td>
+<td>看它属于 Agent 的输入、状态、决策、工具、协作还是治理。</td>
+</tr>
+<tr>
+<td><code>上下文</code></td>
+<td>看它属于 Agent 的输入、状态、决策、工具、协作还是治理。</td>
+</tr>
+<tr>
+<td><code>记忆</code></td>
+<td>看它属于 Agent 的输入、状态、决策、工具、协作还是治理。</td>
+</tr>
+<tr>
+<td><code>推理</code></td>
+<td>看它属于 Agent 的输入、状态、决策、工具、协作还是治理。</td>
+</tr>
+</tbody></table>
+<h2 id="关键线索"><a href="#关键线索" class="headerlink" title="关键线索"></a>关键线索</h2><p><code>Task</code>、<code>复制</code>、<code>Agent</code>、<code>Prompt</code>、<code>Router</code>、<code>上下文</code>、<code>记忆</code>、<code>推理</code>、<code>工具</code>、<code>感知</code>、<code>评估</code></p>
+<p>常见 API &#x2F; 操作线索：<code>explain</code>、<code>Spark UI</code>、最小可复现实验</p>
+<h2 id="配置、命令与实验线索"><a href="#配置、命令与实验线索" class="headerlink" title="配置、命令与实验线索"></a>配置、命令与实验线索</h2><ul>
+<li>本讲没有明显以配置项为主，重点放在概念和执行链路。</li>
+</ul>
+<h2 id="实战清单"><a href="#实战清单" class="headerlink" title="实战清单"></a>实战清单</h2><ul>
+<li>把模式落地前先写清失败现象：是感知拿错信息、记忆缺证据、推理路线不稳，还是工具执行失控。</li>
+<li>每个 Agent 模式都要配观测字段，例如输入摘要、工具调用、置信度、失败类型、成本和耗时。</li>
+<li>长任务要把计划、进度、证据和恢复点结构化，避免上下文增长后系统失去可解释性。</li>
+<li>把一次失败沉淀成 Skill、规则、检索样例或评估集，形成可复用的系统资产。</li>
+<li>定位性能问题时，先从 Spark UI 的 Job&#x2F;Stage&#x2F;Task 层观察耗时、Shuffle、数据倾斜和长尾任务。</li>
+</ul>
+<h2 id="易错点"><a href="#易错点" class="headerlink" title="易错点"></a>易错点</h2><ul>
+<li>把模式当 Prompt 技巧，而不是输入、状态、工具、评估共同组成的系统设计。</li>
+<li>没有记录失败样例和观测字段，上线后只能凭感觉判断 Agent 为什么跑偏。</li>
+<li>过早引入复杂编排，却没有明确每个 Agent、工具和记忆层的职责边界。</li>
+</ul>
+<h2 id="项目表达"><a href="#项目表达" class="headerlink" title="项目表达"></a>项目表达</h2><p>项目里可以这样表达：我会把 <code>复杂度路由：一件事该消耗多少推理</code> 落成一个可观测的 Agent 模式，明确输入输出、状态字段、工具边界、失败恢复和评估指标，而不是只改 Prompt。</p>
+<h2 id="复习问题"><a href="#复习问题" class="headerlink" title="复习问题"></a>复习问题</h2><ul>
+<li>这个模式解决的是感知、记忆、推理、行动，还是多 Agent 编排问题？</li>
+<li>要让这个模式上线，需要记录哪些状态、证据、工具调用和失败类型？</li>
+<li>如果模型判断错了，系统如何发现、停止、回滚或请求人工介入？</li>
+</ul>
+<h2 id="二次复习建议"><a href="#二次复习建议" class="headerlink" title="二次复习建议"></a>二次复习建议</h2><ul>
+<li>第一遍只看“全文脉络”和“逐节精读”，确认自己能复述每一节解决的问题。</li>
+<li>第二遍回到原课程正文，对照这里的概念表和实战清单，把缺失的例子、SQL、配置或执行计划补进自己的实验记录。</li>
+<li>第三遍用项目视角复盘：这个机制有没有在自己的业务、数据规模、Agent 场景或线上故障里出现过。</li>
+</ul>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Agent/">Agent</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/">极客时间</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E9%80%90%E8%AE%B2%E7%AC%94%E8%AE%B0/">逐讲笔记</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%AD%A3%E6%96%87%E7%B2%BE%E8%AF%BB/">正文精读</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8E%A8%E7%90%86%EF%BC%9A%E6%BC%94%E5%8C%96%E4%B9%8B%E7%BE%8E%EF%BC%885%E8%AE%B2%EF%BC%89/">推理：演化之美（5讲）</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2026/07/29/agent-design-patterns-22-%E5%B9%B6%E8%A1%8C%E6%8E%A2%E7%B4%A2-%E4%B8%80%E9%A2%98%E5%A4%9A%E8%A7%A3-%E6%8B%A9%E4%BC%98%E5%BD%95%E5%8F%96/"
+                                   title="Agent 设计模式之美｜19｜并行探索：一题多解，择优录取"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Agent 设计模式之美｜19｜并行探索：一题多解，择优录取</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2026/07/29/agent-design-patterns-20-%E6%80%9D%E7%BB%B4%E9%93%BE-%E7%BB%99-agent-%E7%9A%84%E5%88%A4%E6%96%AD%E7%95%99%E4%B8%8B%E4%B8%80%E6%9D%A1%E5%8F%AF%E6%A3%80%E6%9F%A5%E7%9A%84%E8%B7%AF%E5%BE%84/"
+                                   title="Agent 设计模式之美｜17｜思维链：给 Agent 的判断留下一条可检查的路径"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Agent 设计模式之美｜17｜思维链：给 Agent 的判断留下一条可检查的路径</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">JotaroRD</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/toggle-theme.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/code-block.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/libs/anime.min.js"></script>
+
+<!-- local search -->
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+
+    
+        
+    
+        
+            
+<script class="custom-inject-js" src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/js/selection-comments-v2.js" data-pjax></script>
+
+        
+    
+
+</body>
+</html>

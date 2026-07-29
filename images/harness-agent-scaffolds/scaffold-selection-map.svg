@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620" role="img" aria-labelledby="title desc">
+  <title id="title">Agent 脚手架选型地图</title>
+  <desc id="desc">展示 Smolagents、Claude Agent SDK 和 DeepAgents 在交付速度、编排深度、知识沉淀上的侧重点。</desc>
+  <rect width="1120" height="620" rx="20" fill="#fbfcfe"/>
+  <text x="560" y="54" text-anchor="middle" font-size="28" font-family="Arial, sans-serif" font-weight="700" fill="#101828">Harness Agent 脚手架选型地图</text>
+  <text x="560" y="88" text-anchor="middle" font-size="15" font-family="Arial, sans-serif" fill="#667085">先按业务形态选脚手架，再补工具、状态、观测和知识沉淀</text>
+
+  <defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#101828" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#667085"/>
+    </marker>
+  </defs>
+
+  <g filter="url(#shadow)" font-family="Arial, sans-serif">
+    <rect x="90" y="170" width="260" height="170" rx="8" fill="#e0f2fe" stroke="#38bdf8"/>
+    <text x="220" y="212" text-anchor="middle" font-size="24" font-weight="700" fill="#075985">Smolagents</text>
+    <text x="220" y="248" text-anchor="middle" font-size="15" fill="#075985">快速交付数据洞察</text>
+    <text x="220" y="280" text-anchor="middle" font-size="14" fill="#344054">CodeAct / 自定义工具</text>
+    <text x="220" y="306" text-anchor="middle" font-size="14" fill="#344054">报告生成 / 多 Agent 协同</text>
+
+    <rect x="430" y="140" width="260" height="220" rx="8" fill="#dcfae6" stroke="#32d583"/>
+    <text x="560" y="184" text-anchor="middle" font-size="24" font-weight="700" fill="#05603a">Claude Agent SDK</text>
+    <text x="560" y="220" text-anchor="middle" font-size="15" fill="#05603a">复杂任务 Loop 与编排</text>
+    <text x="560" y="252" text-anchor="middle" font-size="14" fill="#344054">Session / Fork / Hooks</text>
+    <text x="560" y="278" text-anchor="middle" font-size="14" fill="#344054">Skills / OTel / 成本治理</text>
+    <text x="560" y="304" text-anchor="middle" font-size="14" fill="#344054">研报与投研系统</text>
+
+    <rect x="770" y="170" width="260" height="170" rx="8" fill="#fef0c7" stroke="#fdb022"/>
+    <text x="900" y="212" text-anchor="middle" font-size="24" font-weight="700" fill="#93370d">DeepAgents</text>
+    <text x="900" y="248" text-anchor="middle" font-size="15" fill="#93370d">动态知识库与旧项目升级</text>
+    <text x="900" y="280" text-anchor="middle" font-size="14" fill="#344054">LangChain 迁移</text>
+    <text x="900" y="306" text-anchor="middle" font-size="14" fill="#344054">知识沉淀 / 长期演化</text>
+  </g>
+
+  <path d="M350 255 H430" stroke="#667085" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M690 255 H770" stroke="#667085" stroke-width="2.2" marker-end="url(#arrow)"/>
+
+  <rect x="170" y="430" width="780" height="86" rx="8" fill="#f2f4f7" stroke="#d0d5dd"/>
+  <text x="560" y="464" text-anchor="middle" font-size="18" font-family="Arial, sans-serif" font-weight="700" fill="#344054">共同工程底座</text>
+  <text x="560" y="493" text-anchor="middle" font-size="14" font-family="Arial, sans-serif" fill="#475467">工具 Schema、Agent Loop、状态管理、权限准入、链路观测、成本统计、知识回写</text>
+</svg>

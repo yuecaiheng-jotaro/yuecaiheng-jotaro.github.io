@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" role="img" aria-labelledby="title desc">
+  <title id="title">Spark 执行模型</title>
+  <desc id="desc">展示 Spark 从 Driver 到 Cluster Manager、Executor、Task、Shuffle 和存储的执行模型。</desc>
+  <rect width="1120" height="560" rx="20" fill="#fffdf8"/>
+  <text x="560" y="54" text-anchor="middle" font-size="28" font-family="Arial, sans-serif" font-weight="700" fill="#101828">Spark 执行模型：从代码到分布式任务</text>
+  <text x="560" y="86" text-anchor="middle" font-size="15" font-family="Arial, sans-serif" fill="#667085">理解 Driver、Executor、Task、Shuffle，很多性能问题就有了抓手</text>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#667085"/>
+    </marker>
+  </defs>
+  <g font-family="Arial, sans-serif">
+    <rect x="80" y="210" width="170" height="90" rx="8" fill="#e0f2fe" stroke="#38bdf8"/>
+    <text x="165" y="246" text-anchor="middle" font-size="19" font-weight="700" fill="#075985">Driver</text>
+    <text x="165" y="274" text-anchor="middle" font-size="13" fill="#075985">SparkSession / DAG</text>
+
+    <rect x="325" y="210" width="170" height="90" rx="8" fill="#dcfae6" stroke="#32d583"/>
+    <text x="410" y="246" text-anchor="middle" font-size="19" font-weight="700" fill="#05603a">Cluster Manager</text>
+    <text x="410" y="274" text-anchor="middle" font-size="13" fill="#05603a">申请资源 / 调度执行</text>
+
+    <rect x="590" y="150" width="185" height="100" rx="8" fill="#fef0c7" stroke="#fdb022"/>
+    <text x="682" y="187" text-anchor="middle" font-size="19" font-weight="700" fill="#93370d">Executor A</text>
+    <text x="682" y="217" text-anchor="middle" font-size="13" fill="#93370d">Task / Cache / Shuffle</text>
+
+    <rect x="590" y="320" width="185" height="100" rx="8" fill="#fef0c7" stroke="#fdb022"/>
+    <text x="682" y="357" text-anchor="middle" font-size="19" font-weight="700" fill="#93370d">Executor B</text>
+    <text x="682" y="387" text-anchor="middle" font-size="13" fill="#93370d">Task / Cache / Shuffle</text>
+
+    <rect x="850" y="235" width="180" height="100" rx="8" fill="#ebe9fe" stroke="#9b8afb"/>
+    <text x="940" y="272" text-anchor="middle" font-size="19" font-weight="700" fill="#5925dc">Storage</text>
+    <text x="940" y="302" text-anchor="middle" font-size="13" fill="#5925dc">HDFS / Hive / Kafka</text>
+  </g>
+  <path d="M250 255 H325" stroke="#667085" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M495 248 C540 210 552 200 590 200" stroke="#667085" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M495 262 C540 318 552 370 590 370" stroke="#667085" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M775 200 C825 220 830 260 850 280" stroke="#667085" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M775 370 C825 350 830 310 850 290" stroke="#667085" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M682 250 V320" stroke="#b54708" stroke-width="2.2" stroke-dasharray="6 6" marker-end="url(#arrow)"/>
+  <text x="715" y="288" font-size="14" font-family="Arial, sans-serif" fill="#b54708">Shuffle</text>
+  <text x="560" y="508" text-anchor="middle" font-size="15" font-family="Arial, sans-serif" fill="#475467">排障口诀：先看 Stage，再看 Shuffle，再看倾斜、内存、并行度和数据源</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" role="img" aria-labelledby="title desc">
+  <title id="title">研报 Agent 工作流</title>
+  <desc id="desc">展示从问题输入到数据抓取、分析、写作、审校和知识沉淀的 Agent 工作流。</desc>
+  <rect width="1120" height="560" rx="20" fill="#fffdf8"/>
+  <text x="560" y="54" text-anchor="middle" font-size="28" font-family="Arial, sans-serif" font-weight="700" fill="#101828">研报 Agent：从工作流替代到智能协同</text>
+  <text x="560" y="86" text-anchor="middle" font-size="15" font-family="Arial, sans-serif" fill="#667085">复杂金融任务需要工具、会话、分叉、技能和可观测性共同支撑</text>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#667085"/>
+    </marker>
+  </defs>
+
+  <g font-family="Arial, sans-serif">
+    <rect x="70" y="220" width="135" height="78" rx="8" fill="#e0f2fe" stroke="#38bdf8"/>
+    <text x="137" y="252" text-anchor="middle" font-size="17" font-weight="700" fill="#075985">任务输入</text>
+    <text x="137" y="278" text-anchor="middle" font-size="13" fill="#075985">研究主题/约束</text>
+
+    <rect x="255" y="220" width="135" height="78" rx="8" fill="#f2f4f7" stroke="#98a2b3"/>
+    <text x="322" y="252" text-anchor="middle" font-size="17" font-weight="700" fill="#344054">工具集</text>
+    <text x="322" y="278" text-anchor="middle" font-size="13" fill="#344054">行情/公告/搜索</text>
+
+    <rect x="440" y="140" width="135" height="78" rx="8" fill="#dcfae6" stroke="#32d583"/>
+    <text x="507" y="172" text-anchor="middle" font-size="17" font-weight="700" fill="#05603a">Agent Loop</text>
+    <text x="507" y="198" text-anchor="middle" font-size="13" fill="#05603a">计划/行动/观察</text>
+
+    <rect x="440" y="320" width="135" height="78" rx="8" fill="#ebe9fe" stroke="#9b8afb"/>
+    <text x="507" y="352" text-anchor="middle" font-size="17" font-weight="700" fill="#5925dc">Session/Fork</text>
+    <text x="507" y="378" text-anchor="middle" font-size="13" fill="#5925dc">多投资逻辑</text>
+
+    <rect x="625" y="220" width="135" height="78" rx="8" fill="#fef0c7" stroke="#fdb022"/>
+    <text x="692" y="252" text-anchor="middle" font-size="17" font-weight="700" fill="#93370d">Skills</text>
+    <text x="692" y="278" text-anchor="middle" font-size="13" fill="#93370d">模板/规则/写作</text>
+
+    <rect x="810" y="220" width="135" height="78" rx="8" fill="#fee4e2" stroke="#f97066"/>
+    <text x="877" y="252" text-anchor="middle" font-size="17" font-weight="700" fill="#912018">审校输出</text>
+    <text x="877" y="278" text-anchor="middle" font-size="13" fill="#912018">证据链/报告</text>
+
+    <rect x="440" y="455" width="505" height="54" rx="8" fill="#ecfdf3" stroke="#75e0a7"/>
+    <text x="692" y="488" text-anchor="middle" font-size="15" fill="#05603a">OpenTelemetry：链路、成本、错误、工具耗时、分支质量</text>
+  </g>
+
+  <path d="M205 259 H255" stroke="#667085" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M390 259 C420 250 420 198 440 180" stroke="#667085" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M575 180 C610 194 610 238 625 259" stroke="#667085" stroke-width="2.2" fill="none" marker-end="url(#arrow)"/>
+  <path d="M760 259 H810" stroke="#667085" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M507 218 V320" stroke="#667085" stroke-width="2.2" marker-end="url(#arrow)"/>
+  <path d="M507 398 V455" stroke="#667085" stroke-width="2.2" marker-end="url(#arrow)"/>
+</svg>
