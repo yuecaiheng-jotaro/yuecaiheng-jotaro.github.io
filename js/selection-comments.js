@@ -6,6 +6,7 @@
     owner: 'yuecaiheng-jotaro',
     repo: 'yuecaiheng-jotaro.github.io',
     siteUrl: 'https://yuecaiheng-jotaro.github.io',
+    staticDataUrl: '/selection-comments.json',
     marker: '<!-- jotaro-selection-comment -->',
     label: 'selection-comment'
   };
@@ -242,6 +243,46 @@
     }
   }
 
+  function parseStaticAnnotation(item) {
+    if (!item || item.path !== pagePath()) return null;
+    if (!item.text || !item.comment) return null;
+
+    return {
+      id: String(item.id || ('static-' + item.number)),
+      number: item.number || '',
+      source: 'github',
+      text: String(item.text).slice(0, 240),
+      comment: String(item.comment),
+      createdAt: item.createdAt || item.created_at || new Date().toISOString(),
+      url: item.url || ''
+    };
+  }
+
+  function applyRemoteAnnotations(items) {
+    githubLoadError = '';
+    githubAnnotations = items;
+    mergeAnnotations();
+    renderMarks();
+    renderPanel();
+  }
+
+  function shouldFallbackToGitHubApi() {
+    return location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  }
+
+  function fetchStaticAnnotations() {
+    const url = githubConfig.staticDataUrl + '?v=' + Date.now();
+    return fetch(url, { headers: { Accept: 'application/json' }, cache: 'no-store' })
+      .then(function (response) {
+        if (!response.ok) throw new Error('静态批注文件不存在，状态码：' + response.status);
+        return response.json();
+      })
+      .then(function (data) {
+        const items = Array.isArray(data) ? data : (data.annotations || []);
+        applyRemoteAnnotations(items.map(parseStaticAnnotation).filter(Boolean));
+      });
+  }
+
   function fetchGitHubAnnotations() {
     const url = 'https://api.github.com/repos/' + githubConfig.owner + '/' + githubConfig.repo + '/issues?state=open&per_page=100';
     return fetch(url, { headers: { Accept: 'application/vnd.github+json' } })
@@ -255,11 +296,17 @@
         return response.json();
       })
       .then(function (issues) {
-        githubLoadError = '';
-        githubAnnotations = issues.map(parseGitHubAnnotation).filter(Boolean);
-        mergeAnnotations();
-        renderMarks();
-        renderPanel();
+        applyRemoteAnnotations(issues.map(parseGitHubAnnotation).filter(Boolean));
+      });
+  }
+
+  function loadRemoteAnnotations() {
+    return fetchStaticAnnotations()
+      .catch(function (staticError) {
+        if (shouldFallbackToGitHubApi()) {
+          return fetchGitHubAnnotations();
+        }
+        throw staticError;
       })
       .catch(function (error) {
         githubLoadError = error && error.message ? error.message : 'GitHub Issues 读取失败。';
@@ -405,7 +452,7 @@
     renderMarks();
     renderPanel();
     bindEvents();
-    fetchGitHubAnnotations();
+    loadRemoteAnnotations();
   }
 
   if (document.querySelector(articleSelector)) {
