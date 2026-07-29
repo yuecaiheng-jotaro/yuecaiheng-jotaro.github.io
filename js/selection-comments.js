@@ -20,6 +20,7 @@
   let editor;
   let panel;
   let toggle;
+  let githubLoadError = '';
 
   function storageKey() {
     return storagePrefix + location.pathname;
@@ -115,7 +116,7 @@
 
   function renderPanel() {
     if (!panel || !toggle) return;
-    toggle.style.display = annotations.length ? 'block' : 'none';
+    toggle.style.display = annotations.length || githubLoadError ? 'block' : 'none';
     const list = annotations.map(function (item) {
       const time = new Date(item.createdAt).toLocaleString();
       const metaAction = item.source === 'github'
@@ -131,8 +132,13 @@
       ].join('');
     }).join('');
 
+    const status = githubLoadError
+      ? '<div class="selection-comment-status error">' + escapeHtml(githubLoadError) + '</div>'
+      : '';
+
     panel.innerHTML = [
       '<header><span>划词评论</span><button class="cancel" type="button" data-close>关闭</button></header>',
+      status,
       annotations.length ? list : '<div class="empty">暂无划词评论</div>'
     ].join('');
   }
@@ -240,16 +246,23 @@
     const url = 'https://api.github.com/repos/' + githubConfig.owner + '/' + githubConfig.repo + '/issues?state=open&per_page=100';
     return fetch(url, { headers: { Accept: 'application/vnd.github+json' } })
       .then(function (response) {
-        if (!response.ok) throw new Error('GitHub issues request failed');
+        if (!response.ok) {
+          if (response.status === 403) {
+            throw new Error('GitHub Issues 匿名接口被限流，稍后刷新或登录 GitHub 后再试。');
+          }
+          throw new Error('GitHub Issues 读取失败，状态码：' + response.status);
+        }
         return response.json();
       })
       .then(function (issues) {
+        githubLoadError = '';
         githubAnnotations = issues.map(parseGitHubAnnotation).filter(Boolean);
         mergeAnnotations();
         renderMarks();
         renderPanel();
       })
-      .catch(function () {
+      .catch(function (error) {
+        githubLoadError = error && error.message ? error.message : 'GitHub Issues 读取失败。';
         githubAnnotations = [];
         mergeAnnotations();
         renderMarks();
