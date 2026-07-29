@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-07-29T06:08:50.351Z",
+  "generatedAt": "2026-07-29T06:59:42.861Z",
   "annotations": [
     {
       "id": "gh-6",
@@ -10,6 +10,8 @@
       "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
       "text": "意图识别”4 讲的学习笔记",
       "comment": "test",
+      "state": "open",
+      "stateReason": "",
       "createdAt": "2026-07-29T06:08:10Z",
       "updatedAt": "2026-07-29T06:08:10Z"
     },
@@ -21,6 +23,8 @@
       "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
       "text": "会做事的系统",
       "comment": "test",
+      "state": "open",
+      "stateReason": "",
       "createdAt": "2026-07-29T06:08:38Z",
       "updatedAt": "2026-07-29T06:08:38Z"
     }
