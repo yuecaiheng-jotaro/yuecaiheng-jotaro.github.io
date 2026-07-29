@@ -384,6 +384,7 @@
   }
 
   function init() {
+    if (document.querySelector('.selection-comment-popover')) return;
     article = document.querySelector(articleSelector);
     if (!article) return;
     createUi();
@@ -394,7 +395,9 @@
     fetchGitHubAnnotations();
   }
 
-  if (document.readyState === 'loading') {
+  if (document.querySelector(articleSelector)) {
+    init();
+  } else if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
