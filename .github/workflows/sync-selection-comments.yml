@@ -39,12 +39,13 @@ jobs:
             const issues = await github.paginate(github.rest.issues.listForRepo, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              state: 'open',
+              state: 'all',
               per_page: 100
             });
 
             for (const issue of issues) {
               if (issue.pull_request || !issue.body || !issue.body.includes(marker)) continue;
+              if (issue.state === 'closed' && issue.state_reason === 'not_planned') continue;
               const match = issue.body.match(/```json\s*([\s\S]*?)\s*```/);
               if (!match) continue;
 
@@ -60,6 +61,8 @@ jobs:
                   title: String(payload.title || issue.title || ''),
                   text: String(payload.text).slice(0, 240),
                   comment: String(payload.comment),
+                  state: issue.state,
+                  stateReason: issue.state_reason || '',
                   createdAt: issue.created_at,
                   updatedAt: issue.updated_at
                 });
