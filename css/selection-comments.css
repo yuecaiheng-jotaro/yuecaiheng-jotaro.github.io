@@ -158,6 +158,20 @@
   font-size: 14px;
 }
 
+.selection-comment-status {
+  margin: 12px 14px 0;
+  padding: 9px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.selection-comment-status.error {
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
+  color: #9a3412;
+}
+
 .selection-comment-item {
   padding: 12px 14px;
   border-bottom: 1px solid #edf0f5;
