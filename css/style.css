@@ -3429,7 +3429,7 @@ figure.highlight .shrink-line:hover::before {
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background-image: url("https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/first-screen.jpg");
+  background-image: url("/images/first-screen.jpg");
   background-position-x: center;
   background-position-y: center;
   background-size: cover;
@@ -3437,7 +3437,7 @@ figure.highlight .shrink-line:hover::before {
   background-repeat-y: no-repeat;
 }
 .dark-mode .first-screen-container {
-  background-image: url("https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/first-screen.jpg");
+  background-image: url("/images/first-screen.jpg");
 }
 .first-screen-container .first-screen-content {
   display: flex;
