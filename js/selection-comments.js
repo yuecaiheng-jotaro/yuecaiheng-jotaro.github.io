@@ -7,6 +7,7 @@
     repo: 'yuecaiheng-jotaro.github.io',
     siteUrl: 'https://yuecaiheng-jotaro.github.io',
     staticDataUrl: '/selection-comments.json',
+    staticDataCdnUrl: 'https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/selection-comments.json',
     marker: '<!-- jotaro-selection-comment -->',
     label: 'selection-comment'
   };
@@ -271,11 +272,32 @@
     return location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   }
 
-  function fetchStaticAnnotations() {
-    return fetch(githubConfig.staticDataUrl, { headers: { Accept: 'application/json' } })
+  function fetchJson(url, timeout) {
+    const controller = 'AbortController' in window ? new AbortController() : null;
+    const timer = controller && timeout
+      ? window.setTimeout(function () { controller.abort(); }, timeout)
+      : null;
+
+    return fetch(url, {
+      headers: { Accept: 'application/json' },
+      signal: controller ? controller.signal : undefined
+    })
       .then(function (response) {
         if (!response.ok) throw new Error('静态批注文件不存在，状态码：' + response.status);
         return response.json();
+      })
+      .finally(function () {
+        if (timer) window.clearTimeout(timer);
+      });
+  }
+
+  function fetchStaticAnnotations() {
+    return fetchJson(githubConfig.staticDataUrl, 1200)
+      .catch(function () {
+        if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+          throw new Error('本地静态批注文件读取失败。');
+        }
+        return fetchJson(githubConfig.staticDataCdnUrl, 3000);
       })
       .then(function (data) {
         const items = Array.isArray(data) ? data : (data.annotations || []);
