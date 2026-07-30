@@ -1,87 +1,55 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
-  <title id="title">Agent 设计模式之美｜18｜复杂度路由：一件事该消耗多少推理 主线理解图</title>
-  <desc id="desc">围绕课程笔记主题生成的原创概念流程图，帮助理解章节主线、关键概念和实践闭环。</desc>
-  <defs>
-    <linearGradient id="header" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#0891b2"/>
-      <stop offset="100%" stop-color="#4f46e5"/>
-    </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.12"/>
-    </filter>
-  </defs>
-  <rect width="1200" height="720" rx="0" fill="#ecfeff"/>
-  <rect x="56" y="48" width="1088" height="624" rx="24" fill="#ffffff" filter="url(#shadow)"/>
-  <rect x="56" y="48" width="1088" height="108" rx="24" fill="url(#header)"/>
-  <rect x="56" y="114" width="1088" height="42" fill="url(#header)"/>
-  <text x="92" y="92" font-size="24" font-weight="800" fill="#ffffff">Agent 学习笔记</text>
-  <text x="92" y="132" text-anchor="start" font-size="26" font-weight="750" fill="#ffffff">Agent 设计模式之美｜18｜复杂度路由：一件事该消耗多...</text>
-  <text x="92" y="204" font-size="22" font-weight="700" fill="#0f172a">主线拆解</text>
-  <text x="1060" y="204" text-anchor="end" font-size="16" fill="#64748b">agent-design-patterns-21-复杂度路由-一件事该消耗多少推理</text>
-  <rect x="48" y="250" width="170" height="118" rx="14" fill="#ffffff" stroke="#0891b2" stroke-width="2"/>
-<circle cx="76" cy="278" r="16" fill="#cffafe" stroke="#0891b2" stroke-width="2"/>
-<text x="76" y="285" text-anchor="middle" font-size="18" font-weight="700" fill="#0891b2">1</text>
-<text x="133" y="312" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">一句话里混着四类</text>
-<text x="133" y="337" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">任务</text>
-<path d="M 225 309 H 235" stroke="#4f46e5" stroke-width="3" stroke-linecap="round"/>
-<path d="M 235 309 l -9 -7 v 14 z" fill="#4f46e5"/>
-<rect x="246" y="250" width="170" height="118" rx="14" fill="#ffffff" stroke="#0891b2" stroke-width="2"/>
-<circle cx="274" cy="278" r="16" fill="#cffafe" stroke="#0891b2" stroke-width="2"/>
-<text x="274" y="285" text-anchor="middle" font-size="18" font-weight="700" fill="#0891b2">2</text>
-<text x="331" y="312" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">复杂度路由模式的</text>
-<text x="331" y="337" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">定义</text>
-<path d="M 423 309 H 433" stroke="#4f46e5" stroke-width="3" stroke-linecap="round"/>
-<path d="M 433 309 l -9 -7 v 14 z" fill="#4f46e5"/>
-<rect x="444" y="250" width="170" height="118" rx="14" fill="#ffffff" stroke="#0891b2" stroke-width="2"/>
-<circle cx="472" cy="278" r="16" fill="#cffafe" stroke="#0891b2" stroke-width="2"/>
-<text x="472" y="285" text-anchor="middle" font-size="18" font-weight="700" fill="#0891b2">3</text>
-<text x="529" y="312" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">先把模糊请求拆成</text>
-<text x="529" y="337" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">任务原子</text>
-<path d="M 621 309 H 631" stroke="#4f46e5" stroke-width="3" stroke-linecap="round"/>
-<path d="M 631 309 l -9 -7 v 14 z" fill="#4f46e5"/>
-<rect x="642" y="250" width="170" height="118" rx="14" fill="#ffffff" stroke="#0891b2" stroke-width="2"/>
-<circle cx="670" cy="278" r="16" fill="#cffafe" stroke="#0891b2" stroke-width="2"/>
-<text x="670" y="285" text-anchor="middle" font-size="18" font-weight="700" fill="#0891b2">4</text>
-<text x="727" y="312" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">四个路由信号：意</text>
-<text x="727" y="337" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">图 / 证据 ...</text>
-<path d="M 819 309 H 829" stroke="#4f46e5" stroke-width="3" stroke-linecap="round"/>
-<path d="M 829 309 l -9 -7 v 14 z" fill="#4f46e5"/>
-<rect x="840" y="250" width="170" height="118" rx="14" fill="#ffffff" stroke="#0891b2" stroke-width="2"/>
-<circle cx="868" cy="278" r="16" fill="#cffafe" stroke="#0891b2" stroke-width="2"/>
-<text x="868" y="285" text-anchor="middle" font-size="18" font-weight="700" fill="#0891b2">5</text>
-<text x="925" y="312" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">第一个信号：任务</text>
-<text x="925" y="337" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">意图（inte...</text>
-<path d="M 1017 309 H 1027" stroke="#4f46e5" stroke-width="3" stroke-linecap="round"/>
-<path d="M 1027 309 l -9 -7 v 14 z" fill="#4f46e5"/>
-<rect x="1038" y="250" width="170" height="118" rx="14" fill="#ffffff" stroke="#0891b2" stroke-width="2"/>
-<circle cx="1066" cy="278" r="16" fill="#cffafe" stroke="#0891b2" stroke-width="2"/>
-<text x="1066" y="285" text-anchor="middle" font-size="18" font-weight="700" fill="#0891b2">6</text>
-<text x="1123" y="312" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">第二个信号：证据</text>
-<text x="1123" y="337" text-anchor="middle" font-size="20" font-weight="650" fill="#0f172a">状态（evid...</text>
-  <text x="92" y="454" font-size="22" font-weight="700" fill="#0f172a">关键词抓手</text>
-  <rect x="328" y="484" width="124" height="36" rx="18" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-<text x="390" y="508" text-anchor="middle" font-size="15" font-weight="600" fill="#334155">Task</text>
-<rect x="468" y="484" width="124" height="36" rx="18" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-<text x="530" y="508" text-anchor="middle" font-size="15" font-weight="600" fill="#334155">复制</text>
-<rect x="608" y="484" width="124" height="36" rx="18" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-<text x="670" y="508" text-anchor="middle" font-size="15" font-weight="600" fill="#334155">Agent</text>
-<rect x="748" y="484" width="124" height="36" rx="18" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-<text x="810" y="508" text-anchor="middle" font-size="15" font-weight="600" fill="#334155">Prompt</text>
-<rect x="328" y="532" width="124" height="36" rx="18" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-<text x="390" y="556" text-anchor="middle" font-size="15" font-weight="600" fill="#334155">Router</text>
-<rect x="468" y="532" width="124" height="36" rx="18" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-<text x="530" y="556" text-anchor="middle" font-size="15" font-weight="600" fill="#334155">上下文</text>
-<rect x="608" y="532" width="124" height="36" rx="18" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-<text x="670" y="556" text-anchor="middle" font-size="15" font-weight="600" fill="#334155">记忆</text>
-<rect x="748" y="532" width="124" height="36" rx="18" fill="#ffffff" stroke="#4f46e5" stroke-width="1.5"/>
-<text x="810" y="556" text-anchor="middle" font-size="15" font-weight="600" fill="#334155">推理</text>
-  <text x="92" y="596" font-size="22" font-weight="700" fill="#0f172a">复习闭环</text>
-  <rect x="116" y="620" width="214" height="58" rx="12" fill="#cffafe" stroke="#0891b2" stroke-width="1.5"/>
-<text x="223" y="656" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">任务</text>
-<rect x="366" y="620" width="214" height="58" rx="12" fill="#cffafe" stroke="#0891b2" stroke-width="1.5"/>
-<text x="473" y="656" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">上下文</text>
-<rect x="616" y="620" width="214" height="58" rx="12" fill="#cffafe" stroke="#0891b2" stroke-width="1.5"/>
-<text x="723" y="656" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">推理决策</text>
-<rect x="866" y="620" width="214" height="58" rx="12" fill="#cffafe" stroke="#0891b2" stroke-width="1.5"/>
-<text x="973" y="656" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">行动闭环</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img">
+<rect width="1200" height="680" fill="#ecfeff"/>
+<rect x="56" y="48" width="1088" height="584" rx="24" fill="#ffffff"/>
+<rect x="56" y="48" width="1088" height="108" rx="24" fill="#0891b2"/>
+<rect x="56" y="112" width="1088" height="44" fill="#0891b2"/>
+<text x="92" y="92" font-size="24" font-weight="800" fill="#fff">Agent 设计模式之美</text>
+<text x="92" y="132" text-anchor="start" font-size="25" font-weight="700" fill="#fff">18｜复杂度路由：一件事该消耗多少推理</text>
+<text x="92" y="214" font-size="22" font-weight="800" fill="#0f172a">本讲理解路线</text>
+<text x="92" y="248" font-size="16" fill="#64748b">先抓问题，再拆机制，最后落到可验证的工程动作。</text>
+<rect x="60" y="292" width="160" height="120" rx="14" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<circle cx="88" cy="322" r="16" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+<text x="88" y="329" text-anchor="middle" font-size="17" font-weight="700" fill="#0891b2">1</text>
+<text x="140" y="360" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">导读</text>
+<path d="M 226 352 H 228" stroke="#4f46e5" stroke-width="3"/><path d="M 228 352 l -9 -7 v14 z" fill="#4f46e5"/>
+<rect x="244" y="292" width="160" height="120" rx="14" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<circle cx="272" cy="322" r="16" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+<text x="272" y="329" text-anchor="middle" font-size="17" font-weight="700" fill="#0891b2">2</text>
+<text x="324" y="360" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">一句话里混着四类</text>
+<text x="324" y="385" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">任务</text>
+<path d="M 410 352 H 412" stroke="#4f46e5" stroke-width="3"/><path d="M 412 352 l -9 -7 v14 z" fill="#4f46e5"/>
+<rect x="428" y="292" width="160" height="120" rx="14" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<circle cx="456" cy="322" r="16" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+<text x="456" y="329" text-anchor="middle" font-size="17" font-weight="700" fill="#0891b2">3</text>
+<text x="508" y="360" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">复杂度路由模式的</text>
+<text x="508" y="385" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">定义</text>
+<path d="M 594 352 H 596" stroke="#4f46e5" stroke-width="3"/><path d="M 596 352 l -9 -7 v14 z" fill="#4f46e5"/>
+<rect x="612" y="292" width="160" height="120" rx="14" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<circle cx="640" cy="322" r="16" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+<text x="640" y="329" text-anchor="middle" font-size="17" font-weight="700" fill="#0891b2">4</text>
+<text x="692" y="360" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">先把模糊请求拆成</text>
+<text x="692" y="385" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">任务原子</text>
+<path d="M 778 352 H 780" stroke="#4f46e5" stroke-width="3"/><path d="M 780 352 l -9 -7 v14 z" fill="#4f46e5"/>
+<rect x="796" y="292" width="160" height="120" rx="14" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<circle cx="824" cy="322" r="16" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+<text x="824" y="329" text-anchor="middle" font-size="17" font-weight="700" fill="#0891b2">5</text>
+<text x="876" y="360" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">四个路由信号：意</text>
+<text x="876" y="385" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">图 / 证据 …</text>
+<path d="M 962 352 H 964" stroke="#4f46e5" stroke-width="3"/><path d="M 964 352 l -9 -7 v14 z" fill="#4f46e5"/>
+<rect x="980" y="292" width="160" height="120" rx="14" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<circle cx="1008" cy="322" r="16" fill="#ecfeff" stroke="#0891b2" stroke-width="2"/>
+<text x="1008" y="329" text-anchor="middle" font-size="17" font-weight="700" fill="#0891b2">6</text>
+<text x="1060" y="360" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">第一个信号：任务</text>
+<text x="1060" y="385" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">意图（inte…</text>
+
+<text x="92" y="520" font-size="22" font-weight="800" fill="#0f172a">复习抓手</text>
+<rect x="150" y="548" width="180" height="54" rx="12" fill="#ecfeff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="240" y="582" text-anchor="middle" font-size="20" font-weight="700" fill="#334155">任务入口</text>
+<rect x="380" y="548" width="180" height="54" rx="12" fill="#ecfeff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="470" y="582" text-anchor="middle" font-size="20" font-weight="700" fill="#334155">状态证据</text>
+<rect x="610" y="548" width="180" height="54" rx="12" fill="#ecfeff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="700" y="582" text-anchor="middle" font-size="20" font-weight="700" fill="#334155">推理控制</text>
+<rect x="840" y="548" width="180" height="54" rx="12" fill="#ecfeff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="930" y="582" text-anchor="middle" font-size="20" font-weight="700" fill="#334155">行动闭环</text>
+<text x="1108" y="622" text-anchor="end" font-size="14" fill="#64748b">agent-design-patterns-21-复杂度路由-一件事该消耗多少推理</text>
 </svg>

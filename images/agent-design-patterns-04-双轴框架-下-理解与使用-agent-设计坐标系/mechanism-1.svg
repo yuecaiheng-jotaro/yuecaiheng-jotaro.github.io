@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img">
+<rect width="1200" height="520" fill="#ecfeff"/>
+<rect x="62" y="54" width="1076" height="412" rx="22" fill="#fff"/>
+<text x="100" y="112" font-size="26" font-weight="800" fill="#0891b2">导读：机制拆解</text>
+<text x="100" y="154" text-anchor="start" font-size="18" font-weight="700" fill="#64748b">03｜双轴框架（下）：理解与使用 Agent 设计坐标系</text>
+<rect x="130" y="210" width="190" height="92" rx="12" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<text x="225" y="260" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">任务原子</text>
+<path d="M 320 256 H 365" stroke="#4f46e5" stroke-width="3"/><path d="M 365 256 l -9 -7 v14 z" fill="#4f46e5"/>
+<rect x="375" y="210" width="190" height="92" rx="12" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<text x="470" y="260" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">路由信号</text>
+<path d="M 565 256 H 610" stroke="#4f46e5" stroke-width="3"/><path d="M 610 256 l -9 -7 v14 z" fill="#4f46e5"/>
+<rect x="620" y="210" width="190" height="92" rx="12" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<text x="715" y="260" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">控制契约</text>
+<path d="M 810 256 H 855" stroke="#4f46e5" stroke-width="3"/><path d="M 855 256 l -9 -7 v14 z" fill="#4f46e5"/>
+<rect x="865" y="210" width="190" height="92" rx="12" fill="#fff" stroke="#0891b2" stroke-width="2"/>
+<text x="960" y="260" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">审计闭环</text>
+
+<rect x="130" y="370" width="940" height="56" rx="14" fill="#ecfeff" stroke="#4f46e5" stroke-width="1.5"/>
+<text x="600" y="405" text-anchor="middle" font-size="20" font-weight="700" fill="#334155">把正文案例压缩成：输入条件 → 关键机制 → 可观测证据 → 工程动作</text>
+<text x="1090" y="448" text-anchor="end" font-size="13" fill="#64748b">agent-design-patterns-04-双轴框架-下-理解与使用-agent-设计坐标系</text>
+</svg>
