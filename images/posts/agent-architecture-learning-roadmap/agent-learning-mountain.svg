@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Agent 学习路线山地图</title>
+  <desc id="desc">用登山路线表现从 LLM 基础到生产化 Agent 的学习阶段。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f1d3d"/>
+      <stop offset="58%" stop-color="#172f5d"/>
+      <stop offset="100%" stop-color="#f4b96e"/>
+    </linearGradient>
+    <linearGradient id="mountain" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="42%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#020617" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#sky)"/>
+  <circle cx="980" cy="104" r="58" fill="#fde68a" opacity="0.95"/>
+  <g opacity="0.72" stroke="#bae6fd" stroke-width="2" fill="none">
+    <path d="M92 138 C236 82 326 178 478 110 S744 92 886 178 S1086 130 1152 88"/>
+    <circle cx="202" cy="116" r="4" fill="#bae6fd"/>
+    <circle cx="494" cy="108" r="4" fill="#bae6fd"/>
+    <circle cx="846" cy="160" r="4" fill="#bae6fd"/>
+    <circle cx="1096" cy="116" r="4" fill="#bae6fd"/>
+  </g>
+
+  <path d="M54 594 L308 260 L438 420 L640 142 L848 428 L1008 258 L1168 594 Z" fill="url(#mountain)" filter="url(#softShadow)"/>
+  <path d="M640 142 L570 238 L670 214 L706 232 Z" fill="#e0f2fe" opacity="0.95"/>
+  <path d="M308 260 L270 310 L338 296 L368 330 Z" fill="#dbeafe" opacity="0.75"/>
+  <path d="M1008 258 L954 328 L1024 308 L1060 344 Z" fill="#dbeafe" opacity="0.75"/>
+
+  <path d="M118 574 C218 504 268 508 326 448 C398 374 454 444 518 360 C588 268 684 304 730 386 C788 490 908 430 1082 548" fill="none" stroke="#fef3c7" stroke-width="10" stroke-linecap="round" stroke-dasharray="1 24"/>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" font-size="24" fill="#f8fafc" text-anchor="middle">
+    <g transform="translate(154 548)">
+      <circle r="31" fill="#14b8a6"/><text y="8" font-weight="700">1</text>
+      <text x="0" y="62" font-size="20">LLM 基础</text>
+    </g>
+    <g transform="translate(296 478)">
+      <circle r="31" fill="#06b6d4"/><text y="8" font-weight="700">2</text>
+      <text x="0" y="62" font-size="20">手写 RAG</text>
+    </g>
+    <g transform="translate(454 394)">
+      <circle r="31" fill="#3b82f6"/><text y="8" font-weight="700">3</text>
+      <text x="0" y="62" font-size="20">最小 Agent</text>
+    </g>
+    <g transform="translate(610 306)">
+      <circle r="31" fill="#6366f1"/><text y="8" font-weight="700">4</text>
+      <text x="0" y="62" font-size="20">轻量框架</text>
+    </g>
+    <g transform="translate(748 382)">
+      <circle r="31" fill="#8b5cf6"/><text y="8" font-weight="700">5</text>
+      <text x="0" y="62" font-size="20">状态图</text>
+    </g>
+    <g transform="translate(908 454)">
+      <circle r="31" fill="#a855f7"/><text y="8" font-weight="700">6</text>
+      <text x="0" y="62" font-size="20">读源码</text>
+    </g>
+    <g transform="translate(1062 538)">
+      <circle r="31" fill="#f59e0b"/><text y="8" font-weight="700">7</text>
+      <text x="0" y="62" font-size="20">生产化</text>
+    </g>
+  </g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif" fill="#fff7ed">
+    <text x="64" y="76" font-size="38" font-weight="800">Agent 学习路线不是平地跑步，而是逐级登山</text>
+    <text x="66" y="118" font-size="22" opacity="0.88">先建立手感，再学习抽象，最后进入真实工程复杂度。</text>
+  </g>
+</svg>
