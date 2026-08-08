@@ -1,1 +1,32 @@
-{"version":1,"generatedAt":null,"annotations":[]}
+{
+  "version": 1,
+  "generatedAt": "2026-08-08T13:01:58.111Z",
+  "annotations": [
+    {
+      "id": "gh-6",
+      "number": 6,
+      "path": "/2026/07/29/ai-agent-intent-recognition-notes/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/6",
+      "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
+      "text": "意图识别”4 讲的学习笔记",
+      "comment": "test",
+      "state": "open",
+      "stateReason": "",
+      "createdAt": "2026-07-29T06:08:10Z",
+      "updatedAt": "2026-07-29T06:08:10Z"
+    },
+    {
+      "id": "gh-7",
+      "number": 7,
+      "path": "/2026/07/29/ai-agent-intent-recognition-notes/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/7",
+      "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
+      "text": "会做事的系统",
+      "comment": "test",
+      "state": "open",
+      "stateReason": "",
+      "createdAt": "2026-07-29T06:08:38Z",
+      "updatedAt": "2026-07-29T06:08:38Z"
+    }
+  ]
+}
