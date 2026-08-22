@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520" role="img" aria-label="Tool execution pipeline">
+  <style>
+    .bg{fill:#fff}.title{font:700 30px Arial,Helvetica,sans-serif;fill:#0f172a}.box{fill:#f8fafc;stroke:#334155;stroke-width:2;rx:12}.policy{fill:#fff7ed;stroke:#ea580c}.body{fill:#f0fdf4;stroke:#16a34a}.log{fill:#fdf2f8;stroke:#db2777}.txt{font:600 16px Arial,Helvetica,sans-serif;fill:#111827}.small{font:400 13px Arial,Helvetica,sans-serif;fill:#475569}.arrow{stroke:#334155;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker></defs>
+  <rect class="bg" width="1280" height="520"/>
+  <text x="56" y="58" class="title">工具执行流水线：工具不是函数调用那么简单</text>
+  <rect x="70" y="130" width="150" height="95" class="box"/><text x="95" y="165" class="txt">model call</text><text x="95" y="194" class="small">name + args</text>
+  <rect x="270" y="130" width="150" height="95" class="box policy"/><text x="294" y="165" class="txt">pre-execute</text><text x="294" y="194" class="small">allow / ask / deny</text>
+  <rect x="470" y="130" width="150" height="95" class="box policy"/><text x="494" y="165" class="txt">guards</text><text x="494" y="194" class="small">monotonic deny</text>
+  <rect x="670" y="130" width="150" height="95" class="box body"/><text x="694" y="165" class="txt">execute</text><text x="694" y="194" class="small">body / wrapper</text>
+  <rect x="870" y="130" width="150" height="95" class="box policy"/><text x="894" y="165" class="txt">post-exec</text><text x="894" y="194" class="small">replace / block</text>
+  <rect x="1070" y="130" width="150" height="95" class="box log"/><text x="1094" y="165" class="txt">tool/result</text><text x="1094" y="194" class="small">durable content</text>
+  <path class="arrow" d="M220 178 H270"/><path class="arrow" d="M420 178 H470"/><path class="arrow" d="M620 178 H670"/><path class="arrow" d="M820 178 H870"/><path class="arrow" d="M1020 178 H1070"/>
+  <rect x="250" y="315" width="220" height="100" class="box"/>
+  <text x="278" y="352" class="txt">Native Mode</text><text x="278" y="382" class="small">工具 schema 直接暴露给模型</text>
+  <rect x="530" y="315" width="220" height="100" class="box"/>
+  <text x="558" y="352" class="txt">Code Mode</text><text x="558" y="382" class="small">run_code + 生成 SDK</text>
+  <rect x="810" y="315" width="220" height="100" class="box"/>
+  <text x="838" y="352" class="txt">Both</text><text x="838" y="382" class="small">两种呈现并存</text>
+  <path class="arrow" d="M360 315 C420 270 520 245 680 225"/>
+  <path class="arrow" d="M640 315 C680 270 710 245 735 225"/>
+  <path class="arrow" d="M920 315 C900 270 810 245 770 225"/>
+</svg>

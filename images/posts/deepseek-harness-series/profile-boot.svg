@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="520" viewBox="0 0 1280 520" role="img" aria-label="Profile boot chain">
+  <style>
+    .bg{fill:#fbfdff}.title{font:700 30px Arial,Helvetica,sans-serif;fill:#0f172a}.box{fill:#fff;stroke:#334155;stroke-width:2;rx:12}.accent{fill:#eff6ff;stroke:#2563eb}.txt{font:600 18px Arial,Helvetica,sans-serif;fill:#111827}.small{font:400 14px Arial,Helvetica,sans-serif;fill:#475569}.arrow{stroke:#334155;stroke-width:2.2;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker></defs>
+  <rect class="bg" width="1280" height="520"/>
+  <text x="56" y="58" class="title">启动链路：从 dsh 命令到可运行插件树</text>
+  <rect x="70" y="120" width="170" height="105" class="box"/>
+  <text x="95" y="160" class="txt">1. CLI</text><text x="95" y="190" class="small">解析 web/headless</text>
+  <rect x="300" y="120" width="190" height="105" class="box"/>
+  <text x="325" y="160" class="txt">2. Profile</text><text x="325" y="190" class="small">$DSH_HOME/profiles</text>
+  <rect x="550" y="120" width="210" height="105" class="box accent"/>
+  <text x="575" y="160" class="txt">3. Bundle layers</text><text x="575" y="190" class="small">base → web-app/headless</text>
+  <rect x="820" y="120" width="200" height="105" class="box"/>
+  <text x="845" y="160" class="txt">4. User patches</text><text x="845" y="190" class="small">profile/home/--patch</text>
+  <rect x="1080" y="120" width="150" height="105" class="box accent"/>
+  <text x="1105" y="160" class="txt">5. Loader</text><text x="1105" y="190" class="small">activate plugins</text>
+  <path class="arrow" d="M240 172 H300"/><path class="arrow" d="M490 172 H550"/><path class="arrow" d="M760 172 H820"/><path class="arrow" d="M1020 172 H1080"/>
+  <rect x="105" y="305" width="250" height="105" class="box"/>
+  <text x="132" y="345" class="txt">.env / credentials</text><text x="132" y="375" class="small">环境变量与受管凭据</text>
+  <rect x="440" y="305" width="250" height="105" class="box"/>
+  <text x="467" y="345" class="txt">Cordis Context</text><text x="467" y="375" class="small">ctx.effect / ctx.on / service</text>
+  <rect x="775" y="305" width="250" height="105" class="box"/>
+  <text x="802" y="345" class="txt">Running surface</text><text x="802" y="375" class="small">Web URL 或 headless 输出</text>
+  <path class="arrow" d="M230 305 C330 250 455 250 565 305"/>
+  <path class="arrow" d="M1155 225 C1135 300 1030 350 1025 357"/>
+  <path class="arrow" d="M690 357 H775"/>
+</svg>

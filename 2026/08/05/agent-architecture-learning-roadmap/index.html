@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="JotaroRD">
+    
+    <title>
+        
+            Agent 架构与设计学习路线 |
+        
+        Jotaro Space
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/site-avatar-256.png">
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/brands.min.css">
+    
+        
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/first-screen-local.css">
+
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/selection-comments.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"yuecaiheng-jotaro.github.io","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Jotaro Space","author":"JotaroRD","avatar":"/images/site-avatar-256.png","logo":"/images/site-avatar-256.png","favicon":"/images/site-avatar-256.png"},"menu":{"home":"/","archives":"/archives","categories":"/categories","insight":"/insight","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/first-screen.jpg","background_img_dark":"/images/first-screen.jpg","description":"Talk is Cheap","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":false,"post_datetime":"updated"},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":false,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":true,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":false,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":true,"css":[null,"/css/first-screen-local.css","/css/selection-comments.css"],"js":[null,"/js/selection-comments-v2.js"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/site-avatar-256.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Jotaro Space
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                CATEGORIES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/insight">
+                                
+                                INSIGHT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                            CATEGORIES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/insight">
+                            
+                            INSIGHT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Agent 架构与设计学习路线
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/site-avatar-256.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">JotaroRD</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-08-05 00:00:00</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Wed Aug 05 2026 02:07:11 GMT+0800">2026-08-05 02:07:11</span>
+                </span>
+            
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/AI/">AI</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Agent/">Agent</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/LLM/">LLM</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/RAG/">RAG</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/LangGraph/">LangGraph</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="Agent-架构与设计学习路线"><a href="#Agent-架构与设计学习路线" class="headerlink" title="Agent 架构与设计学习路线"></a>Agent 架构与设计学习路线</h1><blockquote>
+<p>主线：先手写，再用框架；先单 Agent，再多 Agent；先能跑，再能评估、能上线。</p>
+</blockquote>
+<p><img   src="/images/posts/agent-architecture-learning-roadmap/agent-architecture-hero.png"  alt="Agent 架构与设计学习路线封面"></p>
+<p>这篇文章不是“框架清单”，而是一条从基础能力到生产系统的学习路线。Agent 最容易学偏的地方，是一上来就追 LangGraph、CrewAI、AutoGen 这些名字，结果只学会了调 API，却没有真正理解一个 Agent 为什么会失控、为什么会幻觉、为什么工具调用会失败、为什么上线后必须做评估和观测。</p>
+<p>所以更推荐把 Agent 当成一个工程系统来学：模型只是大脑，工具是手脚，状态是记忆，评估和观测是仪表盘，权限控制是刹车。没有仪表盘和刹车的智能体，看起来很酷，但一上路就容易漂移。</p>
+<h2 id="0-总体认知"><a href="#0-总体认知" class="headerlink" title="0. 总体认知"></a>0. 总体认知</h2><p>Agent 不是简单 prompt，也不是几个角色互相聊天，更不是某个框架的 API 速通。一个靠谱 Agent 系统通常包含：</p>
+<ul>
+<li>Model：负责理解、推理、生成。</li>
+<li>Tools：搜索、数据库、代码执行、文件读写、业务 API。</li>
+<li>State：任务状态、对话状态、执行历史、checkpoint。</li>
+<li>Memory&#x2F;RAG：外部知识、长期记忆、检索策略。</li>
+<li>Planner&#x2F;Router：决定下一步做什么、用哪个工具、是否拆任务。</li>
+<li>Executor：真实执行工具调用。</li>
+<li>Evaluator：判断结果是否正确。</li>
+<li>Observer：记录 trace、日志、token、成本、错误。</li>
+<li>Human-in-the-loop：高风险动作前让人审批。</li>
+</ul>
+<p>从知乎文章中最值得借鉴的一点是：<strong>不要把 Agent 学成调 API。</strong> Agent 的核心难点在系统设计、工具边界、状态管理、评估、调试、稳定性和成本控制。</p>
+<p>下面这张图可以作为 Agent 系统的总览。学习时不要只盯着 Model，而要观察 Model 如何和工具、状态、知识库、评估系统一起组成闭环。</p>
+<div class="mermaid">
+flowchart TD
+    U[用户请求] --> R[Planner / Router<br/>理解任务并决定下一步]
+    R --> M[Model<br/>推理与生成]
+    M --> T[Tools<br/>搜索 / 数据库 / 代码 / 业务 API]
+    T --> O[Observation<br/>工具执行结果]
+    O --> S[State<br/>任务状态 / 对话历史 / checkpoint]
+    S --> M
+    M --> K[Memory / RAG<br/>外部知识与长期记忆]
+    K --> M
+    M --> E[Evaluator<br/>结果校验]
+    E -->|通过| A[Final Answer]
+    E -->|不通过| R
+    R --> H{高风险动作?}
+    H -->|是| P[Human Approval]
+    H -->|否| T
+    P --> T
+    M --> L[Observer<br/>trace / token / cost / error]
+    T --> L
+</div>
+
+<p>可以把 Agent 的核心问题拆成三类：</p>
+<ul>
+<li>决策问题：下一步做什么？该不该调用工具？调用哪个工具？</li>
+<li>执行问题：工具入参是否正确？失败后如何重试？副作用是否可控？</li>
+<li>可信问题：结果是否有证据？能否复现？上线后如何知道它变好了还是变坏了？</li>
+</ul>
+<h2 id="1-学习路径总览"><a href="#1-学习路径总览" class="headerlink" title="1. 学习路径总览"></a>1. 学习路径总览</h2><p>建议按 7 个阶段推进：</p>
+<ol>
+<li>LLM 应用基础</li>
+<li>手写 RAG</li>
+<li>手写最小 Agent</li>
+<li>学轻量 Agent 框架</li>
+<li>学状态图与工作流 Agent</li>
+<li>学真实开源 Agent 系统</li>
+<li>做生产级 Agent 项目</li>
+</ol>
+<p><img   src="/images/posts/agent-architecture-learning-roadmap/agent-learning-mountain.svg"  alt="Agent 学习路线山地图"></p>
+<p>路线可以用这张图理解：前 3 阶段是在练“手感”，第 4-5 阶段是在学习成熟抽象，第 6-7 阶段是在进入真实工程复杂度。</p>
+<div class="mermaid">
+flowchart LR
+    A[1. LLM 应用基础<br/>结构化输出 / 工具调用] --> B[2. 手写 RAG<br/>检索 / 引用 / 解释错误]
+    B --> C[3. 手写最小 Agent<br/>ReAct / tools / trace]
+    C --> D[4. 轻量框架<br/>Pydantic AI / smolagents]
+    D --> E[5. 状态图 Agent<br/>LangGraph / checkpoint / HITL]
+    E --> F[6. 阅读真实系统<br/>OpenHands / SWE-agent]
+    F --> G[7. 生产化项目<br/>eval / trace / cost / deployment]
+</div>
+
+<p>每个阶段都建议遵循同一个节奏：先做一个能跑的最小项目，再补日志、错误处理、测试和评估。不要等“理论完全懂了”再动手，Agent 的很多坑只有跑起来才会露出牙齿。</p>
+<h2 id="2-第-1-阶段：LLM-应用基础"><a href="#2-第-1-阶段：LLM-应用基础" class="headerlink" title="2. 第 1 阶段：LLM 应用基础"></a>2. 第 1 阶段：LLM 应用基础</h2><p>建议周期：1-2 周</p>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>对 LLM 的能力边界建立体感，知道模型什么时候可靠，什么时候必须约束、校验和回退。</p>
+<h3 id="要掌握"><a href="#要掌握" class="headerlink" title="要掌握"></a>要掌握</h3><ul>
+<li>Prompt Engineering</li>
+<li>Few-shot</li>
+<li>Chain-of-Thought &#x2F; reasoning prompt</li>
+<li>Structured Output</li>
+<li>Function Calling &#x2F; Tool Calling</li>
+<li>Token、上下文窗口、temperature、top_p</li>
+<li>幻觉、指令冲突、提示注入</li>
+<li>流式输出</li>
+<li>模型选择和成本控制</li>
+</ul>
+<h3 id="练习项目"><a href="#练习项目" class="headerlink" title="练习项目"></a>练习项目</h3><h4 id="1-结构化信息抽取器"><a href="#1-结构化信息抽取器" class="headerlink" title="1. 结构化信息抽取器"></a>1. 结构化信息抽取器</h4><p>输入一段客服对话，输出结构化 JSON：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;user_question&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;intent&quot;</span><span class="punctuation">:</span> <span class="string">&quot;...&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;urgency&quot;</span><span class="punctuation">:</span> <span class="string">&quot;low|medium|high&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;need_human&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-工具调用-Demo"><a href="#2-工具调用-Demo" class="headerlink" title="2. 工具调用 Demo"></a>2. 工具调用 Demo</h4><p>让模型根据用户问题决定调用：</p>
+<ul>
+<li>calculator</li>
+<li>search_local_file</li>
+<li>get_current_time</li>
+<li>final_answer</li>
+</ul>
+<h3 id="验收标准"><a href="#验收标准" class="headerlink" title="验收标准"></a>验收标准</h3><ul>
+<li>知道什么时候该用自然语言输出，什么时候必须用结构化输出。</li>
+<li>知道模型输出不可信，必须校验。</li>
+<li>知道 tool schema 设计不好，Agent 会非常不稳定。</li>
+</ul>
+<h3 id="这一阶段的关键直觉"><a href="#这一阶段的关键直觉" class="headerlink" title="这一阶段的关键直觉"></a>这一阶段的关键直觉</h3><p>LLM 应用基础不是学一些 prompt 技巧，而是建立一个意识：<strong>模型输出默认只是候选答案，不是事实本身。</strong> 只要输出会进入系统流程，比如写数据库、生成客服回复、触发退款、调用外部 API，就必须尽量结构化、可校验、可回退。</p>
+<p>工具调用尤其要重视 schema 设计。比如 <code>search(query: string)</code> 看起来简单，但如果没有说明搜索范围、返回数量、失败语义和是否允许模糊匹配，模型就会自己“脑补工具能力”。很多 Agent 不稳定，不是模型笨，而是工具边界太暧昧。</p>
+<h3 id="推荐资料"><a href="#推荐资料" class="headerlink" title="推荐资料"></a>推荐资料</h3><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/" >ChatGPT Prompt Engineering for Developers<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.deeplearning.ai/short-courses/building-systems-with-chatgpt/" >Building Systems with the ChatGPT API<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://openai.github.io/openai-agents-python/quickstart/" >OpenAI Agents SDK - Quickstart<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://openai.github.io/openai-agents-python/agents/" >OpenAI Agents SDK - Agents<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://pydantic.dev/docs/ai/core-concepts/agent/" >Pydantic AI - Agents<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://pydantic.dev/docs/ai/core-concepts/output/" >Pydantic AI - Structured Output<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<h2 id="3-第-2-阶段：RAG-基础"><a href="#3-第-2-阶段：RAG-基础" class="headerlink" title="3. 第 2 阶段：RAG 基础"></a>3. 第 2 阶段：RAG 基础</h2><p>建议周期：2-3 周</p>
+<p><img   src="/images/posts/agent-architecture-learning-roadmap/rag-knowledge-library.svg"  alt="RAG 知识库检索插画"></p>
+<h3 id="目标-1"><a href="#目标-1" class="headerlink" title="目标"></a>目标</h3><p>能独立做一个不用框架的 RAG 问答系统，并能解释为什么回答错。</p>
+<h3 id="要掌握-1"><a href="#要掌握-1" class="headerlink" title="要掌握"></a>要掌握</h3><ul>
+<li>文档加载</li>
+<li>文本切分</li>
+<li>Embedding</li>
+<li>向量数据库</li>
+<li>Top-k 检索</li>
+<li>Hybrid Search</li>
+<li>Rerank</li>
+<li>Query rewrite</li>
+<li>Context compression</li>
+<li>Citation &#x2F; 引用来源</li>
+<li>过期文档、冲突文档处理</li>
+</ul>
+<h3 id="练习项目-1"><a href="#练习项目-1" class="headerlink" title="练习项目"></a>练习项目</h3><p>做一个个人知识库问答系统：</p>
+<ul>
+<li>支持 Markdown &#x2F; PDF &#x2F; txt 文档导入。</li>
+<li>文档切 chunk。</li>
+<li>存入 FAISS、Chroma 或 SQLite 向量扩展。</li>
+<li>用户提问时检索相关 chunk。</li>
+<li>回答时必须带引用来源。</li>
+<li>如果检索不到，必须说“不知道”，不能瞎编。</li>
+</ul>
+<p>RAG 的流程可以先按最朴素版本实现，不急着堆复杂框架：</p>
+<div class="mermaid">
+flowchart TD
+    D[原始文档<br/>Markdown / PDF / txt] --> C[切分 Chunk]
+    C --> EM[Embedding]
+    EM --> V[(向量库)]
+    Q[用户问题] --> QR[Query Rewrite<br/>可选]
+    QR --> RET[Top-k Retrieval]
+    V --> RET
+    RET --> RR[Rerank<br/>可选]
+    RR --> CTX[组装上下文<br/>带来源]
+    CTX --> LLM[LLM 生成回答]
+    LLM --> ANS[答案 + 引用]
+    ANS --> EV[评估<br/>命中率 / 忠实度 / 相关性]
+</div>
+
+<h3 id="验收标准-1"><a href="#验收标准-1" class="headerlink" title="验收标准"></a>验收标准</h3><p>你能解释一次错误回答的原因属于哪一类：</p>
+<ul>
+<li>文档没收录。</li>
+<li>chunk 切坏了。</li>
+<li>embedding 召回差。</li>
+<li>rerank 排错了。</li>
+<li>prompt 没约束住。</li>
+<li>模型幻觉了。</li>
+</ul>
+<h3 id="常见坑"><a href="#常见坑" class="headerlink" title="常见坑"></a>常见坑</h3><ul>
+<li>chunk 太大：召回内容冗余，模型抓不到重点。</li>
+<li>chunk 太小：上下文断裂，答案缺少必要条件。</li>
+<li>只做向量召回：关键词、编号、订单号、错误码这类问题可能召回很差。</li>
+<li>不做引用：回答看起来顺滑，但无法判断证据来自哪里。</li>
+<li>没有“不知道”机制：检索不到时模型会自然补全，越会写越危险。</li>
+</ul>
+<h3 id="推荐资料-1"><a href="#推荐资料-1" class="headerlink" title="推荐资料"></a>推荐资料</h3><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://docs.llamaindex.org.cn/en/stable/understanding/rag/" >LlamaIndex: RAG 简介<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://python.langchain.com/docs/tutorials/rag/" >LangChain RAG Tutorial<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://docs.ragas.io/" >RAGAS Docs<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/explodinggradients/ragas" >RAGAS GitHub<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<h2 id="4-第-3-阶段：手写最小-Agent"><a href="#4-第-3-阶段：手写最小-Agent" class="headerlink" title="4. 第 3 阶段：手写最小 Agent"></a>4. 第 3 阶段：手写最小 Agent</h2><p>建议周期：2 周</p>
+<h3 id="目标-2"><a href="#目标-2" class="headerlink" title="目标"></a>目标</h3><p>不依赖框架，自己写出 Agent 主循环。</p>
+<h3 id="要掌握-2"><a href="#要掌握-2" class="headerlink" title="要掌握"></a>要掌握</h3><ul>
+<li>ReAct 循环</li>
+<li>Tool registry</li>
+<li>Tool schema</li>
+<li>Observation</li>
+<li>Retry</li>
+<li>Max steps</li>
+<li>Stop condition</li>
+<li>Error handling</li>
+<li>Tool result summarization</li>
+<li>Tool permission</li>
+</ul>
+<h3 id="最小主循环"><a href="#最小主循环" class="headerlink" title="最小主循环"></a>最小主循环</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> step &lt; max_steps:</span><br><span class="line">    response = call_llm(messages, tools)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> response.<span class="built_in">type</span> == <span class="string">&quot;final&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span> response.answer</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> response.<span class="built_in">type</span> == <span class="string">&quot;tool_call&quot;</span>:</span><br><span class="line">        result = run_tool(response.tool_name, response.arguments)</span><br><span class="line">        messages.append(tool_observation(result))</span><br></pre></td></tr></table></figure>
+
+<p>更完整一点，最小 Agent 主循环其实是这个闭环：</p>
+<div class="mermaid">
+flowchart TD
+    START[接收任务] --> THINK[LLM 思考下一步]
+    THINK --> DECIDE{需要工具?}
+    DECIDE -->|否| FINAL[输出最终答案]
+    DECIDE -->|是| SCHEMA[校验工具名和参数]
+    SCHEMA --> EXEC[执行工具]
+    EXEC --> OBS[记录 Observation]
+    OBS --> TRACE[写入 Trace]
+    TRACE --> LIMIT{超过 max steps?}
+    LIMIT -->|否| THINK
+    LIMIT -->|是| STOP[停止并说明未完成原因]
+    EXEC --> ERR{工具失败?}
+    ERR -->|可恢复| OBS
+    ERR -->|不可恢复| STOP
+</div>
+
+<h3 id="练习项目-2"><a href="#练习项目-2" class="headerlink" title="练习项目"></a>练习项目</h3><p>做一个本地文件研究 Agent：</p>
+<ul>
+<li>搜索目录。</li>
+<li>读取文件。</li>
+<li>总结文件。</li>
+<li>根据多个文件回答问题。</li>
+<li>遇到不确定时继续搜索。</li>
+<li>最多执行 10 步，防止无限循环。</li>
+</ul>
+<h3 id="验收标准-2"><a href="#验收标准-2" class="headerlink" title="验收标准"></a>验收标准</h3><ul>
+<li>能完整打印每一步 trace。</li>
+<li>能限制最大步数。</li>
+<li>能处理工具报错。</li>
+<li>能让 Agent 在没有证据时停止瞎猜。</li>
+</ul>
+<h3 id="实现时建议额外记录的日志"><a href="#实现时建议额外记录的日志" class="headerlink" title="实现时建议额外记录的日志"></a>实现时建议额外记录的日志</h3><p>最小 Agent 不只是能跑，还要能复盘。每一步至少记录：</p>
+<ul>
+<li>step 编号。</li>
+<li>模型本次输入摘要。</li>
+<li>模型选择的动作。</li>
+<li>工具名和参数。</li>
+<li>工具返回摘要。</li>
+<li>本次 token 和耗时。</li>
+<li>是否触发重试、停止或回退。</li>
+</ul>
+<p>这些 trace 在学习阶段看起来有点啰嗦，但它会让你第一次真正“看见”Agent 如何思考、如何跑偏。没有 trace 的 Agent 调试，就像黑灯瞎火修发动机。</p>
+<h3 id="推荐资料-2"><a href="#推荐资料-2" class="headerlink" title="推荐资料"></a>推荐资料</h3><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2023-06-23-agent/" >Lilian Weng: LLM Powered Autonomous Agents<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2210.03629" >ReAct: Synergizing Reasoning and Acting in Language Models<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2305.10601" >Tree of Thoughts<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2303.11366" >Reflexion<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<h2 id="5-第-4-阶段：轻量-Agent-框架"><a href="#5-第-4-阶段：轻量-Agent-框架" class="headerlink" title="5. 第 4 阶段：轻量 Agent 框架"></a>5. 第 4 阶段：轻量 Agent 框架</h2><p>建议周期：2-3 周</p>
+<h3 id="目标-3"><a href="#目标-3" class="headerlink" title="目标"></a>目标</h3><p>理解成熟框架如何抽象 Agent、Tool、Output、Dependency、Usage。</p>
+<h3 id="推荐项目"><a href="#推荐项目" class="headerlink" title="推荐项目"></a>推荐项目</h3><h4 id="smolagents"><a href="#smolagents" class="headerlink" title="smolagents"></a>smolagents</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/huggingface/smolagents" >smolagents GitHub<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://huggingface.co/docs/smolagents/main/index" >smolagents Docs<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/huggingface/smolagents/blob/main/docs/source/en/guided_tour.md" >smolagents Guided Tour<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>重点看：</p>
+<ul>
+<li>CodeAgent</li>
+<li>ToolCallingAgent</li>
+<li>Tool</li>
+<li>Model wrapper</li>
+<li>Execution loop</li>
+</ul>
+<h4 id="Pydantic-AI"><a href="#Pydantic-AI" class="headerlink" title="Pydantic AI"></a>Pydantic AI</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/pydantic/pydantic-ai" >Pydantic AI GitHub<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://pydantic.dev/docs/ai/core-concepts/agent/" >Pydantic AI - Agents<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://pydantic.dev/docs/ai/tools-toolsets/toolsets/" >Pydantic AI - Toolsets<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://pydantic.dev/docs/ai/core-concepts/capabilities/" >Pydantic AI - Capabilities<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>重点看：</p>
+<ul>
+<li>Agent 如何定义。</li>
+<li>Tools 如何注册。</li>
+<li>Tool arguments 如何校验。</li>
+<li>Output 如何结构化。</li>
+<li>Usage &#x2F; token 如何统计。</li>
+<li>Toolset 如何组合。</li>
+<li>测试时如何 mock 工具。</li>
+</ul>
+<h3 id="练习项目-3"><a href="#练习项目-3" class="headerlink" title="练习项目"></a>练习项目</h3><p>用 Pydantic AI 或 smolagents 重写第 3 阶段的本地文件 Agent。</p>
+<h3 id="验收标准-3"><a href="#验收标准-3" class="headerlink" title="验收标准"></a>验收标准</h3><ul>
+<li>所有工具入参都有类型。</li>
+<li>最终输出是结构化模型。</li>
+<li>能 mock 工具做单元测试。</li>
+<li>能记录每次 run 的 usage。</li>
+</ul>
+<h3 id="框架学习的正确姿势"><a href="#框架学习的正确姿势" class="headerlink" title="框架学习的正确姿势"></a>框架学习的正确姿势</h3><p>学框架时不要只看 quickstart，要反过来问：</p>
+<ul>
+<li>它如何表达 Agent？</li>
+<li>它如何描述工具？</li>
+<li>它如何校验工具入参？</li>
+<li>它如何处理模型输出不符合 schema？</li>
+<li>它如何记录 usage？</li>
+<li>它如何 mock 模型和工具？</li>
+<li>它如何把一次 run 的中间过程暴露出来？</li>
+</ul>
+<p>如果一个框架让 demo 很快，但隐藏了状态、错误和 trace，那它适合原型，不一定适合生产。学习框架最有价值的部分，不是“少写几行代码”，而是理解它替你做了哪些抽象，以及这些抽象在什么场景下会漏。</p>
+<h2 id="6-第-5-阶段：LangGraph-与状态图"><a href="#6-第-5-阶段：LangGraph-与状态图" class="headerlink" title="6. 第 5 阶段：LangGraph 与状态图"></a>6. 第 5 阶段：LangGraph 与状态图</h2><p>建议周期：3-4 周</p>
+<h3 id="目标-4"><a href="#目标-4" class="headerlink" title="目标"></a>目标</h3><p>从“Agent 循环”升级到“Agent 工作流系统”。</p>
+<p>真实 Agent 很少只是一个 while loop，它更像一张状态图：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">理解任务 -&gt; 检索知识 -&gt; 判断是否需要工具 -&gt; 执行工具</span><br><span class="line">-&gt; 验证结果 -&gt; 需要人工审批？ -&gt; 生成最终结果</span><br></pre></td></tr></table></figure>
+
+<p>对应到状态图，大致会长这样：</p>
+<div class="mermaid">
+flowchart TD
+    A[理解任务] --> B[检索知识]
+    B --> C{是否需要工具?}
+    C -->|否| F[生成草稿]
+    C -->|是| D[执行工具]
+    D --> E[验证工具结果]
+    E -->|失败| B
+    E -->|通过| F
+    F --> G{是否高风险?}
+    G -->|是| H[人工审批<br/>Interrupt]
+    H --> I[恢复执行<br/>Resume]
+    G -->|否| J[最终答复]
+    I --> J
+    J --> K[保存 checkpoint / trace]
+</div>
+
+<h3 id="要掌握-3"><a href="#要掌握-3" class="headerlink" title="要掌握"></a>要掌握</h3><ul>
+<li>State</li>
+<li>Node</li>
+<li>Edge</li>
+<li>Conditional Edge</li>
+<li>Checkpoint</li>
+<li>Interrupt</li>
+<li>Resume</li>
+<li>Human-in-the-loop</li>
+<li>Subgraph</li>
+<li>Durable execution</li>
+</ul>
+<h3 id="推荐资料-3"><a href="#推荐资料-3" class="headerlink" title="推荐资料"></a>推荐资料</h3><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph" >LangGraph GitHub<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://langchain-ai.github.io/langgraph/reference/" >LangGraph Reference<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://docs.langchain.com/oss/python/langchain/human-in-the-loop" >LangGraph Human-in-the-loop<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://docs.langchain.com/oss/javascript/langgraph/persistence" >LangGraph Persistence<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<h3 id="练习项目-4"><a href="#练习项目-4" class="headerlink" title="练习项目"></a>练习项目</h3><p>做一个工单处理 Agent：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">用户问题</span><br><span class="line"> -&gt; 意图识别</span><br><span class="line"> -&gt; 检索知识库</span><br><span class="line"> -&gt; 判断是否能自动回答</span><br><span class="line"> -&gt; 生成草稿</span><br><span class="line"> -&gt; 如果涉及退款/赔偿/敏感操作，则人工审批</span><br><span class="line"> -&gt; 输出最终答复</span><br></pre></td></tr></table></figure>
+
+<h3 id="验收标准-4"><a href="#验收标准-4" class="headerlink" title="验收标准"></a>验收标准</h3><ul>
+<li>每一步都有明确 state。</li>
+<li>任意节点失败可以重试。</li>
+<li>高风险工具调用前可以暂停。</li>
+<li>人工审批后可以恢复执行。</li>
+<li>每次执行都能回放 trace。</li>
+</ul>
+<h3 id="为什么要学状态图"><a href="#为什么要学状态图" class="headerlink" title="为什么要学状态图"></a>为什么要学状态图</h3><p>普通 while loop 适合学习 Agent 的最小机制，但真实业务通常需要更明确的流程控制。比如客服工单、报表生成、退款审核、代码修复，这些任务都有确定阶段：先识别意图，再检索，再判断风险，再执行，再审批，再输出。</p>
+<p>状态图的好处是把“下一步去哪”显式表达出来。这样失败重试、人工审批、断点恢复、并行分支、子任务复用都会更清楚。你不再只是让模型自由发挥，而是在给模型一条可控的轨道。</p>
+<h2 id="7-第-6-阶段：真实开源-Agent-系统"><a href="#7-第-6-阶段：真实开源-Agent-系统" class="headerlink" title="7. 第 6 阶段：真实开源 Agent 系统"></a>7. 第 6 阶段：真实开源 Agent 系统</h2><p>建议周期：4-6 周</p>
+<h3 id="目标-5"><a href="#目标-5" class="headerlink" title="目标"></a>目标</h3><p>看真实项目如何处理复杂性：shell、文件系统、sandbox、事件流、前后端、错误恢复、权限边界。</p>
+<h3 id="阅读顺序"><a href="#阅读顺序" class="headerlink" title="阅读顺序"></a>阅读顺序</h3><h4 id="1-smolagents"><a href="#1-smolagents" class="headerlink" title="1. smolagents"></a>1. smolagents</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/huggingface/smolagents" >smolagents GitHub<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>适合理解最小 Agent 抽象。</p>
+<h4 id="2-Pydantic-AI"><a href="#2-Pydantic-AI" class="headerlink" title="2. Pydantic AI"></a>2. Pydantic AI</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/pydantic/pydantic-ai" >Pydantic AI GitHub<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>适合学习类型化 Agent 工程实践。</p>
+<h4 id="3-LangGraph"><a href="#3-LangGraph" class="headerlink" title="3. LangGraph"></a>3. LangGraph</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph" >LangGraph GitHub<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>适合学习状态、流程、checkpoint、human-in-the-loop。</p>
+<h4 id="4-OpenHands"><a href="#4-OpenHands" class="headerlink" title="4. OpenHands"></a>4. OpenHands</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/OpenHands/OpenHands" >OpenHands GitHub<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://docs.openhands.dev/openhands/usage/agents" >OpenHands Agents Docs<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>重点看：</p>
+<ul>
+<li>CodeActAgent</li>
+<li>Agent runtime</li>
+<li>Shell 执行</li>
+<li>文件修改</li>
+<li>sandbox</li>
+<li>event stream</li>
+<li>planner</li>
+<li>error recovery</li>
+<li>frontend&#x2F;backend 如何交互</li>
+</ul>
+<h4 id="5-SWE-agent"><a href="#5-SWE-agent" class="headerlink" title="5. SWE-agent"></a>5. SWE-agent</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/princeton-nlp/SWE-agent" >SWE-agent GitHub<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://arxiv.org/abs/2405.15793" >SWE-agent Paper<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>重点看 Agent-Computer Interface，也就是如何设计 Agent 与代码库、shell、测试系统交互的接口。</p>
+<h4 id="6-CrewAI"><a href="#6-CrewAI" class="headerlink" title="6. CrewAI"></a>6. CrewAI</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/crewAIInc/crewAI" >CrewAI GitHub<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>适合学习角色型多 Agent：</p>
+<ul>
+<li>Agent role</li>
+<li>Task</li>
+<li>Crew</li>
+<li>Process</li>
+<li>Tool</li>
+</ul>
+<h4 id="7-AutoGen"><a href="#7-AutoGen" class="headerlink" title="7. AutoGen"></a>7. AutoGen</h4><ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/microsoft/autogen" >AutoGen GitHub<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>适合作为经典多 Agent 案例阅读，重点看 conversational agents、group chat、multi-agent runtime。</p>
+<h3 id="阅读开源项目时看什么"><a href="#阅读开源项目时看什么" class="headerlink" title="阅读开源项目时看什么"></a>阅读开源项目时看什么</h3><p>建议不要按文件从头读到尾，而是带着问题读：</p>
+<ul>
+<li>入口在哪里？一次用户请求如何变成 Agent run？</li>
+<li>工具是如何注册、隔离和执行的？</li>
+<li>shell、文件系统、网络这些危险能力如何做权限控制？</li>
+<li>中间事件如何流向前端？</li>
+<li>失败后如何恢复？是否会重新规划？</li>
+<li>trace 保存在哪里？能不能复现一次失败？</li>
+<li>prompt、工具、状态三者之间如何组织？</li>
+</ul>
+<p>真实系统的价值不在于“代码更多”，而在于你能看到工程妥协：哪些地方必须安全，哪些地方为了体验做了简化，哪些地方为了可观测性牺牲了实现优雅。</p>
+<h2 id="8-第-7-阶段：生产化能力"><a href="#8-第-7-阶段：生产化能力" class="headerlink" title="8. 第 7 阶段：生产化能力"></a>8. 第 7 阶段：生产化能力</h2><p>建议周期：长期练习</p>
+<p><img   src="/images/posts/agent-architecture-learning-roadmap/agent-production-dashboard.svg"  alt="生产级 Agent 仪表盘插画"></p>
+<h3 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h3><p>Agent 没有评估集，就没有迭代方向。</p>
+<p>你要建立：</p>
+<ul>
+<li>Golden dataset</li>
+<li>用户真实问题集</li>
+<li>标准答案</li>
+<li>检索命中率</li>
+<li>Answer relevancy</li>
+<li>Faithfulness</li>
+<li>Context recall</li>
+<li>Tool success rate</li>
+<li>Human escalation rate</li>
+</ul>
+<p>推荐资料：</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://docs.ragas.io/" >RAGAS Docs<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://github.com/confident-ai/deepeval" >DeepEval GitHub<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<p>生产化 Agent 的迭代闭环可以这样理解：</p>
+<div class="mermaid">
+flowchart LR
+    Q[真实用户问题] --> G[Golden Dataset<br/>标准问题集]
+    G --> RUN[Agent Run]
+    RUN --> T[Trace<br/>每一步执行过程]
+    RUN --> M[Metrics<br/>命中率 / 工具成功率 / 成本]
+    T --> ERR[错误归因]
+    M --> ERR
+    ERR --> IMP[改进 Prompt / Tool / RAG / Workflow]
+    IMP --> RUN
+    RUN --> PROD[线上发布]
+    PROD --> Q
+</div>
+
+<h3 id="Observability"><a href="#Observability" class="headerlink" title="Observability"></a>Observability</h3><p>你要能回答：</p>
+<ul>
+<li>Agent 每一步做了什么？</li>
+<li>调了哪些工具？</li>
+<li>每次 LLM 输入输出是什么？</li>
+<li>哪一步开始跑偏？</li>
+<li>token 花在哪？</li>
+<li>延迟主要在哪？</li>
+</ul>
+<p>推荐资料：</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://openai.github.io/openai-agents-python/tracing/" >OpenAI Agents SDK - Tracing<i class="fas fa-external-link-alt"></i></a></li>
+<li><a class="link"   target="_blank" rel="noopener" href="https://www.langchain.com/langsmith" >LangSmith<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<h3 id="Safety"><a href="#Safety" class="headerlink" title="Safety"></a>Safety</h3><p>重点能力：</p>
+<ul>
+<li>工具白名单</li>
+<li>参数校验</li>
+<li>SQL 防护</li>
+<li>文件读写限制</li>
+<li>用户确认</li>
+<li>敏感信息脱敏</li>
+<li>prompt injection 防御</li>
+<li>高风险动作审批</li>
+</ul>
+<p>推荐资料：</p>
+<ul>
+<li><a class="link"   target="_blank" rel="noopener" href="https://openai.github.io/openai-agents-python/guardrails/" >OpenAI Agents SDK - Guardrails<i class="fas fa-external-link-alt"></i></a></li>
+</ul>
+<h3 id="Stability"><a href="#Stability" class="headerlink" title="Stability"></a>Stability</h3><p>重点能力：</p>
+<ul>
+<li>max iterations</li>
+<li>timeout</li>
+<li>retry</li>
+<li>circuit breaker</li>
+<li>fallback model</li>
+<li>cost budget</li>
+<li>tool idempotency</li>
+<li>partial failure recovery</li>
+</ul>
+<h3 id="生产化检查清单"><a href="#生产化检查清单" class="headerlink" title="生产化检查清单"></a>生产化检查清单</h3><table>
+<thead>
+<tr>
+<th>能力</th>
+<th>要回答的问题</th>
+<th>最小做法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Evaluation</td>
+<td>改完后到底有没有变好？</td>
+<td>准备 30-100 条真实问题和标准答案</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>Agent 是在哪一步跑偏的？</td>
+<td>保存每一步模型输入、工具调用、输出摘要</td>
+</tr>
+<tr>
+<td>Safety</td>
+<td>哪些动作不能让模型直接执行？</td>
+<td>工具白名单 + 高风险动作人工审批</td>
+</tr>
+<tr>
+<td>Stability</td>
+<td>卡住、超时、失败怎么办？</td>
+<td>max steps、timeout、retry、fallback</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>一次 run 花多少钱？</td>
+<td>记录 token、模型、工具耗时和调用次数</td>
+</tr>
+</tbody></table>
+<h2 id="9-一年学习计划"><a href="#9-一年学习计划" class="headerlink" title="9. 一年学习计划"></a>9. 一年学习计划</h2><h3 id="第-1-个月：LLM-Prompt-Structured-Output"><a href="#第-1-个月：LLM-Prompt-Structured-Output" class="headerlink" title="第 1 个月：LLM + Prompt + Structured Output"></a>第 1 个月：LLM + Prompt + Structured Output</h3><p>产出：</p>
+<ul>
+<li>信息抽取器</li>
+<li>工具调用 demo</li>
+<li>JSON 输出校验器</li>
+</ul>
+<h3 id="第-2-个月：RAG"><a href="#第-2-个月：RAG" class="headerlink" title="第 2 个月：RAG"></a>第 2 个月：RAG</h3><p>产出：</p>
+<ul>
+<li>本地知识库问答</li>
+<li>带引用回答</li>
+<li>简单评估集</li>
+</ul>
+<h3 id="第-3-个月：手写-Agent"><a href="#第-3-个月：手写-Agent" class="headerlink" title="第 3 个月：手写 Agent"></a>第 3 个月：手写 Agent</h3><p>产出：</p>
+<ul>
+<li>本地文件 Agent</li>
+<li>ReAct loop</li>
+<li>工具注册系统</li>
+<li>trace 日志</li>
+</ul>
+<h3 id="第-4-个月：Pydantic-AI-smolagents"><a href="#第-4-个月：Pydantic-AI-smolagents" class="headerlink" title="第 4 个月：Pydantic AI &#x2F; smolagents"></a>第 4 个月：Pydantic AI &#x2F; smolagents</h3><p>产出：</p>
+<ul>
+<li>类型化 Agent</li>
+<li>toolset</li>
+<li>structured final output</li>
+<li>mock tool tests</li>
+</ul>
+<h3 id="第-5-6-个月：LangGraph"><a href="#第-5-6-个月：LangGraph" class="headerlink" title="第 5-6 个月：LangGraph"></a>第 5-6 个月：LangGraph</h3><p>产出：</p>
+<ul>
+<li>工单 Agent</li>
+<li>human-in-the-loop</li>
+<li>checkpoint&#x2F;resume</li>
+<li>状态图可视化</li>
+</ul>
+<h3 id="第-7-8-个月：OpenHands-Coding-Agent"><a href="#第-7-8-个月：OpenHands-Coding-Agent" class="headerlink" title="第 7-8 个月：OpenHands &#x2F; Coding Agent"></a>第 7-8 个月：OpenHands &#x2F; Coding Agent</h3><p>产出：</p>
+<ul>
+<li>简易代码修复 Agent</li>
+<li>能读 repo、改文件、跑测试</li>
+<li>失败后重新规划</li>
+</ul>
+<h3 id="第-9-10-个月：多-Agent"><a href="#第-9-10-个月：多-Agent" class="headerlink" title="第 9-10 个月：多 Agent"></a>第 9-10 个月：多 Agent</h3><p>产出：</p>
+<ul>
+<li>Researcher + Writer + Reviewer 协作 Agent</li>
+<li>或客服场景：Router + RAG Agent + Escalation Agent</li>
+</ul>
+<h3 id="第-11-12-个月：生产化项目"><a href="#第-11-12-个月：生产化项目" class="headerlink" title="第 11-12 个月：生产化项目"></a>第 11-12 个月：生产化项目</h3><p>做一个完整项目，例如：</p>
+<ul>
+<li>企业知识库客服 Agent</li>
+<li>代码库问答 + 修复 Agent</li>
+<li>工单转知识库 Agent</li>
+<li>数据分析 Agent</li>
+<li>运营日报 Agent</li>
+</ul>
+<p>必须包含：</p>
+<ul>
+<li>RAG</li>
+<li>tool calling</li>
+<li>LangGraph workflow</li>
+<li>human approval</li>
+<li>eval dataset</li>
+<li>trace</li>
+<li>cost tracking</li>
+<li>deployment</li>
+<li>README</li>
+<li>demo cases</li>
+</ul>
+<h2 id="10-最推荐的-5-个开源项目"><a href="#10-最推荐的-5-个开源项目" class="headerlink" title="10. 最推荐的 5 个开源项目"></a>10. 最推荐的 5 个开源项目</h2><ol>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/huggingface/smolagents" >smolagents<i class="fas fa-external-link-alt"></i></a><br>轻，适合理解 Agent 最小实现。</p>
+</li>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/pydantic/pydantic-ai" >Pydantic AI<i class="fas fa-external-link-alt"></i></a><br>工程味强，适合学类型化 Agent。</p>
+</li>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph" >LangGraph<i class="fas fa-external-link-alt"></i></a><br>最适合学状态、流程、checkpoint、human-in-the-loop。</p>
+</li>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/OpenHands/OpenHands" >OpenHands<i class="fas fa-external-link-alt"></i></a><br>真实复杂 coding agent，值得反复读。</p>
+</li>
+<li><p><a class="link"   target="_blank" rel="noopener" href="https://github.com/crewAIInc/crewAI" >CrewAI<i class="fas fa-external-link-alt"></i></a><br>学多 Agent 角色和任务编排。</p>
+</li>
+</ol>
+<h2 id="11-最小实战组合"><a href="#11-最小实战组合" class="headerlink" title="11. 最小实战组合"></a>11. 最小实战组合</h2><p>如果时间有限，至少完成这 4 个项目：</p>
+<ol>
+<li>本地文件搜索 Agent：练 ReAct + tools。</li>
+<li>个人知识库 RAG：练 chunk、embedding、retrieval、citation。</li>
+<li>工单处理 Agent：练 LangGraph、状态流、人工审批。</li>
+<li>代码修复 Agent：练 sandbox、shell、patch、测试、失败恢复。</li>
+</ol>
+<h2 id="12-最终能力地图"><a href="#12-最终能力地图" class="headerlink" title="12. 最终能力地图"></a>12. 最终能力地图</h2><p>学完之后，你应该能独立设计这种架构：</p>
+<div class="mermaid">
+flowchart TD
+    U[User Request] --> IR[Intent Router]
+    IR --> SC[Safety Check]
+    SC --> PL[Planner]
+    PL --> RAG[RAG Retriever]
+    PL --> TE[Tool Executor]
+    RAG --> RV[Result Verifier]
+    TE --> RV
+    RV --> HA{Need Human Approval?}
+    HA -->|Yes| H[Human Approval]
+    H --> FA[Final Response]
+    HA -->|No| FA
+    FA --> LOG[Trace / Eval / Cost Log]
+    LOG --> DATA[Evaluation Dataset]
+    DATA --> PL
+</div>
+
+<p>更重要的是，你能解释每个设计决策：</p>
+<ul>
+<li>为什么这里用 RAG，不用 fine-tuning？</li>
+<li>为什么这里用 LangGraph，不用普通 while loop？</li>
+<li>为什么这个工具要人工审批？</li>
+<li>为什么多 Agent 在这里有价值？</li>
+<li>为什么这个回答可信？</li>
+<li>怎么证明改版后效果变好了？</li>
+</ul>
+<p>这才算真正学会 Agent 架构和设计。</p>
+<h2 id="13-一句话总结"><a href="#13-一句话总结" class="headerlink" title="13. 一句话总结"></a>13. 一句话总结</h2><p>Agent 学习最好的路径不是“先找最强框架”，而是：</p>
+<ol>
+<li>先理解模型边界。</li>
+<li>再学会给模型接工具。</li>
+<li>然后用 RAG 给模型可靠知识。</li>
+<li>接着用 Agent loop 让模型能行动。</li>
+<li>再用状态图让行动可控。</li>
+<li>最后用评估、观测、安全和成本控制让系统可上线。</li>
+</ol>
+<p>真正成熟的 Agent 工程师，不是让模型“看起来很聪明”，而是能让它在复杂环境里稳定、可解释、可回滚、可持续改进。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Agent/">Agent</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/LLM/">LLM</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/RAG/">RAG</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/LangGraph/">LangGraph</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2026/08/10/codeforces-go-problem-type-index/"
+                                   title="算法题目类型索引"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">算法题目类型索引</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">JotaroRD</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/toggle-theme.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/code-block.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/libs/anime.min.js"></script>
+
+<!-- local search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/local-search.js"></script>
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+        
+    
+        
+            
+<script class="custom-inject-js" src="/js/selection-comments-v2.js" data-pjax></script>
+
+        
+    
+
+</body>
+</html>

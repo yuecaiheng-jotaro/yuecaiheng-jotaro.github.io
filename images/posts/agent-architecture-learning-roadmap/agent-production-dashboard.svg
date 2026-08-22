@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">生产级 Agent 仪表盘插画</title>
+  <desc id="desc">展示评估、观测、安全、稳定性和成本控制构成生产化仪表盘。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="52%" stop-color="#172554"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#22d3ee" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <g opacity="0.22" stroke="#93c5fd" stroke-width="2">
+    <path d="M58 134 H1142"/>
+    <path d="M58 264 H1142"/>
+    <path d="M58 394 H1142"/>
+    <path d="M58 524 H1142"/>
+    <path d="M182 80 V600"/>
+    <path d="M430 80 V600"/>
+    <path d="M678 80 V600"/>
+    <path d="M926 80 V600"/>
+  </g>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+    <text x="64" y="76" font-size="38" font-weight="800" fill="#f8fafc">生产级 Agent：不是更聪明，而是更可控</text>
+    <text x="66" y="116" font-size="22" fill="#cbd5e1">上线后要能评估、观测、限权、止损和控制成本。</text>
+  </g>
+
+  <g transform="translate(74 166)" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+    <rect width="310" height="390" rx="28" fill="url(#panel)" stroke="#38bdf8" stroke-opacity="0.34"/>
+    <text x="32" y="54" font-size="26" font-weight="800" fill="#e0f2fe">Trace Replay</text>
+    <g transform="translate(34 92)">
+      <circle cx="18" cy="18" r="18" fill="#22c55e"/><text x="50" y="26" font-size="20" fill="#e5e7eb">Intent Router</text>
+      <line x1="18" y1="38" x2="18" y2="72" stroke="#64748b" stroke-width="4"/>
+      <circle cx="18" cy="92" r="18" fill="#06b6d4"/><text x="50" y="100" font-size="20" fill="#e5e7eb">RAG Retrieve</text>
+      <line x1="18" y1="112" x2="18" y2="146" stroke="#64748b" stroke-width="4"/>
+      <circle cx="18" cy="166" r="18" fill="#f59e0b"/><text x="50" y="174" font-size="20" fill="#e5e7eb">Tool Call</text>
+      <line x1="18" y1="186" x2="18" y2="220" stroke="#64748b" stroke-width="4"/>
+      <circle cx="18" cy="240" r="18" fill="#8b5cf6"/><text x="50" y="248" font-size="20" fill="#e5e7eb">Verifier</text>
+    </g>
+    <rect x="34" y="336" width="242" height="20" rx="10" fill="#334155"/>
+    <rect x="34" y="336" width="188" height="20" rx="10" fill="#22d3ee"/>
+  </g>
+
+  <g transform="translate(446 166)" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+    <rect width="310" height="390" rx="28" fill="url(#panel)" stroke="#a78bfa" stroke-opacity="0.34"/>
+    <text x="32" y="54" font-size="26" font-weight="800" fill="#ede9fe">Quality Metrics</text>
+    <circle cx="154" cy="182" r="96" fill="none" stroke="#334155" stroke-width="22"/>
+    <path d="M154 86 A96 96 0 1 1 72 230" fill="none" stroke="#22c55e" stroke-width="22" stroke-linecap="round" filter="url(#glow)"/>
+    <text x="154" y="174" font-size="46" font-weight="900" fill="#f8fafc" text-anchor="middle">87%</text>
+    <text x="154" y="208" font-size="19" fill="#cbd5e1" text-anchor="middle">answer pass rate</text>
+    <g fill="#cbd5e1" font-size="18">
+      <text x="44" y="324">Faithfulness</text><rect x="174" y="306" width="88" height="14" rx="7" fill="#22c55e"/>
+      <text x="44" y="356">Tool success</text><rect x="174" y="338" width="72" height="14" rx="7" fill="#38bdf8"/>
+    </g>
+  </g>
+
+  <g transform="translate(818 166)" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+    <rect width="310" height="390" rx="28" fill="url(#panel)" stroke="#fbbf24" stroke-opacity="0.34"/>
+    <text x="32" y="54" font-size="26" font-weight="800" fill="#fef3c7">Safety & Cost</text>
+    <g transform="translate(64 92)">
+      <path d="M90 0 L174 36 V112 C174 174 132 214 90 236 C48 214 6 174 6 112 V36 Z" fill="#0f766e" stroke="#5eead4" stroke-width="5"/>
+      <path d="M58 112 l24 25 l50 -70" fill="none" stroke="#fff7ed" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+    <g transform="translate(44 344)">
+      <rect width="222" height="18" rx="9" fill="#334155"/>
+      <rect width="138" height="18" rx="9" fill="#f59e0b"/>
+      <text x="0" y="-16" font-size="18" fill="#cbd5e1">Token budget</text>
+    </g>
+    <circle cx="246" cy="112" r="28" fill="#ef4444"/>
+    <text x="246" y="121" font-size="28" font-weight="900" fill="#fff" text-anchor="middle">!</text>
+    <text x="154" y="310" font-size="20" fill="#e5e7eb" text-anchor="middle">高风险动作先审批</text>
+  </g>
+</svg>

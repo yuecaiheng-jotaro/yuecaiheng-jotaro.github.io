@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="700" viewBox="0 0 1280 700" role="img" aria-label="Agent turn flow">
+  <style>
+    .bg{fill:#f8fafc}.title{font:700 30px Arial,Helvetica,sans-serif;fill:#0f172a}.lane{fill:#fff;stroke:#cbd5e1;stroke-width:2;rx:12}.step{fill:#eef6ff;stroke:#2563eb;stroke-width:2;rx:10}.event{fill:#fdf2f8;stroke:#db2777;stroke-width:2;rx:10}.tool{fill:#f0fdf4;stroke:#16a34a;stroke-width:2;rx:10}.txt{font:600 16px Arial,Helvetica,sans-serif;fill:#111827}.small{font:400 13px Arial,Helvetica,sans-serif;fill:#475569}.arrow{stroke:#334155;stroke-width:2;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker></defs>
+  <rect class="bg" width="1280" height="700"/>
+  <text x="56" y="58" class="title">Turn/Step 流程：为什么 Harness 能回放、恢复、审计</text>
+  <rect x="70" y="105" width="1140" height="95" class="lane"/><text x="95" y="140" class="txt">Inbox</text><text x="95" y="170" class="small">followup / steer / inject 进入统一队列</text>
+  <rect x="70" y="245" width="1140" height="95" class="lane"/><text x="95" y="280" class="txt">Prompt assembly</text><text x="95" y="310" class="small">system sections + visible tools + session-derived history</text>
+  <rect x="70" y="385" width="1140" height="95" class="lane"/><text x="95" y="420" class="txt">LLM and tools</text><text x="95" y="450" class="small">provider stream, tool calls, policy, result context</text>
+  <rect x="70" y="525" width="1140" height="95" class="lane"/><text x="95" y="560" class="txt">Session log</text><text x="95" y="590" class="small">durable events reconstruct every model-visible input</text>
+  <rect x="300" y="120" width="145" height="55" class="step"/><text x="318" y="153" class="txt">claim input</text>
+  <rect x="515" y="260" width="170" height="55" class="step"/><text x="535" y="293" class="txt">agent/pre-step</text>
+  <rect x="755" y="260" width="170" height="55" class="step"/><text x="778" y="293" class="txt">request config</text>
+  <rect x="300" y="540" width="155" height="55" class="event"/><text x="322" y="573" class="txt">turn/start</text>
+  <rect x="520" y="540" width="155" height="55" class="event"/><text x="542" y="573" class="txt">user/message</text>
+  <rect x="740" y="540" width="175" height="55" class="event"/><text x="760" y="573" class="txt">assistant/*</text>
+  <rect x="970" y="540" width="155" height="55" class="event"/><text x="992" y="573" class="txt">tool/*</text>
+  <rect x="350" y="400" width="160" height="55" class="step"/><text x="372" y="433" class="txt">llm/stream</text>
+  <rect x="610" y="400" width="165" height="55" class="tool"/><text x="632" y="433" class="txt">tools.execute</text>
+  <rect x="875" y="400" width="175" height="55" class="step"/><text x="897" y="433" class="txt">turn-stopping</text>
+  <path class="arrow" d="M445 148 C530 170 565 220 600 260"/>
+  <path class="arrow" d="M685 287 H755"/>
+  <path class="arrow" d="M840 315 C790 365 530 360 430 400"/>
+  <path class="arrow" d="M510 427 H610"/>
+  <path class="arrow" d="M775 427 H875"/>
+  <path class="arrow" d="M372 175 C350 285 360 450 377 540"/>
+  <path class="arrow" d="M600 315 C585 390 590 480 598 540"/>
+  <path class="arrow" d="M430 455 C550 505 710 505 820 540"/>
+  <path class="arrow" d="M692 455 C790 505 960 505 1048 540"/>
+</svg>

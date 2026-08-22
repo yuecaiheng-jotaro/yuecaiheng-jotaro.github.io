@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="760" viewBox="0 0 1280 760" role="img" aria-label="DeepSeek Harness architecture overview">
+  <style>
+    .bg{fill:#f8fafc}.title{font:700 32px Arial,Helvetica,sans-serif;fill:#0f172a}.sub{font:400 16px Arial,Helvetica,sans-serif;fill:#475569}.box{fill:#fff;stroke:#334155;stroke-width:2;rx:14}.core{fill:#eef6ff;stroke:#2563eb}.cap{fill:#f0fdf4;stroke:#16a34a}.ui{fill:#fff7ed;stroke:#ea580c}.store{fill:#fdf2f8;stroke:#db2777}.txt{font:600 18px Arial,Helvetica,sans-serif;fill:#111827}.small{font:400 14px Arial,Helvetica,sans-serif;fill:#334155}.arrow{stroke:#334155;stroke-width:2.4;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker></defs>
+  <rect class="bg" width="1280" height="760"/>
+  <text x="60" y="62" class="title">DeepSeek Harness：一切皆插件的 Agent 运行时</text>
+  <text x="60" y="94" class="sub">CLI/Profile 组合 Cordis 插件树，核心 Loop 驱动 Turn/Step，能力通过 Service / Provider / Tool / UI 接入。</text>
+  <rect x="60" y="135" width="250" height="120" class="box ui"/>
+  <text x="86" y="176" class="txt">入口与界面</text>
+  <text x="86" y="206" class="small">dsh web / headless</text>
+  <text x="86" y="230" class="small">Web Host + Browser Client</text>
+  <rect x="380" y="135" width="250" height="120" class="box"/>
+  <text x="406" y="176" class="txt">Profile 与 Bundle</text>
+  <text x="406" y="206" class="small">base / web-app / headless</text>
+  <text x="406" y="230" class="small">cordis.patch.yml 层叠组合</text>
+  <rect x="700" y="135" width="250" height="120" class="box core"/>
+  <text x="726" y="176" class="txt">Cordis Context</text>
+  <text x="726" y="206" class="small">services / events / effects</text>
+  <text x="726" y="230" class="small">插件注册可卸载贡献</text>
+  <rect x="380" y="320" width="250" height="140" class="box core"/>
+  <text x="406" y="362" class="txt">Agent Loop</text>
+  <text x="406" y="394" class="small">turn → step → request</text>
+  <text x="406" y="418" class="small">stream → tool calls → stop</text>
+  <rect x="700" y="320" width="250" height="140" class="box store"/>
+  <text x="726" y="362" class="txt">Session Log</text>
+  <text x="726" y="394" class="small">append-only durable events</text>
+  <text x="726" y="418" class="small">resume / fork / replay / UI</text>
+  <rect x="60" y="540" width="260" height="130" class="box cap"/>
+  <text x="86" y="582" class="txt">能力层</text>
+  <text x="86" y="614" class="small">LLM / Tools / FS / Shell</text>
+  <text x="86" y="638" class="small">Subagent / Workflow / Web</text>
+  <rect x="380" y="540" width="260" height="130" class="box cap"/>
+  <text x="406" y="582" class="txt">策略层</text>
+  <text x="406" y="614" class="small">approval / sandbox / guard</text>
+  <text x="406" y="638" class="small">timeout / permissions</text>
+  <rect x="700" y="540" width="260" height="130" class="box cap"/>
+  <text x="726" y="582" class="txt">扩展层</text>
+  <text x="726" y="614" class="small">插件 / MCP / presets</text>
+  <text x="726" y="638" class="small">agent-scoped composition</text>
+  <rect x="1010" y="320" width="210" height="140" class="box ui"/>
+  <text x="1036" y="362" class="txt">可观测界面</text>
+  <text x="1036" y="394" class="small">transcript / tool cards</text>
+  <text x="1036" y="418" class="small">settings / sessions</text>
+  <path class="arrow" d="M310 195 H380"/>
+  <path class="arrow" d="M630 195 H700"/>
+  <path class="arrow" d="M825 255 V320"/>
+  <path class="arrow" d="M700 390 H630"/>
+  <path class="arrow" d="M630 390 H700"/>
+  <path class="arrow" d="M950 390 H1010"/>
+  <path class="arrow" d="M505 460 V540"/>
+  <path class="arrow" d="M825 460 V540"/>
+  <path class="arrow" d="M320 605 H380"/>
+  <path class="arrow" d="M640 605 H700"/>
+</svg>

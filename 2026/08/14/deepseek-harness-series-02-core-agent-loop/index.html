@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="JotaroRD">
+    
+    <title>
+        
+            DeepSeek Harness 核心 Agent Loop：Turn、Step、Inbox 与取消收敛 |
+        
+        Jotaro Space
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/site-avatar-256.png">
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/brands.min.css">
+    
+        
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/first-screen-local.css">
+
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/selection-comments.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"yuecaiheng-jotaro.github.io","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Jotaro Space","author":"JotaroRD","avatar":"/images/site-avatar-256.png","logo":"/images/site-avatar-256.png","favicon":"/images/site-avatar-256.png"},"menu":{"home":"/","archives":"/archives","categories":"/categories","insight":"/insight","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/first-screen.jpg","background_img_dark":"/images/first-screen.jpg","description":"Talk is Cheap","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":false,"post_datetime":"updated"},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":false,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":true,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":false,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":true,"css":[null,"/css/first-screen-local.css","/css/selection-comments.css"],"js":[null,"/js/selection-comments-v2.js"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/site-avatar-256.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Jotaro Space
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                CATEGORIES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/insight">
+                                
+                                INSIGHT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                            CATEGORIES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/insight">
+                            
+                            INSIGHT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        DeepSeek Harness 核心 Agent Loop：Turn、Step、Inbox 与取消收敛
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/site-avatar-256.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">JotaroRD</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-08-14 01:02:00</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Fri Aug 14 2026 15:25:19 GMT+0800">2026-08-14 15:25:19</span>
+                </span>
+            
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/AI/">AI</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Agent/">Agent</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/DeepSeek/">DeepSeek</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Harness/">Harness</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p><img   src="/images/posts/deepseek-harness-series/turn-flow.svg"  alt="Turn&#x2F;Step 流程"></p>
+<h2 id="模块定位"><a href="#模块定位" class="headerlink" title="模块定位"></a>模块定位</h2><p><code>packages/core/agent-loop</code> 是 DeepSeek Harness 里唯一包含具体 loop driver 的包。它的职责不是实现所有 Agent 能力，而是驱动 Agent 生命周期：领取输入、组装请求、调用模型、执行工具、判断是否继续下一步。</p>
+<p>相关源码入口：</p>
+<ul>
+<li><code>packages/core/agent-loop/src/agent.ts</code></li>
+<li><code>packages/core/agent-loop/src/tool-calls.ts</code></li>
+<li><code>packages/core/agent-loop/src/runtime-context.ts</code></li>
+<li><code>packages/core/agent-loop/src/index.ts</code></li>
+<li><code>packages/core/agent/</code></li>
+<li><code>packages/core/session/</code></li>
+</ul>
+<p>项目文档反复强调：新行为优先挂插件，不要改 loop。原因是 loop 是 spine，插件才是行为扩展面。</p>
+<h2 id="Turn-与-Step"><a href="#Turn-与-Step" class="headerlink" title="Turn 与 Step"></a>Turn 与 Step</h2><p>Turn 是外层工作单元，通常对应用户可感知的一轮交互。Step 是一次模型请求加它触发的工具执行。一个 turn 可以包含多个 step，因为模型可能需要多轮“请求工具 → 看结果 → 继续请求”。</p>
+<p>简化流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">  participant User as User/Input</span><br><span class="line">  participant Loop as Agent Loop</span><br><span class="line">  participant Prompt as SystemPrompt/Tools</span><br><span class="line">  participant LLM as LLM Adapter</span><br><span class="line">  participant Tools as ToolRuntime</span><br><span class="line">  participant Log as Session Log</span><br><span class="line"></span><br><span class="line">  User-&gt;&gt;Loop: followup / steer / inject</span><br><span class="line">  Loop-&gt;&gt;Log: turn/start</span><br><span class="line">  Loop-&gt;&gt;Prompt: assemble prompt + schemas</span><br><span class="line">  Loop-&gt;&gt;Log: user/message</span><br><span class="line">  Loop-&gt;&gt;LLM: stream request</span><br><span class="line">  LLM--&gt;&gt;Loop: assistant chunks</span><br><span class="line">  Loop-&gt;&gt;Log: assistant/chunk*, assistant/message</span><br><span class="line">  Loop-&gt;&gt;Tools: execute tool calls</span><br><span class="line">  Tools--&gt;&gt;Loop: normalized results</span><br><span class="line">  Loop-&gt;&gt;Log: tool/call*, tool/result*</span><br><span class="line">  Loop-&gt;&gt;Log: step/end, turn/end</span><br></pre></td></tr></table></figure>
+
+<h2 id="Inbox-的三个入口"><a href="#Inbox-的三个入口" class="headerlink" title="Inbox 的三个入口"></a>Inbox 的三个入口</h2><p>Agent 输入不是直接拼进 messages，而是进入 inbox。核心入口可以理解为三种：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>进入队列</th>
+<th>是否唤醒 loop</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>followup()</code></td>
+<td>next-turn FIFO</td>
+<td>是</td>
+<td>普通用户新输入</td>
+</tr>
+<tr>
+<td><code>steer()</code></td>
+<td>next-step inbox</td>
+<td>是</td>
+<td>立刻影响当前&#x2F;下一 step</td>
+</tr>
+<tr>
+<td><code>inject()</code></td>
+<td>next-step inbox</td>
+<td>否</td>
+<td>等下一次自然唤醒时附加上下文</td>
+</tr>
+</tbody></table>
+<p>这种设计让“用户新问题”“运行中引导”“静默上下文注入”有不同语义。Loop 在 turn 边界会领取 pending next-step input 加一个 queued prompt；step 之间只领取 next-step input。</p>
+<h2 id="agent-pre-step-是关键关口"><a href="#agent-pre-step-是关键关口" class="headerlink" title="agent/pre-step 是关键关口"></a><code>agent/pre-step</code> 是关键关口</h2><p>Loop 领取输入后不会立刻发给模型。它会先触发 <code>agent/pre-step</code> waterfall。Listener 可以：</p>
+<ul>
+<li>接受输入。</li>
+<li>改写进入 step 的消息。</li>
+<li>拒绝这次 step。</li>
+</ul>
+<p>如果第一批输入被拒绝或改写为空，loop 仍然会关闭一个 durable turn，只是没有实际 step。这让“尝试过但没有进入模型”的事实也能被记录。</p>
+<h2 id="请求如何形成"><a href="#请求如何形成" class="headerlink" title="请求如何形成"></a>请求如何形成</h2><p>每个 step 的模型请求来自：</p>
+<ul>
+<li>system prompt sections。</li>
+<li>当前 agent 可见 tool schemas。</li>
+<li>session log 派生出的 message history。</li>
+<li>provider&#x2F;model&#x2F;maxTokens&#x2F;reasoning 等 request config。</li>
+</ul>
+<p><code>agent/request</code> waterfall 可以调整请求。然后 loop 调 <code>ctx.llm.prepareCall()</code>，让 adapter 拥有的默认值被具体 materialize，并把 request&#x2F;header 写入 log，保证后续可重建。</p>
+<h2 id="工具调用与并发"><a href="#工具调用与并发" class="headerlink" title="工具调用与并发"></a>工具调用与并发</h2><p>模型返回 tool calls 后，loop 会交给 <code>ToolRuntime</code> 执行。工具有并发分类：</p>
+<ul>
+<li><code>parallel</code>：连续安全调用可以进入有上限的 rolling pool。</li>
+<li><code>exclusive</code>：作为 barrier，前后调用不能重叠。</li>
+</ul>
+<p>注意：并发只覆盖 dispatch&#x2F;body；策略、持久结果、结果上下文仍保持模型顺序。这样既能提高读类工具吞吐，又不会让 session log 顺序失真。</p>
+<h2 id="取消与收敛"><a href="#取消与收敛" class="headerlink" title="取消与收敛"></a>取消与收敛</h2><p>取消不是简单 throw。Loop 有一个当前 admission&#x2F;turn 的 signal。取消时：</p>
+<ul>
+<li>清理 pending work，除非调用方要求保留 inbox。</li>
+<li>协作式 abort 当前 signal。</li>
+<li>已开始工具要 drain，保留 finalized result context。</li>
+<li>未派发 tool call 会生成 synthetic result。</li>
+<li>durable <code>turn/end</code> 记录 aborted 或 disposed。</li>
+</ul>
+<p>一个关键细节是 wake latch：如果取消收敛过程中又来了唤醒输入，loop 会在收敛边界重放唤醒，避免丢输入。</p>
+<h2 id="插件应该挂在哪里"><a href="#插件应该挂在哪里" class="headerlink" title="插件应该挂在哪里"></a>插件应该挂在哪里</h2><p>不要为了功能直接改 loop。常见扩展点：</p>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>扩展点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>改模型请求</td>
+<td><code>agent/request</code></td>
+</tr>
+<tr>
+<td>入模前过滤&#x2F;压缩输入</td>
+<td><code>agent/pre-step</code></td>
+</tr>
+<tr>
+<td>工具审批</td>
+<td><code>tools/pre-execute</code></td>
+</tr>
+<tr>
+<td>工具超时&#x2F;指标</td>
+<td><code>tools/execute</code></td>
+</tr>
+<tr>
+<td>工具结果附加上下文</td>
+<td><code>tools/post-execute</code></td>
+</tr>
+<tr>
+<td>回合停止策略</td>
+<td><code>agent/turn-stopping</code></td>
+</tr>
+<tr>
+<td>UI 观察</td>
+<td><code>session/event</code> + <code>agent/status</code></td>
+</tr>
+<tr>
+<td>持久化</td>
+<td><code>session/event</code> + <code>session/flush</code></td>
+</tr>
+</tbody></table>
+<h2 id="常见坑"><a href="#常见坑" class="headerlink" title="常见坑"></a>常见坑</h2><p>第一，<code>agent/pre-step</code> 是 waterfall。要委托后续 listener，就必须调用 <code>next()</code>。</p>
+<p>第二，插件异常会结束当前 turn，但不一定杀死整个 loop。恢复逻辑要看异常发生在哪个阶段。</p>
+<p>第三，模型可见的新信息不能只存在内存。要能从 session log 还原。</p>
+<p>第四，工具取消是协作式的。工具 body 必须观察或转发 <code>AbortSignal</code>。</p>
+<h2 id="继续读源码"><a href="#继续读源码" class="headerlink" title="继续读源码"></a>继续读源码</h2><ul>
+<li><code>packages/core/agent-loop/README.md</code></li>
+<li><code>packages/core/agent-loop/src/agent.ts</code></li>
+<li><code>packages/core/agent-loop/src/tool-calls.ts</code></li>
+<li><code>docs/agent-lifecycle.md</code></li>
+<li><code>docs/subsystems/core.md</code></li>
+</ul>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Agent/">Agent</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/DeepSeek/">DeepSeek</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Harness/">Harness</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2026/08/14/deepseek-harness-series-03-session-log/"
+                                   title="DeepSeek Harness Session Log：为什么模型可见内容必须可重建"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">DeepSeek Harness Session Log：为什么模型可见内容必须可重建</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2026/08/14/deepseek-harness-series-01-boot-profile-bundle/"
+                                   title="DeepSeek Harness 启动与组合：Profile、Bundle、Patch 如何拼出运行时"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">DeepSeek Harness 启动与组合：Profile、Bundle、Patch 如何拼出运行时</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">JotaroRD</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/toggle-theme.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/code-block.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/libs/anime.min.js"></script>
+
+<!-- local search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/local-search.js"></script>
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+        
+    
+        
+            
+<script class="custom-inject-js" src="/js/selection-comments-v2.js" data-pjax></script>
+
+        
+    
+
+</body>
+</html>

@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="JotaroRD">
+    
+    <title>
+        
+            DeepSeek Harness 深度拆解：一个“Agent = Model + Harness”的插件化运行时到底怎么工作 |
+        
+        Jotaro Space
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/site-avatar-256.png">
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/brands.min.css">
+    
+        
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/first-screen-local.css">
+
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/selection-comments.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"yuecaiheng-jotaro.github.io","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Jotaro Space","author":"JotaroRD","avatar":"/images/site-avatar-256.png","logo":"/images/site-avatar-256.png","favicon":"/images/site-avatar-256.png"},"menu":{"home":"/","archives":"/archives","categories":"/categories","insight":"/insight","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/first-screen.jpg","background_img_dark":"/images/first-screen.jpg","description":"Talk is Cheap","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":false,"post_datetime":"updated"},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":false,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":true,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":false,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":true,"css":[null,"/css/first-screen-local.css","/css/selection-comments.css"],"js":[null,"/js/selection-comments-v2.js"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/site-avatar-256.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Jotaro Space
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                CATEGORIES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/insight">
+                                
+                                INSIGHT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                            CATEGORIES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/insight">
+                            
+                            INSIGHT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        DeepSeek Harness 深度拆解：一个“Agent = Model + Harness”的插件化运行时到底怎么工作
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/site-avatar-256.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">JotaroRD</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-08-14 00:00:00</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Fri Aug 14 2026 15:12:54 GMT+0800">2026-08-14 15:12:54</span>
+                </span>
+            
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/AI/">AI</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Agent/">Agent</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/DeepSeek/">DeepSeek</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Harness/">Harness</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/">插件化</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <h1 id="DeepSeek-Harness-深度拆解：一个“Agent-Model-Harness”的插件化运行时到底怎么工作"><a href="#DeepSeek-Harness-深度拆解：一个“Agent-Model-Harness”的插件化运行时到底怎么工作" class="headerlink" title="DeepSeek Harness 深度拆解：一个“Agent &#x3D; Model + Harness”的插件化运行时到底怎么工作"></a>DeepSeek Harness 深度拆解：一个“Agent &#x3D; Model + Harness”的插件化运行时到底怎么工作</h1><blockquote>
+<p>这篇文章适合已经写过 Agent、Tool Calling、MCP、CLI 自动化或 Web Agent UI 的工程师。它不讲概念鸡汤，重点拆 DeepSeek Harness 这个仓库的运行模型、源码结构、扩展方式和真实使用姿势。</p>
+</blockquote>
+<p><img   src="/images/posts/deepseek-harness-deep-dive/architecture-overview.svg"  alt="DeepSeek Harness 总架构"></p>
+<h2 id="先给结论"><a href="#先给结论" class="headerlink" title="先给结论"></a>先给结论</h2><p>DeepSeek Harness 不是一个“把 DeepSeek API 包一层”的 SDK，也不是只跑 prompt 的 demo。它更像一个完整的 Agent 操作系统：模型适配器、工具注册表、文件系统、shell、权限审批、会话日志、持久化、Web UI、子 Agent、工作流、设置页、插件管理，全都被拆成 Cordis 插件，再由 profile 和 bundle 组合成一个可运行产品。</p>
+<p>官方落地页用一句话概括它的定位：Agent &#x3D; Model + Harness。这里的 Model 负责生成下一步意图，Harness 负责给模型提供可控、可观测、可恢复的运行环境。换成人话就是：模型不是直接“裸奔”在你的机器上，而是在一个有工具边界、会话日志、权限策略、UI 投影和插件生命周期的 runtime 里行动。</p>
+<p>这个仓库最值得学的不是某一个工具怎么写，而是它把 Agent 产品拆成了几条清晰的工程主线：</p>
+<ul>
+<li>启动不是写死入口，而是 profile + bundle + patch 组合 Cordis 插件树。</li>
+<li>核心 loop 只管 turn&#x2F;step 生命周期，不把工具、权限、UI、持久化塞进自己内部。</li>
+<li>模型可见内容必须能从 session log 重建，所以恢复、fork、回放、UI transcript 都有同一份事实来源。</li>
+<li>工具不是简单函数调用，而是一条带审批、guard、wrapper、post policy、canonical output、UI render intent 的流水线。</li>
+<li>Web UI 不是“读内存状态”，而是从 host remote、session events、tool presentation 和 client slots 投影界面。</li>
+</ul>
+<h2 id="一、为什么-Agent-需要-Harness，而不只是模型和工具"><a href="#一、为什么-Agent-需要-Harness，而不只是模型和工具" class="headerlink" title="一、为什么 Agent 需要 Harness，而不只是模型和工具"></a>一、为什么 Agent 需要 Harness，而不只是模型和工具</h2><p>很多早期 Agent 项目会长成这样：一个 while loop 调模型，拿到 tool call，执行函数，把结果塞回 messages，再继续调模型。这个模型对 demo 足够，但一旦进入真实产品，就会遇到一堆硬问题：</p>
+<ul>
+<li>工具调用失败后怎么恢复，重试归谁管？</li>
+<li>用户取消时，已经开始的 shell、subprocess、tool body 怎么收敛？</li>
+<li>哪些文件能读，哪些文件能写，策略在哪里执行？</li>
+<li>工具结果太大时，是截断、spill，还是仍然塞进上下文？</li>
+<li>Web UI 刷新后，怎么恢复流式输出、工具卡片、子任务状态？</li>
+<li>同一个会话如何 resume、fork、生成标题、查询历史？</li>
+<li>新模型、新工具、新 UI 面板、新权限策略，应该改核心 loop 还是挂插件？</li>
+</ul>
+<p>DeepSeek Harness 的答案是：把 Agent 拆成运行时能力，而不是把一切写进一个 loop。Loop 只负责驱动步骤；能力通过服务和事件接入；持久事实进入 session log；可替换部分都变成插件。</p>
+<p>这就是它和普通 wrapper 最大的差别。</p>
+<h2 id="二、源码总览：先看分层，不要先钻细节"><a href="#二、源码总览：先看分层，不要先钻细节" class="headerlink" title="二、源码总览：先看分层，不要先钻细节"></a>二、源码总览：先看分层，不要先钻细节</h2><p>仓库根目录的结构非常有信息量：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">apps/       CLI 和浏览器入口</span><br><span class="line">packages/   一方包，@deepseek-ai/dsh-*，核心产品都在这里</span><br><span class="line">docs/       架构、子系统、cookbook、生成目录</span><br><span class="line">website/    VitePress 文档站</span><br><span class="line">scripts/    校验、生成器、发布与仓库约束</span><br><span class="line">vendor/     固定版本 Cordis 源码副本</span><br><span class="line">native/     Node addon sandbox 后端</span><br><span class="line">python/     Python SDK</span><br><span class="line">.agents/    Agent Notes 与项目专用工作流</span><br></pre></td></tr></table></figure>
+
+<p>真正的产品代码在 <code>packages/*/*</code>，当前这个仓库有 200 多个一方包。不要被数量吓到，它们不是随意散开的。比较合理的读法是按“能力家族”看：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>代表目录</th>
+<th>你应该看什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>核心主干</td>
+<td><code>packages/core/*</code></td>
+<td>session、system prompt、tools、agent、agent-loop</td>
+</tr>
+<tr>
+<td>模型能力</td>
+<td><code>packages/llm/*</code></td>
+<td>抽象 LLM service、DeepSeek provider、retry、token meter</td>
+</tr>
+<tr>
+<td>执行能力</td>
+<td><code>packages/fs/*</code>、<code>shell/*</code>、<code>subprocess/*</code>、<code>terminal/*</code>、<code>sandbox/*</code></td>
+<td>文件、shell、PTY、进程与沙箱如何拆开</td>
+</tr>
+<tr>
+<td>状态能力</td>
+<td><code>packages/session/*</code>、<code>session-query/*</code>、<code>attachment/*</code>、<code>spill/*</code></td>
+<td>持久化、投影、查询、大结果 spill</td>
+</tr>
+<tr>
+<td>协作能力</td>
+<td><code>interaction/*</code>、<code>goal/*</code>、<code>plan/*</code>、<code>feedback/*</code>、<code>jobs/*</code></td>
+<td>审批、计划模式、目标、反馈、后台任务</td>
+</tr>
+<tr>
+<td>外部界面</td>
+<td><code>host/*</code>、<code>client/*</code>、<code>api/*</code>、<code>typert/*</code>、<code>sdk/*</code>、<code>acp/*</code>、<code>hooks/*</code></td>
+<td>Web、RPC、SDK、自动化协议</td>
+</tr>
+<tr>
+<td>组合与发布</td>
+<td><code>bundle/*</code>、<code>boot/*</code>、<code>preset/*</code></td>
+<td>profile、bundle、patch、启动装配</td>
+</tr>
+</tbody></table>
+<p>读这个仓库最容易踩的坑是：直接打开 <code>agent-loop</code> 想找全部业务逻辑。实际上它故意很克制。新行为通常不该塞进 loop，而应该挂在 <code>agent/*</code>、<code>tools/*</code>、<code>session/event</code>、<code>ctx.tools</code>、<code>ctx.systemPrompt</code>、<code>ctx.fs</code> 等扩展点上。</p>
+<h2 id="三、启动链路：dsh-web-到底发生了什么"><a href="#三、启动链路：dsh-web-到底发生了什么" class="headerlink" title="三、启动链路：dsh web 到底发生了什么"></a>三、启动链路：<code>dsh web</code> 到底发生了什么</h2><p><img   src="/images/posts/deepseek-harness-deep-dive/profile-boot.svg"  alt="Profile 启动链路"></p>
+<p><code>apps/cli/src/bin.ts</code> 是产品命令入口。它解析命令后分发到 profile 模式、plugin 管理模式或 dump-config 模式。</p>
+<p>常用入口是：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dsh web</span><br><span class="line">dsh --profile headless <span class="string">&quot;帮我总结这个仓库&quot;</span></span><br><span class="line">dsh --profile web --dump-config</span><br><span class="line">dsh plugin --profile web add &lt;some-plugin&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里最重要的概念是 profile 和 bundle。</p>
+<p>Profile 是用户机器上的一套运行组合，位于 <code>$DSH_HOME/profiles/&lt;name&gt;</code>，默认 <code>$DSH_HOME</code> 是 <code>~/.dsh</code>。Profile 里有一个 <code>package.json</code> 声明 bundle 列表，还有一个 <code>cordis.patch.yml</code> 放用户自己的 patch。</p>
+<p>Bundle 是产品提供的配置层。内置的关键 bundle 有：</p>
+<ul>
+<li><code>dsh-base</code>：模型 provider、默认模型选择、工具、持久化、文件系统、shell、sandbox、权限、设置、凭据、telemetry 等基础能力。</li>
+<li><code>dsh-web-app</code>：HTTP server、API proxy、workspace、storage、projection cache、静态前端、浏览器 client plugins、Web 启动参数。</li>
+<li><code>dsh-headless</code>：一次性任务 runner，不启动 Web 界面。</li>
+</ul>
+<p>启动时，系统不是手写 new 一堆对象，而是从空 entry list 开始按顺序应用：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bundle patches</span><br><span class="line">→ profile cordis.patch.yml</span><br><span class="line">→ $DSH_HOME/cordis.patch.yml</span><br><span class="line">→ --patch overlays</span><br><span class="line">→ Cordis Loader 激活插件树</span><br></pre></td></tr></table></figure>
+
+<p>这带来一个很实用的工程结果：部署差异、用户覆盖、插件安装、模式切换，都可以表达为配置层，而不是 fork 一套入口代码。</p>
+<p><code>packages/boot/app-boot</code> 是这条链路的共享启动胶水。它负责加载 <code>.env</code>、解析 profile&#x2F;bundle、挂载 <code>cordis:include</code>、等待插件激活、把 Loader 错误变成带产品前缀的失败信息，并让长驻 Web 进程能监听用户 patch 变化。</p>
+<h2 id="四、核心-Loop：Turn-和-Step-是整个-Agent-的心跳"><a href="#四、核心-Loop：Turn-和-Step-是整个-Agent-的心跳" class="headerlink" title="四、核心 Loop：Turn 和 Step 是整个 Agent 的心跳"></a>四、核心 Loop：Turn 和 Step 是整个 Agent 的心跳</h2><p><img   src="/images/posts/deepseek-harness-deep-dive/turn-flow.svg"  alt="Turn&#x2F;Step 流程"></p>
+<p>DeepSeek Harness 的核心执行路径集中在几个包：</p>
+<ul>
+<li><code>packages/core/agent</code>：Agent 接口、live registry、inbox、状态事件。</li>
+<li><code>packages/core/session</code>：append-only session log 和内存 session store。</li>
+<li><code>packages/core/system-prompt</code>：prompt section 和 tool schema 组装。</li>
+<li><code>packages/core/tools</code>：工具注册表和执行流水线。</li>
+<li><code>packages/core/agent-loop</code>：具体 loop driver。</li>
+</ul>
+<p>它的生命周期可以简化为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">turn/start</span><br><span class="line">  claim inbox input</span><br><span class="line">  assemble prompt + tool schemas</span><br><span class="line">  agent/pre-step</span><br><span class="line">  step/start</span><br><span class="line">  user/message</span><br><span class="line">  derive model history from session log</span><br><span class="line">  agent/request</span><br><span class="line">  llm/stream</span><br><span class="line">  assistant/chunk*</span><br><span class="line">  assistant/message</span><br><span class="line">  tool/call*</span><br><span class="line">  tools pipeline</span><br><span class="line">  tool/result*</span><br><span class="line">  step/end</span><br><span class="line">  decide next step or stop</span><br><span class="line">turn/end</span><br></pre></td></tr></table></figure>
+
+<p>这里有两个关键抽象。</p>
+<p>第一，Turn 是用户可感知的一轮工作。它可以包含多个 Step，因为模型可能先调用工具，再看工具结果，再继续调用模型。</p>
+<p>第二，Step 是一次模型请求加它产生的工具调用。Step 里的 prompt 来自三部分：系统 prompt sections、当前 agent 可见的 tool schemas、由 session log 派生出的历史 messages。</p>
+<p>这解释了为什么 DeepSeek Harness 特别强调“model-visible means logged”。只要某个信息会进入模型请求，它就必须能从 session log 重建。否则 resume、fork、回放、UI transcript、调试审计都会出现“当时模型到底看到了什么”的黑洞。</p>
+<p>这个设计看起来麻烦，但它是 Agent 产品从 demo 走向可维护系统的分水岭。</p>
+<h2 id="五、Session-Log：不是聊天记录，而是运行时事实账本"><a href="#五、Session-Log：不是聊天记录，而是运行时事实账本" class="headerlink" title="五、Session Log：不是聊天记录，而是运行时事实账本"></a>五、Session Log：不是聊天记录，而是运行时事实账本</h2><p>很多人把 transcript 理解成 messages 数组。DeepSeek Harness 不是这么做的。它的 session log 是 append-only event stream，里面既有用户消息、assistant chunk、assistant message、tool call、tool result，也有 turn&#x2F;step 边界和子系统事件。</p>
+<p>为什么不直接存最终 messages？</p>
+<p>因为 Agent 运行时不是纯聊天。它有流式输出、工具卡片、取消、未派发工具调用、后台任务、子 Agent、projection cache、fork boundary、session title、telemetry。最终 messages 只是模型下一次请求需要的一种投影，不是全部事实。</p>
+<p>因此 session log 承担几件事：</p>
+<ul>
+<li>恢复会话：resume 时从持久事件恢复状态。</li>
+<li>派生模型历史：<code>deriveMessages()</code> 从日志生成 provider messages。</li>
+<li>UI 回放：Web UI 可以重建 token stream、工具卡片和生命周期。</li>
+<li>Fork：从某个边界生成 child session。</li>
+<li>查询：session-query 能对历史进行 bounded read、lineage、关系和全文检索。</li>
+<li>审计：模型看到过什么，工具返回过什么，都能追。</li>
+</ul>
+<p>这也是为什么你新增模型可见上下文时，不能只在内存里塞一段 prompt。你要问：这段东西 reload 后还能被重建吗？如果不能，通常就要新增 session event 和 projection。</p>
+<h2 id="六、工具系统：它不是函数表，而是安全执行流水线"><a href="#六、工具系统：它不是函数表，而是安全执行流水线" class="headerlink" title="六、工具系统：它不是函数表，而是安全执行流水线"></a>六、工具系统：它不是函数表，而是安全执行流水线</h2><p><img   src="/images/posts/deepseek-harness-deep-dive/tool-pipeline.svg"  alt="工具执行流水线"></p>
+<p>工具在 <code>packages/core/tools</code> 里注册。一个工具定义不只是 name + function，而包括：</p>
+<ul>
+<li>名称和描述。</li>
+<li>JSON 参数 schema。</li>
+<li>canonical output schema。</li>
+<li>output renderer。</li>
+<li>executor。</li>
+<li>可选 timeout 元数据。</li>
+<li>可选并发安全分类器。</li>
+<li>可选 UI presentation intent。</li>
+<li>可选 <code>finalizeContent</code>。</li>
+</ul>
+<p>一次工具调用会经过：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">tools/pre-execute</span><br><span class="line">→ registered guards</span><br><span class="line">→ tools/execute wrappers</span><br><span class="line">→ tool body</span><br><span class="line">→ tools/post-execute</span><br><span class="line">→ finalizeContent</span><br><span class="line">→ tools/result</span><br><span class="line">→ durable tool/result</span><br></pre></td></tr></table></figure>
+
+<p>这条链路把几个问题拆清楚了：</p>
+<ul>
+<li><code>pre-execute</code> 处理 allow &#x2F; ask &#x2F; deny，适合审批和策略。</li>
+<li>guard 是单调拒绝，后续 listener 不能把它放回允许态。</li>
+<li><code>tools/execute</code> wrapper 适合 timeout、metrics、retry 一类 around-dispatch 逻辑。</li>
+<li>tool body 只负责自己的业务执行。</li>
+<li><code>post-execute</code> 可以替换 content、替换 canonical value、block 或附加上下文。</li>
+<li><code>finalizeContent</code> 是工具定义拥有的最后内容不变量。</li>
+<li>durable <code>tool/result</code> 进入 session log，供模型历史和 UI replay 使用。</li>
+</ul>
+<p>这套设计避免了一个常见灾难：权限、超时、展示、日志、业务函数互相缠在一起。工具作者写工具，策略插件管策略，UI 通过 render intent 渲染，loop 只认标准化结果。</p>
+<h3 id="Native-Mode-与-Code-Mode"><a href="#Native-Mode-与-Code-Mode" class="headerlink" title="Native Mode 与 Code Mode"></a>Native Mode 与 Code Mode</h3><p>DeepSeek Harness 的工具呈现还有一个很有意思的设计：工具可以用 native function calling 暴露，也可以用 Code Mode 暴露。</p>
+<p>Native Mode 就是模型直接看到每个工具 schema。</p>
+<p>Code Mode 则暴露一个保留工具 <code>run_code</code>，同时给模型生成当前可见工具集合的 SDK。模型写一段 TypeScript 或 Python 风格代码，在代码里调用 typed tool bindings。每个 binding 调用仍然回到同一条工具流水线；但只有程序打印和返回值进入模型上下文，中间工具结果不会全部塞回 messages。</p>
+<p>这个设计的价值是：当任务需要多次读文件、过滤、聚合、排序、比较时，模型可以把中间计算留在代码里，而不是把每一步工具结果都污染上下文。</p>
+<h2 id="七、Capability-Seam：为什么换一个-provider-不该改所有工具"><a href="#七、Capability-Seam：为什么换一个-provider-不该改所有工具" class="headerlink" title="七、Capability Seam：为什么换一个 provider 不该改所有工具"></a>七、Capability Seam：为什么换一个 provider 不该改所有工具</h2><p>仓库文档里有一个术语叫 capability seam，可以理解为一条可替换能力线。完整的 seam 至少包含三类角色：</p>
+<ul>
+<li>Service Definition：声明接口。</li>
+<li>Service Provider：实现接口。</li>
+<li>Consumer：使用接口，常常是模型可见工具。</li>
+</ul>
+<p>以文件系统为例：</p>
+<ul>
+<li><code>packages/fs/fs</code> 声明 filesystem service。</li>
+<li><code>packages/fs/fs-local</code> 提供本地实现。</li>
+<li><code>packages/fs/fs-sandbox</code> 应用沙箱&#x2F;策略。</li>
+<li><code>packages/fs/tool-fs</code>、<code>tool-fs-search</code> 把能力变成模型工具。</li>
+</ul>
+<p>Shell、subprocess、terminal、web search&#x2F;fetch、subagent、workflow、storage、credentials、settings 也都类似。</p>
+<p>这样做有一个很硬的工程收益：Consumer 不绑定具体 provider。你可以把本地 subprocess 换成远程 sandbox，把 shell 背后的执行世界换掉，把 web search provider 换掉，而不需要每个工具都分叉一份。</p>
+<p>这也是 DeepSeek Harness 比“工具函数集合”更像运行时的地方。</p>
+<h2 id="八、文件系统、Shell、Sandbox：Agent-真正危险的地方"><a href="#八、文件系统、Shell、Sandbox：Agent-真正危险的地方" class="headerlink" title="八、文件系统、Shell、Sandbox：Agent 真正危险的地方"></a>八、文件系统、Shell、Sandbox：Agent 真正危险的地方</h2><p>Agent 一旦能读写文件、执行 shell，就从“聊天应用”变成“本机自动化程序”。这部分如果设计粗糙，风险会非常高。</p>
+<p>DeepSeek Harness 把相关能力拆成几层：</p>
+<ul>
+<li><code>fs</code>：文件系统抽象。</li>
+<li><code>subprocess</code>：进程树能力。</li>
+<li><code>shell</code>：Bash &#x2F; PowerShell 执行能力。</li>
+<li><code>terminal</code>：持久 PTY 能力。</li>
+<li><code>sandbox</code>：进程隔离。</li>
+<li><code>interaction</code>：用户审批和权限 preset。</li>
+<li><code>guard</code>：loop hygiene、工具超时等策略。</li>
+</ul>
+<p>POSIX 上默认挂 Bash 栈；Windows 上挂 PowerShell 栈和 Windows ACL sandbox 路径。两套栈注册同一个 shell service key，所以 profile patch 必须保证只启用一个执行家族。</p>
+<p>这里最值得借鉴的是：它没有把 shell 工具写成“直接 spawn”。工具只是 Consumer；真正的执行、权限、sandbox、文件效果策略分别由不同 provider 和 plugin 组合出来。</p>
+<h2 id="九、Web-UI：不是壳子，是运行时投影"><a href="#九、Web-UI：不是壳子，是运行时投影" class="headerlink" title="九、Web UI：不是壳子，是运行时投影"></a>九、Web UI：不是壳子，是运行时投影</h2><p>Web 相关代码分两半：</p>
+<ul>
+<li><code>packages/host/*</code>：HTTP route、API proxy、frontend static、workspace directory picker、plugin inventory。</li>
+<li><code>packages/client/*</code>：browser shell、connection、runtime、React renderer、slots、conversation UI、sidebar、settings、tool cards、workflow views。</li>
+</ul>
+<p>Web UI 不应该直接知道某个工具内部怎么跑。工具自己提供 presentation intent，session log 提供 durable events，host 通过 API gateway 和 Typert 生成的 remote contracts 暴露服务，client plugins 注册 slot 并渲染状态。</p>
+<p>所以你在 UI 里看到的不是“当前内存里某个 loop 对象的状态”，而是从事件、projection、remote service、tool presentation 中组合出的界面。这个思路对做 Agent IDE、运维面板、协作界面都很有参考价值。</p>
+<h2 id="十、扩展-DeepSeek-Harness：该改哪里"><a href="#十、扩展-DeepSeek-Harness：该改哪里" class="headerlink" title="十、扩展 DeepSeek Harness：该改哪里"></a>十、扩展 DeepSeek Harness：该改哪里</h2><p>如果你想在这个仓库里加能力，先不要打开 loop 开写。更合理的定位方式是：</p>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>应该接入哪里</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>新模型 provider</td>
+<td>注册到 <code>ctx.llm</code></td>
+</tr>
+<tr>
+<td>新模型可见工具</td>
+<td><code>ctx.tools.register()</code></td>
+</tr>
+<tr>
+<td>新 prompt 上下文</td>
+<td><code>ctx.systemPrompt</code> 或 agent-scoped prompt section</td>
+</tr>
+<tr>
+<td>新文件&#x2F;进程后端</td>
+<td>对应 Service Definition 的 provider</td>
+</tr>
+<tr>
+<td>新权限策略</td>
+<td><code>tools/pre-execute</code>、guard、approval</td>
+</tr>
+<tr>
+<td>新 UI 面板</td>
+<td>client slot + host remote</td>
+</tr>
+<tr>
+<td>新会话持久事实</td>
+<td>扩展 <code>SessionEventMap</code> 并实现 projection</td>
+</tr>
+<tr>
+<td>新 profile 默认能力</td>
+<td>bundle patch 或 preset</td>
+</tr>
+<tr>
+<td>新子 Agent 类型</td>
+<td>subagent provider</td>
+</tr>
+</tbody></table>
+<p>这套规则背后的思想是：核心 loop 是产品 spine，不是业务垃圾桶。新行为应该挂在文档化扩展点上。</p>
+<h2 id="十一、从源码跑起来"><a href="#十一、从源码跑起来" class="headerlink" title="十一、从源码跑起来"></a>十一、从源码跑起来</h2><p>源码运行最短路径：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pnpm install</span><br><span class="line">pnpm run build</span><br><span class="line">pnpm dsh web</span><br></pre></td></tr></table></figure>
+
+<p>默认 Web 地址是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:3080</span><br></pre></td></tr></table></figure>
+
+<p>如果要指定端口：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm dsh web --port 8080</span><br></pre></td></tr></table></figure>
+
+<p>跑一个 headless 任务：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm dsh --profile headless <span class="string">&quot;总结这个仓库的核心架构&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>看最终组合出来的 Cordis 配置：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pnpm dsh --profile web --dump-config</span><br></pre></td></tr></table></figure>
+
+<p>配置 DeepSeek API key：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DEEPSEEK_API_KEY=sk-...</span><br><span class="line">DEEPSEEK_BASE_URL=https://... <span class="comment"># 可选</span></span><br></pre></td></tr></table></figure>
+
+<p>如果你要改 profile，先 dump-config 找 row id，再在 <code>cordis.patch.yml</code> 里按 id 覆盖。注意 patch 是替换整个 <code>config</code>，不是 deep merge，保留字段也要重写。</p>
+<h2 id="十二、这套架构适合学什么"><a href="#十二、这套架构适合学什么" class="headerlink" title="十二、这套架构适合学什么"></a>十二、这套架构适合学什么</h2><p>DeepSeek Harness 不是最小 Agent 框架，它反而是一个适合学习“复杂 Agent 产品如何拆工程边界”的样本。它对下面这些问题给出了比较完整的答案：</p>
+<ul>
+<li>Agent loop 和工具执行怎样解耦。</li>
+<li>模型可见上下文如何做到可重建。</li>
+<li>工具权限、审批、超时、展示如何分层。</li>
+<li>本地 shell&#x2F;文件系统能力如何放进策略和沙箱里。</li>
+<li>Web UI 如何从 session log 和 tool presentation 投影。</li>
+<li>子 Agent、workflow、jobs 这些长任务如何作为能力接入。</li>
+<li>配置和插件如何支持不同运行 profile。</li>
+</ul>
+<p>如果你正在做自己的 Agent 平台，我建议重点抄思想，不要先抄代码：</p>
+<ol>
+<li>把 runtime facts 做成 append-only event stream。</li>
+<li>把工具执行做成 pipeline，而不是函数表。</li>
+<li>把模型 adapter 和 request recovery 拆开。</li>
+<li>把权限和 sandbox 作为能力层，不要散落在工具里。</li>
+<li>把 UI 渲染意图交给工具或 capability owner，而不是前端硬编码工具名。</li>
+<li>把部署差异放进 profile&#x2F;config，不要 fork app entry。</li>
+</ol>
+<h2 id="十三、我对这个仓库的评价"><a href="#十三、我对这个仓库的评价" class="headerlink" title="十三、我对这个仓库的评价"></a>十三、我对这个仓库的评价</h2><p>DeepSeek Harness 的代码量和包数量会让第一次阅读的人有点懵，但它的主线是清楚的：Cordis 负责插件化组合，core packages 负责 Agent spine，capability families 负责可替换能力，session log 负责事实账本，Web client&#x2F;host 负责产品界面。</p>
+<p>它不是一个“最容易上手”的项目，但它很适合回答一个更难的问题：如果 Agent 真的要在真实机器上长期运行、能恢复、能审计、能扩展、能让用户控制权限，工程上应该怎么分层？</p>
+<p>这也是它最有干货的地方。</p>
+<h2 id="推荐阅读路径"><a href="#推荐阅读路径" class="headerlink" title="推荐阅读路径"></a>推荐阅读路径</h2><p>如果你准备继续读源码，建议按这个顺序：</p>
+<ol>
+<li><code>README.md</code>：先知道产品怎么跑。</li>
+<li><code>docs/architecture.md</code>：理解 profile、bundle、turn flow、session log、capability seam。</li>
+<li><code>docs/codebase-guide.zh.md</code>：按代码路径建立地图。</li>
+<li><code>packages/core/agent-loop/README.md</code>：看具体 loop 合同。</li>
+<li><code>packages/core/tools/README.md</code>：看工具流水线。</li>
+<li><code>packages/bundle/base/cordis.patch.yml</code>：看默认能力是怎么挂进去的。</li>
+<li><code>packages/host/README.md</code> 和 <code>packages/client/README.md</code>：看 Web UI 分层。</li>
+<li><code>docs/cookbook/adding-a-tool.md</code>、<code>docs/cookbook/adding-an-llm-adapter.md</code>：开始写扩展。</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>DeepSeek Harness 官方页面：<a class="link"   target="_blank" rel="noopener" href="https://deepseek.com/harness" >https://deepseek.com/harness<i class="fas fa-external-link-alt"></i></a></li>
+<li>DeepSeek Harness GitHub 仓库：<a class="link"   target="_blank" rel="noopener" href="https://github.com/deepseek-ai/deepseek-harness" >https://github.com/deepseek-ai/deepseek-harness<i class="fas fa-external-link-alt"></i></a></li>
+<li>Cordis 项目：<a class="link"   target="_blank" rel="noopener" href="https://github.com/cordiverse/cordis" >https://github.com/cordiverse/cordis<i class="fas fa-external-link-alt"></i></a></li>
+<li>本仓库架构文档：<code>docs/architecture.md</code></li>
+<li>本仓库代码库指南：<code>docs/codebase-guide.zh.md</code></li>
+<li>本仓库包索引：<code>packages/README.md</code></li>
+</ul>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Agent/">Agent</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/DeepSeek/">DeepSeek</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Harness/">Harness</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/">插件化</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/2026/08/14/deepseek-harness-series-00-index/"
+                                   title="DeepSeek Harness 源码深度专栏目录"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">DeepSeek Harness 源码深度专栏目录</span>
+                                        <span class="post-nav-item">Prev posts</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2026/08/10/codeforces-go-problem-type-index/"
+                                   title="算法题目类型索引"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">算法题目类型索引</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">JotaroRD</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/toggle-theme.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/code-block.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/libs/anime.min.js"></script>
+
+<!-- local search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/local-search.js"></script>
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+        
+    
+        
+            
+<script class="custom-inject-js" src="/js/selection-comments-v2.js" data-pjax></script>
+
+        
+    
+
+</body>
+</html>
