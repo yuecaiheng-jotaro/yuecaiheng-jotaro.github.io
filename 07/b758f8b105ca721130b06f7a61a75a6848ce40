@@ -1,0 +1,23 @@
+admin/lib.js
+  s_eec56e33076156::t_a7b7e2d4da625b 1-352
+admin/server.js
+  s_eec56e33076156::t_a7b7e2d4da625b 1-415
+package.json
+  s_eec56e33076156::t_a7b7e2d4da625b 9-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "07b758f8b105ca721130b06f7a61a75a6848ce40",
+  "prompts": {},
+  "sessions": {
+    "s_eec56e33076156": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ec782f29-61b3-4a4c-ba74-f1cd0c55ee91",
+        "model": "grok-4.7"
+      },
+      "human_author": "yuecaiheng.jotaro <yuecaiheng.jotaro@jd.com>"
+    }
+  }
+}
