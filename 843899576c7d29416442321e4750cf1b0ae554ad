@@ -1,0 +1,23 @@
+scripts/insight-category-page.js
+  s_8ee3a92db45eb5::t_e5a3e7e66af481 1-7,9,11,13,15,17,19-24,26-28,30-34
+  s_8ee3a92db45eb5::t_c652a564cdfb12 29
+  s_8ee3a92db45eb5::t_eba8ec6aca9250 8,10,12,14,16,18,25
+layouts/insight-archive.ejs
+  s_8ee3a92db45eb5::t_7823228115e7bb 1-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "843899576c7d29416442321e4750cf1b0ae554ad",
+  "prompts": {},
+  "sessions": {
+    "s_8ee3a92db45eb5": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "4c53c1e4-2802-4512-82f3-d34f7b484e79",
+        "model": "grok-4.7"
+      },
+      "human_author": "yuecaiheng.jotaro <yuecaiheng.jotaro@jd.com>"
+    }
+  }
+}
