@@ -14,10 +14,10 @@
         Jotaro Space
     </title>
     
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/css/style.css">
 
     
-        <link rel="shortcut icon" href="/images/site-avatar-256.png">
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/site-avatar-256.png">
     
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/fontawesome.min.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/regular.min.css">
@@ -35,7 +35,7 @@
         
             
                 
-<link rel="stylesheet" href="/css/selection-comments.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/css/selection-comments.css">
 
             
         
@@ -74,7 +74,7 @@
         <div class="left flex-start border-box">
             
                 <a class="logo-image border-box" href="/">
-                    <img src="/images/site-avatar-256.png">
+                    <img src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/site-avatar-256.png">
                 </a>
             
             <a class="site-name border-box" href="/">
@@ -249,7 +249,7 @@
                     <div class="post-header border-box">
                         
                             <div class="avatar-box border-box">
-                                <img src="/images/site-avatar-256.png">
+                                <img src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/site-avatar-256.png">
                             </div>
                         
                         <div class="info-box">
@@ -273,7 +273,7 @@
             
                 <span class="meta-info-item post-update-date">
                     <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                    <span class="datetime" data-updated="Fri Aug 14 2026 15:12:54 GMT+0800">2026-08-14 15:12:54</span>
+                    <span class="datetime" data-updated="Fri Sep 04 2026 18:20:23 GMT+0800">2026-09-04 18:20:23</span>
                 </span>
             
         
@@ -293,10 +293,10 @@
             <span class="post-tag meta-info-item border-box">
                 <ul class="post-tag-ul">
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/DeepSeek/">DeepSeek</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Agent/">Agent</a></li>
                         
                     
-                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Agent/">Agent</a></li>
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/DeepSeek/">DeepSeek</a></li>
                         
                     
                             <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Harness/">Harness</a></li>
@@ -330,7 +330,7 @@
                          <h1 id="DeepSeek-Harness-深度拆解：一个“Agent-Model-Harness”的插件化运行时到底怎么工作"><a href="#DeepSeek-Harness-深度拆解：一个“Agent-Model-Harness”的插件化运行时到底怎么工作" class="headerlink" title="DeepSeek Harness 深度拆解：一个“Agent &#x3D; Model + Harness”的插件化运行时到底怎么工作"></a>DeepSeek Harness 深度拆解：一个“Agent &#x3D; Model + Harness”的插件化运行时到底怎么工作</h1><blockquote>
 <p>这篇文章适合已经写过 Agent、Tool Calling、MCP、CLI 自动化或 Web Agent UI 的工程师。它不讲概念鸡汤，重点拆 DeepSeek Harness 这个仓库的运行模型、源码结构、扩展方式和真实使用姿势。</p>
 </blockquote>
-<p><img   src="/images/posts/deepseek-harness-deep-dive/architecture-overview.svg"  alt="DeepSeek Harness 总架构"></p>
+<p><img   src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/posts/deepseek-harness-deep-dive/architecture-overview.svg"  alt="DeepSeek Harness 总架构"></p>
 <h2 id="先给结论"><a href="#先给结论" class="headerlink" title="先给结论"></a>先给结论</h2><p>DeepSeek Harness 不是一个“把 DeepSeek API 包一层”的 SDK，也不是只跑 prompt 的 demo。它更像一个完整的 Agent 操作系统：模型适配器、工具注册表、文件系统、shell、权限审批、会话日志、持久化、Web UI、子 Agent、工作流、设置页、插件管理，全都被拆成 Cordis 插件，再由 profile 和 bundle 组合成一个可运行产品。</p>
 <p>官方落地页用一句话概括它的定位：Agent &#x3D; Model + Harness。这里的 Model 负责生成下一步意图，Harness 负责给模型提供可控、可观测、可恢复的运行环境。换成人话就是：模型不是直接“裸奔”在你的机器上，而是在一个有工具边界、会话日志、权限策略、UI 投影和插件生命周期的 runtime 里行动。</p>
 <p>这个仓库最值得学的不是某一个工具怎么写，而是它把 Agent 产品拆成了几条清晰的工程主线：</p>
@@ -402,7 +402,7 @@
 </tr>
 </tbody></table>
 <p>读这个仓库最容易踩的坑是：直接打开 <code>agent-loop</code> 想找全部业务逻辑。实际上它故意很克制。新行为通常不该塞进 loop，而应该挂在 <code>agent/*</code>、<code>tools/*</code>、<code>session/event</code>、<code>ctx.tools</code>、<code>ctx.systemPrompt</code>、<code>ctx.fs</code> 等扩展点上。</p>
-<h2 id="三、启动链路：dsh-web-到底发生了什么"><a href="#三、启动链路：dsh-web-到底发生了什么" class="headerlink" title="三、启动链路：dsh web 到底发生了什么"></a>三、启动链路：<code>dsh web</code> 到底发生了什么</h2><p><img   src="/images/posts/deepseek-harness-deep-dive/profile-boot.svg"  alt="Profile 启动链路"></p>
+<h2 id="三、启动链路：dsh-web-到底发生了什么"><a href="#三、启动链路：dsh-web-到底发生了什么" class="headerlink" title="三、启动链路：dsh web 到底发生了什么"></a>三、启动链路：<code>dsh web</code> 到底发生了什么</h2><p><img   src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/posts/deepseek-harness-deep-dive/profile-boot.svg"  alt="Profile 启动链路"></p>
 <p><code>apps/cli/src/bin.ts</code> 是产品命令入口。它解析命令后分发到 profile 模式、plugin 管理模式或 dump-config 模式。</p>
 <p>常用入口是：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dsh web</span><br><span class="line">dsh --profile headless <span class="string">&quot;帮我总结这个仓库&quot;</span></span><br><span class="line">dsh --profile web --dump-config</span><br><span class="line">dsh plugin --profile web add &lt;some-plugin&gt;</span><br></pre></td></tr></table></figure>
@@ -420,7 +420,7 @@
 
 <p>这带来一个很实用的工程结果：部署差异、用户覆盖、插件安装、模式切换，都可以表达为配置层，而不是 fork 一套入口代码。</p>
 <p><code>packages/boot/app-boot</code> 是这条链路的共享启动胶水。它负责加载 <code>.env</code>、解析 profile&#x2F;bundle、挂载 <code>cordis:include</code>、等待插件激活、把 Loader 错误变成带产品前缀的失败信息，并让长驻 Web 进程能监听用户 patch 变化。</p>
-<h2 id="四、核心-Loop：Turn-和-Step-是整个-Agent-的心跳"><a href="#四、核心-Loop：Turn-和-Step-是整个-Agent-的心跳" class="headerlink" title="四、核心 Loop：Turn 和 Step 是整个 Agent 的心跳"></a>四、核心 Loop：Turn 和 Step 是整个 Agent 的心跳</h2><p><img   src="/images/posts/deepseek-harness-deep-dive/turn-flow.svg"  alt="Turn&#x2F;Step 流程"></p>
+<h2 id="四、核心-Loop：Turn-和-Step-是整个-Agent-的心跳"><a href="#四、核心-Loop：Turn-和-Step-是整个-Agent-的心跳" class="headerlink" title="四、核心 Loop：Turn 和 Step 是整个 Agent 的心跳"></a>四、核心 Loop：Turn 和 Step 是整个 Agent 的心跳</h2><p><img   src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/posts/deepseek-harness-deep-dive/turn-flow.svg"  alt="Turn&#x2F;Step 流程"></p>
 <p>DeepSeek Harness 的核心执行路径集中在几个包：</p>
 <ul>
 <li><code>packages/core/agent</code>：Agent 接口、live registry、inbox、状态事件。</li>
@@ -450,7 +450,7 @@
 <li>审计：模型看到过什么，工具返回过什么，都能追。</li>
 </ul>
 <p>这也是为什么你新增模型可见上下文时，不能只在内存里塞一段 prompt。你要问：这段东西 reload 后还能被重建吗？如果不能，通常就要新增 session event 和 projection。</p>
-<h2 id="六、工具系统：它不是函数表，而是安全执行流水线"><a href="#六、工具系统：它不是函数表，而是安全执行流水线" class="headerlink" title="六、工具系统：它不是函数表，而是安全执行流水线"></a>六、工具系统：它不是函数表，而是安全执行流水线</h2><p><img   src="/images/posts/deepseek-harness-deep-dive/tool-pipeline.svg"  alt="工具执行流水线"></p>
+<h2 id="六、工具系统：它不是函数表，而是安全执行流水线"><a href="#六、工具系统：它不是函数表，而是安全执行流水线" class="headerlink" title="六、工具系统：它不是函数表，而是安全执行流水线"></a>六、工具系统：它不是函数表，而是安全执行流水线</h2><p><img   src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/posts/deepseek-harness-deep-dive/tool-pipeline.svg"  alt="工具执行流水线"></p>
 <p>工具在 <code>packages/core/tools</code> 里注册。一个工具定义不只是 name + function，而包括：</p>
 <ul>
 <li>名称和描述。</li>
@@ -635,11 +635,11 @@
                             <ul class="post-tags-box border-box">
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/DeepSeek/">DeepSeek</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Agent/">Agent</a>
                                     </li>
                                 
                                     <li class="tag-item border-box">
-                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Agent/">Agent</a>
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/DeepSeek/">DeepSeek</a>
                                     </li>
                                 
                                     <li class="tag-item border-box">
@@ -922,7 +922,7 @@
     
         
             
-<script class="custom-inject-js" src="/js/selection-comments-v2.js" data-pjax></script>
+<script class="custom-inject-js" src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/js/selection-comments-v2.js" data-pjax></script>
 
         
     

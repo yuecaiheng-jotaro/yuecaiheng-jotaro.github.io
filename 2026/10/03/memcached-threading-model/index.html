@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="JotaroRD">
+    
+    <title>
+        
+            Memcached 多线程模型：监听、CQ、Worker 与共享缓存 |
+        
+        Jotaro Space
+    </title>
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/css/style.css">
+
+    
+        <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/site-avatar-256.png">
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/brands.min.css">
+    
+        
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/first-screen-local.css">
+
+            
+        
+            
+                
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/css/selection-comments.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"yuecaiheng-jotaro.github.io","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Jotaro Space","author":"JotaroRD","avatar":"/images/site-avatar-256.png","logo":"/images/site-avatar-256.png","favicon":"/images/site-avatar-256.png"},"menu":{"home":"/","archives":"/archives","categories":"/categories","insight":"/insight","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/first-screen.jpg","background_img_dark":"/images/first-screen.jpg","description":"Talk is Cheap","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":false,"post_datetime":"updated"},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":false,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":true,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":false,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":true,"css":[null,"/css/first-screen-local.css","/css/selection-comments.css"],"js":[null,"/js/selection-comments-v2.js"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/site-avatar-256.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Jotaro Space
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                CATEGORIES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/insight">
+                                
+                                INSIGHT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                            CATEGORIES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/insight">
+                            
+                            INSIGHT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Memcached 多线程模型：监听、CQ、Worker 与共享缓存
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/images/site-avatar-256.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">JotaroRD</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-10-03 16:45:00</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Sat Oct 03 2026 16:55:46 GMT+0800">2026-10-03 16:55:46</span>
+                </span>
+            
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E7%B3%BB%E7%BB%9F/">系统</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Memcached/">Memcached</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E7%BC%93%E5%AD%98/">缓存</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>Memcached 不是「一连接一线程」。它用一个监听线程接连接，用 Connection Queue 把连接交给多个 worker，每个 worker 用自己的 libevent 管理大量连接，并在本线程里直接执行 GET&#x2F;SET。所有 worker 共享同一份 hash、slab 和 LRU，再用按 hash 分片的 item lock 保护这份缓存。</p>
+<blockquote>
+<p><strong>Memcached &#x3D; 多 worker 线程 + 每 worker 一个 event loop + 每 worker 管多个连接 + 所有 worker 共享同一份缓存。</strong></p>
+</blockquote>
+<p>依据是已经对过的线程模型，以及 Memcached 源码里能直接对上的结构：独立监听线程、worker 自己的 libevent、连接队列 CQ、item locks，以及基于 hash 的锁分片。继续读源码时，优先看 <code>thread.c</code>：worker 初始化、CQ、wakeup、item locks 都在这里。不同版本的源码结构略有演进，基本思想不变。微信公众号原文当时没有逐段对照，下面按源码能确认的模型来记。</p>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#1-%E6%95%B4%E4%BD%93%E6%A8%A1%E5%9E%8B">整体模型</a></li>
+<li><a href="#2-%E8%BF%9E%E6%8E%A5%E6%80%8E%E4%B9%88%E8%BF%9B%E6%9D%A5">连接怎么进来</a></li>
+<li><a href="#3-Worker-%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82">Worker 怎么处理请求</a></li>
+<li><a href="#4-%E5%85%B1%E4%BA%AB%E7%BC%93%E5%AD%98%E4%B8%8E%E9%94%81">共享缓存与锁</a></li>
+<li><a href="#5-%E4%B8%9A%E5%8A%A1%E5%8E%9F%E5%AD%90%E6%80%A7%E3%80%81CAS%E3%80%81Slab%E3%80%81LRU">业务原子性、CAS、Slab、LRU</a></li>
+<li><a href="#6-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%82%E5%90%88%E7%AE%80%E5%8D%95%E9%AB%98%E5%B9%B6%E5%8F%91%E7%BC%93%E5%AD%98">为什么适合简单高并发缓存</a></li>
+<li><a href="#7-%E4%B8%A4%E6%9D%A1%E5%BF%85%E8%83%8C%E8%B0%83%E7%94%A8%E9%93%BE">两条必背调用链</a></li>
+<li><a href="#8-Java-Netty-%E7%B1%BB%E6%AF%94">Java &#x2F; Netty 类比</a></li>
+<li><a href="#9-%E5%8D%81%E6%9D%A1%E7%BB%93%E8%AE%BA">十条结论</a></li>
+</ol>
+<h2 id="1-整体模型"><a href="#1-整体模型" class="headerlink" title="1. 整体模型"></a>1. 整体模型</h2><p>官方资料的描述是：有一个专门线程监听新 socket，再把客户端连接 round-robin 分配给各 worker。连接交出去之后，GET&#x2F;SET 不再回到监听线程。</p>
+<div class="mermaid">
+flowchart TB
+  Client(["Client"])
+  subgraph Listen["Main / Listener"]
+    Accept["accept()"]
+  end
+  Client --> Accept
+  Accept --> RR{"round-robin 选择 worker"}
+  subgraph Queues["Connection Queue：交接的是连接"]
+    direction LR
+    CQ0["CQ0"]
+    CQ1["CQ1"]
+    CQ2["CQ2"]
+  end
+  RR --> CQ0
+  RR --> CQ1
+  RR --> CQ2
+  subgraph Workers["每个 Worker：一个 libevent"]
+    direction LR
+    W0["Worker0<br/>多个 conn"]
+    W1["Worker1<br/>多个 conn"]
+    W2["Worker2<br/>多个 conn"]
+  end
+  CQ0 --> W0
+  CQ1 --> W1
+  CQ2 --> W2
+  W0 --> Shared
+  W1 --> Shared
+  W2 --> Shared
+  subgraph Shared["进程内共享缓存"]
+    direction LR
+    Hash["Hash Table"] ~~~ Slab["Slab"]
+    Slab ~~~ LRU["LRU / item"]
+  end
+  classDef client fill:#f1f5f9,stroke:#64748b,color:#1e293b
+  classDef listen fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef queue fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+  classDef worker fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef cache fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+  classDef decision fill:#fef9c3,stroke:#ca8a04,color:#713f12
+  class Client client
+  class Accept listen
+  class RR decision
+  class CQ0,CQ1,CQ2 queue
+  class W0,W1,W2 worker
+  class Hash,Slab,LRU cache
+</div>
+
+<p>四层各管一件事：</p>
+<table>
+<thead>
+<tr>
+<th>层</th>
+<th>做什么</th>
+<th>不做什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Listener</td>
+<td><code>accept()</code>，按 round-robin 选 worker</td>
+<td>不执行 GET&#x2F;SET</td>
+</tr>
+<tr>
+<td>CQ</td>
+<td>把新连接从监听线程交给某个 worker</td>
+<td>不排队业务请求</td>
+</tr>
+<tr>
+<td>Worker</td>
+<td>自己的 event loop，解析协议并执行命令</td>
+<td>不独占一份缓存</td>
+</tr>
+<tr>
+<td>Shared Cache</td>
+<td>hash、slab、LRU，全进程一份</td>
+<td>不按线程复制</td>
+</tr>
+</tbody></table>
+<h2 id="2-连接怎么进来"><a href="#2-连接怎么进来" class="headerlink" title="2. 连接怎么进来"></a>2. 连接怎么进来</h2><h3 id="2-1-Main-Thread"><a href="#2-1-Main-Thread" class="headerlink" title="2.1 Main Thread"></a>2.1 Main Thread</h3><p>主线程的路径很短：<code>listen</code> → <code>accept</code> → 得到 socket fd → 选择 worker → 把连接交出去。</p>
+<div class="mermaid">
+flowchart LR
+  C1["conn1"] --> W0["Worker0"]
+  C2["conn2"] --> W1["Worker1"]
+  C3["conn3"] --> W2["Worker2"]
+  C4["conn4"] --> W3["Worker3"]
+  C5["conn5"] --> W0
+  classDef conn fill:#f8fafc,stroke:#94a3b8,color:#334155
+  classDef worker fill:#dcfce7,stroke:#16a34a,color:#14532d
+  class C1,C2,C3,C4,C5 conn
+  class W0,W1,W2,W3 worker
+</div>
+
+<p>常见分发是 round-robin：第 5 个连接回到 Worker0。Main Thread 不负责执行每一个 GET&#x2F;SET。</p>
+<h3 id="2-2-CQ：Connection-Queue"><a href="#2-2-CQ：Connection-Queue" class="headerlink" title="2.2 CQ：Connection Queue"></a>2.2 CQ：Connection Queue</h3><p>CQ 是 Main Thread 和 Worker 之间的连接交接队列。源码里它大致带一把队列自己的锁：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">conn_queue</span> &#123;</span></span><br><span class="line">    <span class="comment">/* head / tail ... */</span></span><br><span class="line">    <span class="type">pthread_mutex_t</span> lock;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>CQ_ITEM</code> 保存的是新连接，不是一条命令：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">conn_queue_item</span> &#123;</span></span><br><span class="line">    <span class="type">int</span> sfd;</span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">conn_states</span> <span class="title">init_state</span>;</span></span><br><span class="line">    <span class="type">int</span> event_flags;</span><br><span class="line">    <span class="type">int</span> read_buffer_size;</span><br><span class="line">    <span class="comment">/* ... */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<div class="mermaid">
+flowchart TB
+  Accept["Main Thread<br/>accept fd = 100"] --> Item["CQ_ITEM<br/>sfd = 100"]
+  Item --> CQ["Worker2.CQ"]
+  CQ --> Worker["Worker2 之后接管这条连接"]
+  classDef listen fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef queue fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+  classDef worker fill:#dcfce7,stroke:#16a34a,color:#14532d
+  class Accept listen
+  class Item,CQ queue
+  class Worker worker
+</div>
+
+<p>队列里排的是 socket fd。一次 push 对应一次连接交接，例如 <code>fd 101</code>、<code>fd 102</code>、<code>fd 103</code>。<code>GET a</code> &#x2F; <code>SET b</code> 不会逐条进入 CQ。旧版源码可以直接看到 <code>head/tail + mutex</code>；新版本仍然保留 connection queue 和对应的锁。</p>
+<h3 id="2-3-CQ-为什么自己也要锁"><a href="#2-3-CQ-为什么自己也要锁" class="headerlink" title="2.3 CQ 为什么自己也要锁"></a>2.3 CQ 为什么自己也要锁</h3><p>队列两侧是不同线程。Main 正在 <code>cq_push()</code>，Worker 正在 <code>cq_pop()</code>，两边会同时改队列，所以 queue 自己需要 mutex。</p>
+<div class="mermaid">
+sequenceDiagram
+  participant Main as Main Thread
+  participant CQ as CQ.lock
+  participant Worker as Worker Thread
+  Main->>CQ: cq_push() 加锁
+  Note over CQ: 修改 head / tail
+  Main->>CQ: 解锁
+  Worker->>CQ: cq_pop() 加锁
+  Note over CQ: 取出 CQ_ITEM
+  Worker->>CQ: 解锁
+</div>
+
+<p>这把锁只保护 connection queue。后面保护 KV 数据的 item lock 是另一套锁。</p>
+<h3 id="2-4-Worker-怎么知道-CQ-里有新连接"><a href="#2-4-Worker-怎么知道-CQ-里有新连接" class="headerlink" title="2.4 Worker 怎么知道 CQ 里有新连接"></a>2.4 Worker 怎么知道 CQ 里有新连接</h3><p>只做 <code>CQ.push(conn)</code> 不够。Worker 可能正停在 event loop 里等网络事件，根本不知道队列里多了东西。经典设计里，每个 worker 都有 wakeup pipe 或 eventfd。源码注释的意思是：每个 libevent 实例都有一个 wakeup pipe，其他线程可以通过它通知 worker，queue 里进了一个新连接。</p>
+<h3 id="2-5-新连接的完整调用链"><a href="#2-5-新连接的完整调用链" class="headerlink" title="2.5 新连接的完整调用链"></a>2.5 新连接的完整调用链</h3><div class="mermaid">
+sequenceDiagram
+  participant Client
+  participant Main as Main Thread
+  participant CQ as Worker CQ
+  participant Worker as Worker libevent
+  Client->>Main: TCP connect
+  Main->>Main: accept() 得到 fd
+  Main->>Main: round-robin 选择 worker
+  Main->>CQ: cq_push(CQ_ITEM)
+  Main->>Worker: write notify fd
+  Worker->>Worker: event loop 被唤醒
+  Worker->>CQ: cq_pop()
+  Worker->>Worker: conn_new() + event_add()
+  Note over Worker: 之后这条 conn 只由该 worker 管
+</div>
+
+<p>连接交出去以后，后续 GET&#x2F;SET 走的是该 worker 的 socket event，不再每个 request 都经过 CQ。</p>
+<div class="mermaid">
+flowchart LR
+  Client(["Client"]) -->|"GET / SET"| Sock["Worker 的 socket event"]
+  Sock --> Exec["协议解析 + 命令执行"]
+  classDef client fill:#f1f5f9,stroke:#64748b,color:#1e293b
+  classDef worker fill:#dcfce7,stroke:#16a34a,color:#14532d
+  class Client client
+  class Sock,Exec worker
+</div>
+
+<h2 id="3-Worker-怎么处理请求"><a href="#3-Worker-怎么处理请求" class="headerlink" title="3. Worker 怎么处理请求"></a>3. Worker 怎么处理请求</h2><h3 id="3-1-Worker-是什么"><a href="#3-1-Worker-是什么" class="headerlink" title="3.1 Worker 是什么"></a>3.1 Worker 是什么</h3><p>每个 Worker 是一个 <code>pthread</code>，加上自己的 <code>event_base</code>，加上挂在这个 event loop 上的多个 socket。初始化时为 worker 建自己的 <code>event_base</code>，然后进入 <code>event_base_loop(...)</code>。源码里有 <code>worker_libevent()</code>，核心就是进入 worker 自己的 event loop。</p>
+<blockquote>
+<p>一个 worker 是一个单线程 event loop。</p>
+</blockquote>
+<h3 id="3-2-一个-Worker-管几个-Conn"><a href="#3-2-一个-Worker-管几个-Conn" class="headerlink" title="3.2 一个 Worker 管几个 Conn"></a>3.2 一个 Worker 管几个 Conn</h3><p>很多个。4 个 worker 管 10000 个连接是正常的，因为模型是非阻塞 IO 加 event loop。</p>
+<div class="mermaid">
+flowchart TB
+  W0["Worker0"] --> A1["conn1"]
+  W0 --> A5["conn5"]
+  W0 --> A9["conn9"]
+  W0 --> A13["conn13"]
+  W1["Worker1"] --> B2["conn2"]
+  W1 --> B6["conn6"]
+  W1 --> B10["conn10"]
+  classDef worker fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef conn fill:#f8fafc,stroke:#94a3b8,color:#334155
+  class W0,W1 worker
+  class A1,A5,A9,A13,B2,B6,B10 conn
+</div>
+
+<h3 id="3-3-同一个-Worker-下多个-Conn-是否并行"><a href="#3-3-同一个-Worker-下多个-Conn-是否并行" class="headerlink" title="3.3 同一个 Worker 下多个 Conn 是否并行"></a>3.3 同一个 Worker 下多个 Conn 是否并行</h3><p>同一个 worker 只有一个线程。A、B 可读、C 不可读时，event loop 先处理 A，再处理 B，然后继续循环。这是事件驱动并发，CPU 意义上的并行发生在不同 worker 之间。</p>
+<div class="mermaid">
+flowchart TB
+  subgraph One["同一个 Worker：一个线程串行处理事件"]
+    direction LR
+    A["处理 Conn A"] --> B["处理 Conn B"]
+    B["处理 Conn B"] --> Loop["回到 event loop"]
+  end
+  subgraph Many["不同 Worker：多核并行"]
+    direction LR
+    C0["Worker0 · CPU0"]
+    C1["Worker1 · CPU1"]
+    C2["Worker2 · CPU2"]
+    C3["Worker3 · CPU3"]
+  end
+  classDef serial fill:#fef9c3,stroke:#ca8a04,color:#713f12
+  classDef parallel fill:#dcfce7,stroke:#16a34a,color:#14532d
+  class A,B,Loop serial
+  class C0,C1,C2,C3 parallel
+</div>
+
+<h3 id="3-4-一个-Conn-会不会跨-Worker"><a href="#3-4-一个-Conn-会不会跨-Worker" class="headerlink" title="3.4 一个 Conn 会不会跨 Worker"></a>3.4 一个 Conn 会不会跨 Worker</h3><p>正常情况下，连接建立后分配给某一个 Worker，之后一直由那个 Worker 的 event loop 管理。<code>GET a</code>、<code>GET b</code>、<code>SET c</code>、<code>GET d</code> 都由同一个 worker 执行。这样连接状态不用跨线程同步。</p>
+<h3 id="3-5-Worker-不只是网络-IO-线程"><a href="#3-5-Worker-不只是网络-IO-线程" class="headerlink" title="3.5 Worker 不只是网络 IO 线程"></a>3.5 Worker 不只是网络 IO 线程</h3><p>Memcached Worker 同时做网络 IO、协议解析、命令执行、Hash lookup、GET&#x2F;SET 和结果发送。</p>
+<div class="mermaid">
+flowchart LR
+  W0["Worker0<br/>GET keyA"] --> Core0["CPU0"]
+  W1["Worker1<br/>GET keyB"] --> Core1["CPU1"]
+  classDef worker fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef cpu fill:#dcfce7,stroke:#16a34a,color:#14532d
+  class W0,W1 worker
+  class Core0,Core1 cpu
+</div>
+
+<p>两个 worker 可以在两个 CPU core 上同时执行 KV 操作。这是 Memcached 和 Redis 经典线程模型的一个主要差别。</p>
+<h3 id="3-6-一次请求在-Worker-内怎么走"><a href="#3-6-一次请求在-Worker-内怎么走" class="headerlink" title="3.6 一次请求在 Worker 内怎么走"></a>3.6 一次请求在 Worker 内怎么走</h3><p>客户端发 <code>get user:100</code> 时，全程在这个 Worker 线程里完成：读 socket、解析协议、查缓存、写回结果。锁只包住很短的共享数据临界区。</p>
+<div class="mermaid">
+flowchart TB
+  Read["socket readable<br/>read"] --> Proto["解析协议，识别 GET"]
+  Proto --> Hash["hash(user:100)"]
+  Hash --> Lock["获取 item lock"]
+  Lock --> Lookup["查 hash table，得到 item"]
+  Lookup --> Ref["维护 refcount / item 状态"]
+  Ref --> Unlock["释放 item lock"]
+  Unlock --> Write["写 socket，返回 Client"]
+  classDef io fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef cmd fill:#fef9c3,stroke:#ca8a04,color:#713f12
+  classDef lock fill:#ffe4e6,stroke:#e11d48,color:#881337
+  classDef cache fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+  class Read,Write io
+  class Proto,Hash cmd
+  class Lock,Unlock lock
+  class Lookup,Ref cache
+</div>
+
+<p>记成一条线即可：<strong>Network → Protocol → Command → Cache → Network</strong>。</p>
+<h2 id="4-共享缓存与锁"><a href="#4-共享缓存与锁" class="headerlink" title="4. 共享缓存与锁"></a>4. 共享缓存与锁</h2><h3 id="4-1-为什么多-Worker-能访问同一份数据"><a href="#4-1-为什么多-Worker-能访问同一份数据" class="headerlink" title="4.1 为什么多 Worker 能访问同一份数据"></a>4.1 为什么多 Worker 能访问同一份数据</h3><p>这些 worker 都是同一个进程里的 pthread，共享虚拟地址空间，因此共享同一份堆上的缓存。Worker0 执行 <code>set user:1 A</code> 之后，Worker3 执行 <code>get user:1</code> 可以读到。</p>
+<div class="mermaid">
+flowchart TB
+  subgraph Proc["同一个进程"]
+    direction LR
+    W0["Worker0"]
+    W1["Worker1"]
+    W2["Worker2"]
+  end
+  W0 --> Heap
+  W1 --> Heap
+  W2 --> Heap
+  subgraph Heap["共享堆"]
+    Item["Hash / Slab / LRU / Item"]
+  end
+  classDef worker fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef cache fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+  class W0,W1,W2 worker
+  class Item cache
+</div>
+
+<h3 id="4-2-共享数据会有竞态"><a href="#4-2-共享数据会有竞态" class="headerlink" title="4.2 共享数据会有竞态"></a>4.2 共享数据会有竞态</h3><p>两个 worker 同时 <code>SET k</code>，没有同步就可能破坏 hash table、item metadata、LRU、refcount。源码里能看到多类锁：<code>item_locks</code>、<code>lru_locks</code>、<code>stats_lock</code>、<code>conn_lock</code>，以及前面的 CQ lock。它们保护的对象不同。</p>
+<h3 id="4-3-item-lock：锁分片"><a href="#4-3-item-lock：锁分片" class="headerlink" title="4.3 item_lock：锁分片"></a>4.3 item_lock：锁分片</h3><p>不是每个 key 一把 mutex。路径是 <code>hash(key)</code> 得到 <code>hv</code>，再用 <code>hv &amp; mask</code> 选择 <code>item_locks[x]</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mutex_lock(&amp;item_locks[hv &amp; hashmask(item_lock_hashpower)]);</span><br></pre></td></tr></table></figure>
+
+<p>这是 Lock Striping。例如 1024 把锁时，不同 key 可以落到不同锁上；hash 到同一槽的 key 即使不是同一个 key，也会竞争同一把锁。</p>
+<div class="mermaid">
+flowchart TB
+  A["key A"] --> HA["hash"]
+  B["key B"] --> HB["hash"]
+  C["key C"] --> HC["hash"]
+  HA --> L21["item_locks[21]"]
+  HC --> L21
+  HB --> L729["item_locks[729]"]
+  classDef key fill:#f8fafc,stroke:#94a3b8,color:#334155
+  classDef hash fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef lock fill:#ffe4e6,stroke:#e11d48,color:#881337
+  classDef free fill:#dcfce7,stroke:#16a34a,color:#14532d
+  class A,B,C key
+  class HA,HB,HC hash
+  class L21 lock
+  class L729 free
+</div>
+
+<p>A 和 B 可以同时访问。A 和 C 会在 lock 21 上排队。</p>
+<h3 id="4-4-同一个-KV-同时-GET-SET"><a href="#4-4-同一个-KV-同时-GET-SET" class="headerlink" title="4.4 同一个 KV 同时 GET &#x2F; SET"></a>4.4 同一个 KV 同时 GET &#x2F; SET</h3><p><code>Worker0: GET k</code> 和 <code>Worker1: SET k = A</code> 映射到同一把 item lock。临界区串行化以后，一边不会在另一边已经 free 掉对象时继续使用它。</p>
+<div class="mermaid">
+sequenceDiagram
+  participant W0 as Worker0 GET k
+  participant Lock as item_lock(k)
+  participant W1 as Worker1 SET k
+  W0->>Lock: lock
+  W0->>W0: 查 item，refcount++
+  W0->>Lock: unlock
+  W1->>Lock: lock
+  W1->>W1: 替换 item
+  W1->>Lock: unlock
+</div>
+
+<h3 id="4-5-GET-也要加锁"><a href="#4-5-GET-也要加锁" class="headerlink" title="4.5 GET 也要加锁"></a>4.5 GET 也要加锁</h3><p>关键路径上要加锁。GET 要碰到 item 生命周期、引用计数、LRU 状态，以及 hash table 里对象是否仍然安全。当前源码仍能看到 <code>item_get_locked(...)</code>：先 <code>hash()</code>，再 <code>item_lock()</code>，再 <code>do_item_get()</code>。</p>
+<p>GET 通常只保护很短的共享数据临界区，不会拿锁直到 socket 写完。</p>
+<h3 id="4-6-为什么不用-RWLock"><a href="#4-6-为什么不用-RWLock" class="headerlink" title="4.6 为什么不用 RWLock"></a>4.6 为什么不用 RWLock</h3><p>理论上可以让 GET 拿读锁、SET 拿写锁，使 GET + GET 完全并发。实际 GET 还要碰 refcount、LRU、item metadata 和生命周期，本身就不是纯读。再加上 pthread rwlock 的成本、cache line contention 和实现复杂度，短临界区的 mutex 通常更实用。</p>
+<p>Memcached 的思路是：<strong>锁很多、粒度小、持锁时间短</strong>。</p>
+<h3 id="4-7-item-lock-和-LRU-lock"><a href="#4-7-item-lock-和-LRU-lock" class="headerlink" title="4.7 item lock 和 LRU lock"></a>4.7 item lock 和 LRU lock</h3><p>两套锁保护的对象不同。</p>
+<table>
+<thead>
+<tr>
+<th>锁</th>
+<th>主要保护</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>item_lock</code></td>
+<td>item、hash bucket、item metadata、生命周期</td>
+</tr>
+<tr>
+<td><code>lru_lock</code></td>
+<td>对应的 LRU 数据结构</td>
+</tr>
+<tr>
+<td>CQ lock</td>
+<td>连接交接队列</td>
+</tr>
+<tr>
+<td><code>stats_lock</code> &#x2F; <code>conn_lock</code></td>
+<td>统计或连接相关的共享状态</td>
+</tr>
+</tbody></table>
+<p>源码注释的要点：修改 item &#x2F; hash bucket 前需要 item lock；涉及 LRU 修改时还需要 LRU lock；LRU 访问 item 时要协调 item trylock。实际代码会固定锁顺序，否则容易死锁。</p>
+<div class="mermaid">
+flowchart TB
+  Worker["Worker"] --> ItemLock["item_lock<br/>修改 item / hash bucket"]
+  ItemLock --> LruLock["lru_lock<br/>修改 LRU"]
+  LruLock --> Done["按固定顺序释放"]
+  classDef worker fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef item fill:#ffe4e6,stroke:#e11d48,color:#881337
+  classDef lru fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+  class Worker worker
+  class ItemLock item
+  class LruLock,Done lru
+</div>
+
+<h2 id="5-业务原子性、CAS、Slab、LRU"><a href="#5-业务原子性、CAS、Slab、LRU" class="headerlink" title="5. 业务原子性、CAS、Slab、LRU"></a>5. 业务原子性、CAS、Slab、LRU</h2><h3 id="5-1-线程安全不等于业务操作原子"><a href="#5-1-线程安全不等于业务操作原子" class="headerlink" title="5.1 线程安全不等于业务操作原子"></a>5.1 线程安全不等于业务操作原子</h3><p>内部锁都正确时，下面这段仍然可能丢更新：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">GET counter</span><br><span class="line">counter++</span><br><span class="line">SET counter</span><br></pre></td></tr></table></figure>
+
+<div class="mermaid">
+sequenceDiagram
+  participant A as Client A
+  participant Cache as counter = 10
+  participant B as Client B
+  A->>Cache: GET → 10
+  B->>Cache: GET → 10
+  A->>Cache: SET 11
+  B->>Cache: SET 11
+  Note over Cache: 结果是 11，丢失了一次自增
+</div>
+
+<p>内部保证的是单次 GET 安全、单次 SET 安全。需要原子语义时用 <code>incr</code>、<code>decr</code>、<code>cas</code>、<code>add</code>。</p>
+<h3 id="5-2-CAS"><a href="#5-2-CAS" class="headerlink" title="5.2 CAS"></a>5.2 CAS</h3><p><code>gets</code> 会带回 value 和 CAS token。两个客户端都读到 <code>100, token = 51</code> 时，先提交的 <code>cas</code> 成功并把 token 改成 52，后提交的 <code>cas</code> 因为 token 已经不是 51 而失败。这是乐观并发控制。</p>
+<div class="mermaid">
+sequenceDiagram
+  participant A as Client A
+  participant Cache as value=100 token=51
+  participant B as Client B
+  A->>Cache: gets → 100, token 51
+  B->>Cache: gets → 100, token 51
+  A->>Cache: cas token=51 value=110
+  Cache-->>A: 成功，token 变为 52
+  B->>Cache: cas token=51 value=120
+  Cache-->>B: 失败，51 != 52
+</div>
+
+<h3 id="5-3-Slab-在体系里的位置"><a href="#5-3-Slab-在体系里的位置" class="headerlink" title="5.3 Slab 在体系里的位置"></a>5.3 Slab 在体系里的位置</h3><p>value 最终落在 slab 分配器里。Item 进入合适的 slab class，例如 96B、120B、152B 这类 chunk。</p>
+<div class="mermaid">
+flowchart TB
+  Key["key"] --> Hash["hash table"]
+  Hash --> Item["item *"]
+  Item --> Chunk["chunk"]
+  Chunk --> Page["slab page"]
+  Page --> Class["slab class"]
+  classDef find fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef store fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+  class Key,Hash,Item find
+  class Chunk,Page,Class store
+</div>
+
+<p>四个概念分开记：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>负责什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hash</td>
+<td>按 key 找到 item</td>
+</tr>
+<tr>
+<td>Slab</td>
+<td>决定 value 存在哪块内存</td>
+</tr>
+<tr>
+<td>LRU</td>
+<td>内存满时谁先被淘汰</td>
+</tr>
+<tr>
+<td>item lock</td>
+<td>多 worker 同时访问时的并发安全</td>
+</tr>
+</tbody></table>
+<h3 id="5-4-LRU"><a href="#5-4-LRU" class="headerlink" title="5.4 LRU"></a>5.4 LRU</h3><p>内存满了要决定淘汰谁。Memcached 用 LRU 家族管理冷热：热数据靠近 HEAD，冷数据靠近 TAIL，压力大时从冷的一侧淘汰。GET 看起来只是读，访问模式仍可能改变 LRU 状态，所以 GET 不是纯粹的无状态读取。</p>
+<div class="mermaid">
+flowchart TB
+  Hot["热点"] --> Head["HEAD"]
+  Head --> A["item A"]
+  A --> C["item C"]
+  C --> D["item D"]
+  D --> B["item B"]
+  B --> Tail["TAIL"]
+  Tail --> Cold["冷数据，内存压力大时从这里淘汰"]
+  classDef hot fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+  classDef warm fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+  classDef cold fill:#e0f2fe,stroke:#0284c7,color:#0c4a6e
+  class Hot,Head,A hot
+  class C,D warm
+  class B,Tail,Cold cold
+</div>
+
+<h2 id="6-为什么适合简单高并发缓存"><a href="#6-为什么适合简单高并发缓存" class="headerlink" title="6. 为什么适合简单高并发缓存"></a>6. 为什么适合简单高并发缓存</h2><div class="mermaid">
+flowchart TB
+  CPU["多个 CPU Core"] --> Workers["多个 Worker"]
+  Workers --> Loop["每个 Worker 一个 event loop"]
+  Loop --> Conns["每个 Worker 管大量连接"]
+  Conns --> Parallel["多个 Worker 并行执行 GET/SET"]
+  Parallel --> Share["共享同一份缓存"]
+  Share --> Lock["细粒度 item lock 保证并发安全"]
+  classDef scale fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef safe fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+  class CPU,Workers,Loop,Conns,Parallel scale
+  class Share,Lock safe
+</div>
+
+<p>适合的负载是：大量客户端、大量简单 GET&#x2F;SET、value 是 blob、不需要复杂结构。例如 <code>user:123 -&gt; protobuf</code>、<code>product:456 -&gt; JSON</code>、<code>sql:hash -&gt; DB result</code>、<code>page:x -&gt; HTML fragment</code>。</p>
+<h3 id="和-Redis-的关键区别"><a href="#和-Redis-的关键区别" class="headerlink" title="和 Redis 的关键区别"></a>和 Redis 的关键区别</h3><p>Memcached 的多个 worker 可以真正并行执行缓存命令。Redis 经典核心更接近「IO 进来之后，命令在核心执行线程上跑」，复杂结构也放在这份核心状态里。现代 Redis 已有多线程网络 IO 等机制，核心命令执行架构仍和 Memcached 不同。</p>
+<div class="mermaid">
+flowchart TB
+  subgraph MC["Memcached"]
+    direction TB
+    M0["Worker0：IO + parse + GET/SET"]
+    M1["Worker1：IO + parse + GET/SET"]
+    M2["Worker2：IO + parse + GET/SET"]
+  end
+  subgraph RD["Redis 经典核心"]
+    direction TB
+    IO["网络 IO"] --> Core["核心命令执行"]
+    Core --> Struct["Dict / List / ZSet / Hash"]
+  end
+  classDef mc fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef rd fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  class M0,M1,M2 mc
+  class IO,Core,Struct rd
+</div>
+
+<blockquote>
+<p><strong>Memcached 特别适合多核机器上的简单 KV cache workload。</strong></p>
+</blockquote>
+<h2 id="7-两条必背调用链"><a href="#7-两条必背调用链" class="headerlink" title="7. 两条必背调用链"></a>7. 两条必背调用链</h2><p>第一条是新连接，只走一次。第二条是这条连接上之后的每一次 GET&#x2F;SET。</p>
+<div class="mermaid">
+flowchart TB
+  Client(["Client"]) --> Accept["Listener accept"]
+  Accept --> Push["cq_push + notify"]
+  Push --> Pop["Worker cq_pop"]
+  Pop --> New["conn_new + event_add"]
+  New --> Owned["连接归属这个 Worker"]
+  Owned --> Req["之后的 GET/SET"]
+  Req --> Path["read → parse → hash → item lock → cache → write"]
+  classDef once fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+  classDef steady fill:#dcfce7,stroke:#16a34a,color:#14532d
+  class Client,Accept,Push,Pop,New once
+  class Owned,Req,Path steady
+</div>
+
+<p>橙色是连接建立时的交接，只经过 CQ 一次。绿色是稳态：请求留在该 worker 的 socket event 上，直接打到共享缓存。</p>
+<h2 id="8-Java-Netty-类比"><a href="#8-Java-Netty-类比" class="headerlink" title="8. Java &#x2F; Netty 类比"></a>8. Java &#x2F; Netty 类比</h2><table>
+<thead>
+<tr>
+<th>Memcached</th>
+<th>接近的 Netty &#x2F; Java 概念</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Main Listener</td>
+<td>Boss EventLoop</td>
+</tr>
+<tr>
+<td>Worker</td>
+<td>Worker EventLoop</td>
+</tr>
+<tr>
+<td>CQ</td>
+<td>Boss 把连接注册到 Worker 的过程</td>
+</tr>
+<tr>
+<td>libevent</td>
+<td>epoll selector &#x2F; event loop</td>
+</tr>
+<tr>
+<td>conn</td>
+<td>Channel</td>
+</tr>
+<tr>
+<td>item_lock</td>
+<td>striped <code>ReentrantLock</code></td>
+</tr>
+</tbody></table>
+<p>底层实现不完全一样。用这个映射记模型即可：Boss 只接连接，Worker 既做 IO 也做命令，共享缓存靠分片锁。</p>
+<h2 id="9-十条结论"><a href="#9-十条结论" class="headerlink" title="9. 十条结论"></a>9. 十条结论</h2><ol>
+<li><strong>Memcached 是多线程服务。</strong></li>
+<li><strong>Main Thread 主要负责监听和接受连接。</strong></li>
+<li><strong>新连接通过 CQ 分发到 Worker。</strong></li>
+<li><strong>CQ &#x3D; Connection Queue，交接的是连接。</strong></li>
+<li><strong>一个 Worker 可以管理大量 Conn。</strong></li>
+<li><strong>Worker 使用 libevent + 非阻塞 IO。</strong></li>
+<li><strong>一个 Conn 一般归属一个 Worker。</strong></li>
+<li><strong>Worker 不仅做网络 IO，也执行 GET&#x2F;SET。</strong></li>
+<li><strong>多个 Worker 共享同一份缓存，所以需要 item lock、LRU lock 等同步机制。</strong></li>
+<li><strong>item lock 通过 hash 分片，而不是每个 key 一把 mutex。</strong></li>
+</ol>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Memcached/">Memcached</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E7%BC%93%E5%AD%98/">缓存</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2026/08/22/two-years-in-it/"
+                                   title="入行两年"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">入行两年</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">JotaroRD</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/toggle-theme.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/code-block.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/libs/anime.min.js"></script>
+
+<!-- local search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/local-search.js"></script>
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+        
+    
+        
+            
+<script class="custom-inject-js" src="https://cdn.jsdelivr.net/gh/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io@master/js/selection-comments-v2.js" data-pjax></script>
+
+        
+    
+
+</body>
+</html>
