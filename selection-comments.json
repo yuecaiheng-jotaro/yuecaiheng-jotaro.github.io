@@ -1,1 +1,45 @@
-{"version":1,"generatedAt":null,"annotations":[]}
+{
+  "version": 1,
+  "generatedAt": "2026-10-07T15:50:13.933Z",
+  "annotations": [
+    {
+      "id": "gh-6",
+      "number": 6,
+      "path": "/2026/07/29/ai-agent-intent-recognition-notes/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/6",
+      "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
+      "text": "意图识别”4 讲的学习笔记",
+      "comment": "test",
+      "state": "open",
+      "stateReason": "",
+      "createdAt": "2026-07-29T06:08:10Z",
+      "updatedAt": "2026-07-29T06:08:10Z"
+    },
+    {
+      "id": "gh-7",
+      "number": 7,
+      "path": "/2026/07/29/ai-agent-intent-recognition-notes/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/7",
+      "title": "AI Agent 系统设计面试现场：意图识别 4 讲学习笔记 | Jotaro Space",
+      "text": "会做事的系统",
+      "comment": "test",
+      "state": "open",
+      "stateReason": "",
+      "createdAt": "2026-07-29T06:08:38Z",
+      "updatedAt": "2026-07-29T06:08:38Z"
+    },
+    {
+      "id": "gh-8",
+      "number": 8,
+      "path": "/2026/08/10/codeforces-go-problem-type-index/",
+      "url": "https://github.com/yuecaiheng-jotaro/yuecaiheng-jotaro.github.io/issues/8",
+      "title": "Codeforces Go 题目类型索引 | Jotaro Space",
+      "text": "算法题目类型与相关题目索引",
+      "comment": "参考的https://github.com/EndlessCheng/codeforces-go和代码随想录，哈哈",
+      "state": "open",
+      "stateReason": "",
+      "createdAt": "2026-08-09T16:18:34Z",
+      "updatedAt": "2026-08-09T16:18:34Z"
+    }
+  ]
+}
