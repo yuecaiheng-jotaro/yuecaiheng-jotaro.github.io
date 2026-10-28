@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="JotaroRD">
+    
+    <title>
+        
+            Jotaro动手教你实现rpc |
+        
+        Jotaro Space
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/site-avatar-256.png">
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/font/css/brands.min.css">
+    
+        
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/first-screen-local.css">
+
+            
+        
+            
+                
+<link rel="stylesheet" href="/css/selection-comments.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"yuecaiheng-jotaro.github.io","root":"/","language":"en","path":"search.json"}
+    KEEP.theme_config = {"base_info":{"primary_color":"#0066cc","title":"Jotaro Space","author":"JotaroRD","avatar":"/images/site-avatar-256.png","logo":"/images/site-avatar-256.png","favicon":"/images/site-avatar-256.png"},"menu":{"home":"/","archives":"/archives","categories":"/categories","insight":"/insight","about":"/about"},"first_screen":{"enable":true,"background_img":"/images/first-screen.jpg","background_img_dark":"/images/first-screen.jpg","description":"Talk is Cheap","hitokoto":false},"social_contact":{"enable":false,"links":{"github":null,"weixin":null,"qq":null,"weibo":null,"zhihu":null,"twitter":null,"x":null,"facebook":null,"email":null}},"scroll":{"progress_bar":false,"percent":false,"hide_header":true},"home":{"announcement":null,"category":false,"tag":false,"post_datetime":"updated"},"post":{"author_badge":{"enable":false,"level_badge":true,"custom_badge":["One","Two","Three"]},"word_count":{"wordcount":false,"min2read":false},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":false,"share":false,"reward":{"enable":false,"img_link":null,"text":null,"icon":null}},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"default"},"toc":{"enable":false,"number":false,"expand_all":false,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":false,"site_pv":false,"page_pv":false}},"local_search":{"enable":true,"preload":false},"comment":{"enable":false,"use":"valine","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.39"},"waline":{"server_url":null,"reaction":false,"version":"3.3.2"},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":true,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"site_deploy":{"enable":false,"provider":"github","url":null},"record":{"enable":false,"list":[{"code":null,"link":null}]}},"inject":{"enable":true,"css":[null,"/css/first-screen-local.css","/css/selection-comments.css"],"js":[null,"/js/selection-comments-v2.js"]},"root":"","source_data":{},"version":"4.2.5"}
+    KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
+    KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
+    KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original post title","author":"Original post author","link":"Original post link"}
+  </script>
+<meta name="generator" content="Hexo 8.1.1"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+
+<main class="page-container border-box">
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left flex-start border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/site-avatar-256.png">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Jotaro Space
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc border-box">
+                <ul class="menu-list border-box">
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/">
+                                
+                                HOME
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/archives">
+                                
+                                ARCHIVES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/categories">
+                                
+                                CATEGORIES
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/insight">
+                                
+                                INSIGHT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                        
+                        <li class="menu-item flex-start border-box">
+                            <a class="menu-text-color border-box" href="/about">
+                                
+                                ABOUT
+                                
+                            </a>
+                            
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="menu-text-color fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile border-box flex-start">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list border-box">
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/">
+                            
+                            HOME
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/archives">
+                            
+                            ARCHIVES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/categories">
+                            
+                            CATEGORIES
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/insight">
+                            
+                            INSIGHT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+                
+                <li class="drawer-menu-item border-box not-sub-menu">
+                    <label class="drawer-menu-label border-box">
+                        <a class="drawer-menu-text-color left-side flex-start border-box" href="/about">
+                            
+                            ABOUT
+                        </a>
+                        
+                    </label>
+                    
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        Jotaro动手教你实现rpc
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/site-avatar-256.png">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">JotaroRD</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-plus"></i>&nbsp;
+                <span class="datetime">2026-10-28 17:50:00</span>
+            </span>
+
+            
+                <span class="meta-info-item post-update-date">
+                    <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                    <span class="datetime" data-updated="Wed Oct 28 2026 18:02:11 GMT+0800">2026-10-28 18:02:11</span>
+                </span>
+            
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/JRpc/">JRpc</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/RPC/">RPC</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/Netty/">Netty</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ZooKeeper/">ZooKeeper</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body ">
+                    
+
+                    
+                         <p>调用方只写这一行：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userService.getUserById(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p><code>userService</code> 是接口，实现在另一个进程里。JRpc 把这次方法调用收成一帧二进制，用 Netty 送过去，对端按接口名找到实现、过令牌桶、反射执行，再把 <code>User</code> 送回来。连接用完即关。</p>
+<p>仓库在 <a class="link"   target="_blank" rel="noopener" href="https://github.com/yuecaiheng-jotaro/jotaro-rpc" >jotaro-rpc<i class="fas fa-external-link-alt"></i></a>，版本 <code>1.0.6-SNAPSHOT</code>。下面按动手的顺序写：报文、代理、协议、注册、发现、服务端执行。每段先讲这段代码在链路里干什么，再给出仓库里的实现。</p>
+<div class="mermaid">
+sequenceDiagram
+  participant App as 业务代码
+  participant Proxy as NettyClientProxy
+  participant Disc as ZKServiceCenter
+  participant Cli as NettyRpcClient
+  participant Srv as NettyRpcServerHandler
+  participant Impl as 接口实现
+  App->>Proxy: userService.getUserById(1)
+  Proxy->>Proxy: 组装 RpcRequest
+  Proxy->>Cli: sendRequest
+  Cli->>Disc: serviceDiscovery(接口全名)
+  Disc-->>Cli: InetSocketAddress
+  Cli->>Srv: connect + writeAndFlush
+  Srv->>Srv: 查实现表，取令牌
+  Srv->>Impl: Method.invoke
+  Impl-->>Srv: 返回值
+  Srv-->>Cli: RpcResponse，写出后关闭连接
+  Cli-->>Proxy: channel 属性 rpcResponse
+  Proxy-->>App: response.getData()
+</div>
+
+<p>四个模块够用。<code>common</code> 放报文、编解码和限流，<code>register</code> 管 ZooKeeper，<code>server</code> 负责监听和反射，<code>client</code> 负责代理和连接。</p>
+<div class="mermaid">
+flowchart LR
+  subgraph clientMod["client"]
+    Proxy["NettyClientProxy"]
+    RpcCli["NettyRpcClient"]
+  end
+  subgraph registerMod["register"]
+    Reg["ZKServiceRegister"]
+    Center["ZKServiceCenter"]
+  end
+  subgraph serverMod["server"]
+    Provider["ServerProvider"]
+    RpcSrv["NettyRpcServer"]
+  end
+  subgraph commonMod["common"]
+    Proto["RpcRequest / RpcResponse"]
+    Codec["JotaroEncoder / JotaroDecoder"]
+  end
+  Proxy --> RpcCli
+  RpcCli --> Center
+  RpcCli --> Codec
+  Provider --> Reg
+  RpcSrv --> Provider
+  RpcSrv --> Codec
+  classDef c fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef r fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+  classDef s fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef m fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+  class Proxy,RpcCli c
+  class Reg,Center r
+  class Provider,RpcSrv s
+  class Proto,Codec m
+</div>
+
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#1-%E4%B8%80%E6%AC%A1%E8%B0%83%E7%94%A8%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7">一次调用长什么样</a></li>
+<li><a href="#2-%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86%E6%8A%8A%E6%8E%A5%E5%8F%A3%E5%8F%98%E6%88%90%E8%AF%B7%E6%B1%82">动态代理把接口变成请求</a></li>
+<li><a href="#3-%E8%87%AA%E5%B7%B1%E5%86%99%E4%B8%80%E5%B8%A7%E5%8D%8F%E8%AE%AE">自己写一帧协议</a></li>
+<li><a href="#4-%E6%8C%82%E4%B8%8A-Netty-Pipeline">挂上 Netty Pipeline</a></li>
+<li><a href="#5-JSON-%E8%BF%87%E7%BD%91%E5%90%8E%E6%8A%8A%E7%B1%BB%E5%9E%8B%E6%8D%9E%E5%9B%9E%E6%9D%A5">JSON 过网后把类型捞回来</a></li>
+<li><a href="#6-%E5%AE%9E%E7%8E%B0%E7%B1%BB%E6%8C%82%E8%BF%9B-ZooKeeper">实现类挂进 ZooKeeper</a></li>
+<li><a href="#7-%E6%89%BE%E5%88%B0%E6%9C%BA%E5%99%A8%EF%BC%8C%E5%86%8D%E9%80%89%E4%B8%80%E5%8F%B0">找到机器，再选一台</a></li>
+<li><a href="#8-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%85%88%E9%99%90%E6%B5%81%EF%BC%8C%E5%86%8D%E5%8F%8D%E5%B0%84">服务端先限流，再反射</a></li>
+<li><a href="#9-%E4%BB%8E%E8%BF%99%E6%9D%A1%E8%BF%9E%E6%8E%A5%E4%B8%8A%E6%8B%BF%E5%9B%9E%E7%BB%93%E6%9E%9C">从这条连接上拿回结果</a></li>
+<li><a href="#10-%E8%B7%91%E9%80%9A-UserService">跑通 UserService</a></li>
+</ol>
+<h2 id="1-一次调用长什么样"><a href="#1-一次调用长什么样" class="headerlink" title="1. 一次调用长什么样"></a>1. 一次调用长什么样</h2><p>远程调用要能在对端还原成一次 Java 方法调用，所以请求里带齐四样东西：哪个接口、哪个方法、参数值、参数类型。类型必须单独带，JSON 过网之后数字和对象的运行时类会对不上方法签名。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Builder</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RpcRequest</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String interfaceName;</span><br><span class="line">    <span class="keyword">private</span> String methodName;</span><br><span class="line">    <span class="keyword">private</span> Object[] params;</span><br><span class="line">    <span class="keyword">private</span> Class&lt;?&gt;[] paramsType;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回来的包同样简单。<code>code = 0</code> 是成功，<code>code = -1</code> 是失败，原因写在 <code>message</code>。<code>dataType</code> 留给客户端把 JSON 变回原来的返回类型。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@Builder</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RpcResponse</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> Integer code;</span><br><span class="line">    <span class="keyword">private</span> String message;</span><br><span class="line">    <span class="keyword">private</span> Object data;</span><br><span class="line">    <span class="keyword">private</span> Class&lt;?&gt; dataType;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> RpcResponse <span class="title function_">success</span><span class="params">(Object data, Class&lt;?&gt; dataType)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> RpcResponse.builder()</span><br><span class="line">                .code(RespCodeEnum.SUCCESS.getCode())</span><br><span class="line">                .data(data)</span><br><span class="line">                .dataType(dataType)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> RpcResponse <span class="title function_">fail</span><span class="params">(String message)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> RpcResponse.builder()</span><br><span class="line">                .code(RespCodeEnum.UNKNOWN_ERROR.getCode())</span><br><span class="line">                .message(message)</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>RespCodeEnum</code> 里成功是 <code>0</code>，未知错误是 <code>-1</code>。</p>
+<h2 id="2-动态代理把接口变成请求"><a href="#2-动态代理把接口变成请求" class="headerlink" title="2. 动态代理把接口变成请求"></a>2. 动态代理把接口变成请求</h2><p>业务代码拿不到实现类。<code>getProxy</code> 用 JDK 动态代理生成一个实现，方法调用全部进 <code>invoke</code>。这里把 <code>Method</code> 拆开，填进上一节的 <code>RpcRequest</code>，然后交给 <code>NettyRpcClient</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; T <span class="title function_">getProxy</span><span class="params">(Class&lt;T&gt; clazz)</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> Proxy.newProxyInstance(clazz.getClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;clazz&#125;, <span class="built_in">this</span>);</span><br><span class="line">    <span class="keyword">return</span> (T) obj;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">    <span class="type">RpcRequest</span> <span class="variable">rpcRequest</span> <span class="operator">=</span> RpcRequest.builder()</span><br><span class="line">            .interfaceName(method.getDeclaringClass().getName())</span><br><span class="line">            .methodName(method.getName())</span><br><span class="line">            .params(args)</span><br><span class="line">            .paramsType(method.getParameterTypes())</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    <span class="type">RpcResponse</span> <span class="variable">rpcResponse</span> <span class="operator">=</span> <span class="built_in">this</span>.ioClient.sendRequest(rpcRequest);</span><br><span class="line">    <span class="keyword">if</span> (rpcResponse == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>(<span class="string">&quot;rpc response is null, request=&quot;</span> + method.getName());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> rpcResponse.getData();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>代理只把 <code>data</code> 交回去。响应对象本身是 null，抛 <code>IllegalStateException</code>。限流、找不到服务、发送失败走的是 <code>RpcResponse.fail</code>，<code>data</code> 为空，调用方拿到 null。</p>
+<h2 id="3-自己写一帧协议"><a href="#3-自己写一帧协议" class="headerlink" title="3. 自己写一帧协议"></a>3. 自己写一帧协议</h2><p>TCP 是字节流，两条消息粘在一起时对端不知道从哪切开。JRpc 用两层长度。外层 4 字节由 Netty 的 <code>LengthFieldPrepender</code> 负责，解决粘包。内层是编码器自己写的业务头。</p>
+<div class="mermaid">
+flowchart LR
+  A["frameLen<br/>4 字节<br/>Prepender 添加"] --> B["msgType<br/>2 字节<br/>0 请求 / 1 响应"]
+  B --> C["serialize<br/>2 字节<br/>0 Java / 1 JSON"]
+  C --> D["payloadLen<br/>4 字节<br/>Encoder 写入"]
+  D --> E["payload<br/>N 字节"]
+  classDef len fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+  classDef head fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef body fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+  class A,D len
+  class B,C head
+  class E body
+</div>
+
+<p><code>JotaroEncoder</code> 只写内层。请求写 <code>0</code>，响应写 <code>1</code>，接着写序列化类型、包体长度和包体。当前 pipeline 塞进去的是 <code>JsonSerializer</code>，类型值是 <code>1</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">encode</span><span class="params">(ChannelHandlerContext ctx, Object msg, ByteBuf out)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="keyword">if</span> (msg <span class="keyword">instanceof</span> RpcRequest) &#123;</span><br><span class="line">        out.writeShort(MsgTypeEnum.REQ.getCode());</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (msg <span class="keyword">instanceof</span> RpcResponse) &#123;</span><br><span class="line">        out.writeShort(MsgTypeEnum.RESP.getCode());</span><br><span class="line">    &#125;</span><br><span class="line">    out.writeShort(serializer.getSerializeType());</span><br><span class="line">    <span class="type">byte</span>[] bytes = serializer.serialize(msg);</span><br><span class="line">    out.writeInt(bytes.length);</span><br><span class="line">    out.writeBytes(bytes);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>解码时外层 4 字节已经被 <code>LengthFieldBasedFrameDecoder</code> 剥掉，缓冲区从 <code>msgType</code> 开始。按类型找到序列化器，读出包体，还原成 <code>RpcRequest</code> 或 <code>RpcResponse</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">decode</span><span class="params">(ChannelHandlerContext ctx, ByteBuf in, List&lt;Object&gt; out)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="type">short</span> <span class="variable">msgTypeCode</span> <span class="operator">=</span> in.readShort();</span><br><span class="line">    <span class="type">MsgTypeEnum</span> <span class="variable">msgType</span> <span class="operator">=</span> MsgTypeEnum.getTypeById((<span class="type">int</span>) msgTypeCode);</span><br><span class="line">    <span class="keyword">if</span> (Objects.isNull(msgType)) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;[decoder] not support msg type, msgTypeCode:&#123;&#125;&quot;</span>, msgTypeCode);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">short</span> <span class="variable">serializerType</span> <span class="operator">=</span> in.readShort();</span><br><span class="line">    <span class="type">Serializer</span> <span class="variable">serializer</span> <span class="operator">=</span> Type2SSerializerEnum.getSerializerByType(serializerType);</span><br><span class="line">    <span class="keyword">if</span> (Objects.isNull(serializer)) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;[decoder] not support serializer, type:&#123;&#125;&quot;</span>, serializerType);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> <span class="variable">msgLength</span> <span class="operator">=</span> in.readInt();</span><br><span class="line">    <span class="type">byte</span>[] msg = <span class="keyword">new</span> <span class="title class_">byte</span>[msgLength];</span><br><span class="line">    in.readBytes(msg);</span><br><span class="line">    out.add(serializer.deserialize(msg, msgTypeCode));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>Type2SSerializerEnum</code> 把帧头里的数字映射到类：<code>0</code> 是 <code>ObjectSerializer</code>，<code>1</code> 是 <code>JsonSerializer</code>，用 <code>newInstance()</code> 创建。两端现在都发送 JSON。对端把类型写成 <code>0</code> 时，这段解码会走 Java 原生序列化。</p>
+<h2 id="4-挂上-Netty-Pipeline"><a href="#4-挂上-Netty-Pipeline" class="headerlink" title="4. 挂上 Netty Pipeline"></a>4. 挂上 Netty Pipeline</h2><p>客户端和服务端的 pipeline 一样，最后一个 handler 不同。<code>addLast</code> 的顺序决定加工顺序：入站从头到尾，出站从尾到头。所以写出时先经过 <code>JotaroEncoder</code>，再由 <code>LengthFieldPrepender</code> 在最前面补 4 字节帧长。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">initChannel</span><span class="params">(SocketChannel ch)</span> &#123;</span><br><span class="line">    <span class="type">ChannelPipeline</span> <span class="variable">pipeline</span> <span class="operator">=</span> ch.pipeline();</span><br><span class="line">    pipeline.addLast(<span class="keyword">new</span> <span class="title class_">LengthFieldBasedFrameDecoder</span>(Integer.MAX_VALUE, <span class="number">0</span>, <span class="number">4</span>, <span class="number">0</span>, <span class="number">4</span>));</span><br><span class="line">    pipeline.addLast(<span class="keyword">new</span> <span class="title class_">LengthFieldPrepender</span>(<span class="number">4</span>));</span><br><span class="line">    pipeline.addLast(<span class="keyword">new</span> <span class="title class_">JotaroEncoder</span>(<span class="keyword">new</span> <span class="title class_">JsonSerializer</span>()));</span><br><span class="line">    pipeline.addLast(<span class="keyword">new</span> <span class="title class_">JotaroDecoder</span>());</span><br><span class="line">    pipeline.addLast(<span class="keyword">new</span> <span class="title class_">NettyRpcServerHandler</span>(serverProvider));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>LengthFieldBasedFrameDecoder</code> 的五个参数：最大帧长、长度字段偏移、长度字段占 4 字节、长度调整值 <code>0</code>、解码后跳过 4 字节。跳过之后，<code>JotaroDecoder</code> 读到的第一个 short 就是消息类型。</p>
+<div class="mermaid">
+flowchart TB
+  subgraph outbound["出站 writeAndFlush"]
+    direction LR
+    Enc["JotaroEncoder<br/>类型 + 序列化方式 + 包体长度 + 包体"]
+    Pre["LengthFieldPrepender<br/>前面补 4 字节帧长"]
+    Enc --> Pre
+  end
+  subgraph inbound["入站 channelRead"]
+    direction LR
+    Frame["LengthFieldBasedFrameDecoder<br/>按帧长切开并丢掉帧长"]
+    Dec["JotaroDecoder<br/>还原 RpcRequest 或 RpcResponse"]
+    H["业务 Handler"]
+    Frame --> Dec --> H
+  end
+  Pre -.-> Frame
+  classDef out fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef in fill:#dcfce7,stroke:#16a34a,color:#14532d
+  class Enc,Pre out
+  class Frame,Dec,H in
+</div>
+
+<p>服务端在这里启动。boss 接连接，worker 读包。<code>bind</code> 只绑端口，写进 ZooKeeper 的 host 是构造 <code>ServerProvider</code> 时传入的那个地址。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">start</span><span class="params">(<span class="type">int</span> port)</span> &#123;</span><br><span class="line">    <span class="type">NioEventLoopGroup</span> <span class="variable">bossGroup</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NioEventLoopGroup</span>();</span><br><span class="line">    <span class="type">NioEventLoopGroup</span> <span class="variable">workGroup</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NioEventLoopGroup</span>();</span><br><span class="line">    <span class="type">ServerBootstrap</span> <span class="variable">serverBootstrap</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServerBootstrap</span>();</span><br><span class="line">    serverBootstrap.group(bossGroup, workGroup)</span><br><span class="line">            .channel(NioServerSocketChannel.class)</span><br><span class="line">            .childHandler(<span class="keyword">new</span> <span class="title class_">NettyServerInitializer</span>(serverProvider));</span><br><span class="line">    <span class="type">ChannelFuture</span> <span class="variable">channelFuture</span> <span class="operator">=</span> serverBootstrap.bind(port).sync();</span><br><span class="line">    channelFuture.channel().closeFuture().sync();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-JSON-过网后把类型捞回来"><a href="#5-JSON-过网后把类型捞回来" class="headerlink" title="5. JSON 过网后把类型捞回来"></a>5. JSON 过网后把类型捞回来</h2><p><code>JsonSerializer</code> 用 Fastjson2。反序列化打开 <code>SupportClassForName</code>，请求里的 <code>Class[]</code> 和响应里的 <code>dataType</code> 才能变回类。</p>
+<p>自定义对象从 JSON 回来经常是 <code>JSONObject</code>，直接拿去 <code>Method.invoke</code> 会对不上参数类型。所以每个参数先做一次兼容检查，对不上就按声明类型再转一次。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> Object <span class="title function_">parseReqObject</span><span class="params">(<span class="type">byte</span>[] bytes)</span> &#123;</span><br><span class="line">    <span class="type">RpcRequest</span> <span class="variable">rpcRequest</span> <span class="operator">=</span> JSON.parseObject(bytes, RpcRequest.class, JSONReader.Feature.SupportClassForName);</span><br><span class="line">    Object[] objs = <span class="keyword">new</span> <span class="title class_">Object</span>[rpcRequest.getParamsType().length];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; objs.length; i++) &#123;</span><br><span class="line">        Class&lt;?&gt; paramType = rpcRequest.getParamsType()[i];</span><br><span class="line">        <span class="keyword">if</span> (!paramType.isAssignableFrom(rpcRequest.getParams()[i].getClass())) &#123;</span><br><span class="line">            objs[i] = JSON.to(paramType, rpcRequest.getParams()[i]);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            objs[i] = rpcRequest.getParams()[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    rpcRequest.setParams(objs);</span><br><span class="line">    <span class="keyword">return</span> rpcRequest;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>返回值同样处理。服务端成功时把 <code>method.getReturnType()</code> 放进 <code>dataType</code>，客户端解码时如果 <code>data</code> 的类对不上，再 <code>JSON.to(dataType, data)</code>。<code>User</code> 能变回 <code>User</code>，靠的就是这个字段。</p>
+<p>Java 原生序列化在 <code>ObjectSerializer</code> 里，用 <code>ObjectOutputStream</code> 写、<code>ObjectInputStream</code> 读，类型留在字节流里。<code>RpcRequest</code>、<code>RpcResponse</code>、<code>User</code> 都实现了 <code>Serializable</code>。当前 pipeline 发送的是 JSON。</p>
+<h2 id="6-实现类挂进-ZooKeeper"><a href="#6-实现类挂进-ZooKeeper" class="headerlink" title="6. 实现类挂进 ZooKeeper"></a>6. 实现类挂进 ZooKeeper</h2><p>服务端做两件事：本地留一张「接口名 → 实现」的表，供反射查找；ZooKeeper 上留一个临时节点，供客户端发现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">provideServiceInterface</span><span class="params">(Object service)</span> &#123;</span><br><span class="line">    Class&lt;?&gt;[] interfaceNames = service.getClass().getInterfaces();</span><br><span class="line">    <span class="type">InetSocketAddress</span> <span class="variable">inetSocketAddress</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(<span class="built_in">this</span>.connAddress.getHost(), <span class="built_in">this</span>.connAddress.getPort());</span><br><span class="line">    <span class="keyword">for</span> (Class clazz : interfaceNames) &#123;</span><br><span class="line">        <span class="built_in">this</span>.interfaceProvider.put(clazz.getName(), service);</span><br><span class="line">        <span class="built_in">this</span>.servicerRegister.serviceRegister(clazz.getName(), inetSocketAddress);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个实现类有几个接口，就注册几条服务。</p>
+<p>ZooKeeper 分两级。服务路径是永久节点，进程退出后还在，避免服务名本身消失。实例是临时节点，会话断了 ZooKeeper 会把它删掉。地址写在路径最后一段，节点 data 是空的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">servicePath</span> <span class="operator">=</span> ZKUtils.getZkPathByServiceName(serviceName);</span><br><span class="line"><span class="keyword">if</span> (Objects.isNull(<span class="built_in">this</span>.zkClient.checkExists().forPath(servicePath))) &#123;</span><br><span class="line">    <span class="built_in">this</span>.zkClient.create()</span><br><span class="line">            .creatingParentsIfNeeded()</span><br><span class="line">            .withMode(CreateMode.PERSISTENT)</span><br><span class="line">            .forPath(servicePath);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">this</span>.zkClient.create()</span><br><span class="line">        .creatingParentsIfNeeded()</span><br><span class="line">        .withMode(CreateMode.EPHEMERAL)</span><br><span class="line">        .forPath(String.join(<span class="string">&quot;/&quot;</span>, servicePath, ZKUtils.getServiceInetAddress(address)));</span><br></pre></td></tr></table></figure>
+
+<p>Curator 客户端带了命名空间 <code>JotaroRpc</code>，所以磁盘上的路径是：</p>
+<div class="mermaid">
+flowchart TB
+  NS["命名空间 JotaroRpc"]
+  Svc["/com.jotaro.api.UserService<br/>PERSISTENT，服务下线后还在"]
+  A["/127.0.0.1:9999<br/>EPHEMERAL"]
+  B["/127.0.0.1:10000<br/>EPHEMERAL"]
+  NS --> Svc
+  Svc --> A
+  Svc --> B
+  classDef ns fill:#ede9fe,stroke:#7c3aed,color:#4c1d95
+  classDef persistent fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef ephemeral fill:#ffedd5,stroke:#ea580c,color:#7c2d12
+  class NS ns
+  class Svc persistent
+  class A,B ephemeral
+</div>
+
+<p>连接参数在 <code>ZKClientFactory</code>：会话 40 秒，连接 15 秒，<code>ExponentialBackoffRetry(1000, 3)</code>。地址从 classpath 的 <code>zk.propertis</code> 读 <code>jrpc.zk.address</code>，文件名就是这个拼写。读不到就用 <code>localhost:2181</code>。</p>
+<h2 id="7-找到机器，再选一台"><a href="#7-找到机器，再选一台" class="headerlink" title="7. 找到机器，再选一台"></a>7. 找到机器，再选一台</h2><p>客户端每次调用都问一次 <code>ZKServiceCenter</code>。先看本地 Map，空了再 <code>getChildren</code>。子节点名就是注册时写的 <code>host:port</code>，交给负载均衡挑一个，再拆成 <code>InetSocketAddress</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> InetSocketAddress <span class="title function_">serviceDiscovery</span><span class="params">(String serviceName)</span> &#123;</span><br><span class="line">    List&lt;String&gt; serviceNodesStr = cacheService.getServiceFromCache(serviceName);</span><br><span class="line">    <span class="keyword">if</span> (CollectionUtil.isEmpty(serviceNodesStr)) &#123;</span><br><span class="line">        serviceNodesStr = <span class="built_in">this</span>.zkClient.getChildren().forPath(ZKUtils.getZkPathByServiceName(serviceName));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (CollectionUtil.isEmpty(serviceNodesStr)) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> parseAddress(<span class="built_in">this</span>.loadBalancer.balance(serviceNodesStr));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div class="mermaid">
+flowchart TD
+  Start["serviceDiscovery(接口全名)"]
+  Cache{"本地 Map 里有地址?"}
+  ZK["getChildren /接口全名"]
+  Empty{"子节点为空?"}
+  Null["返回 null"]
+  Pick["RoundLoadBalancer"]
+  Addr["拆成 InetSocketAddress"]
+  Start --> Cache
+  Cache -->|有| Pick
+  Cache -->|没有| ZK
+  ZK --> Empty
+  Empty -->|是| Null
+  Empty -->|否| Pick
+  Pick --> Addr
+  classDef step fill:#dbeafe,stroke:#2563eb,color:#1e3a8a
+  classDef decision fill:#fef9c3,stroke:#ca8a04,color:#713f12
+  classDef bad fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+  classDef ok fill:#dcfce7,stroke:#16a34a,color:#14532d
+  class Start,ZK,Pick step
+  class Cache,Empty decision
+  class Null bad
+  class Addr ok
+</div>
+
+<p>本地 Map 的写入在 <code>ZKWatcher</code>。它监听命名空间根，本意是节点创建就放进缓存。路径解析用的是节点 data：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String[] parsePath(ChildData childData) &#123;</span><br><span class="line">    <span class="type">String</span> <span class="variable">path</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(childData.getData());</span><br><span class="line">    <span class="keyword">return</span> path.split(<span class="string">&quot;/&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注册临时节点时没有写入 data，切出来的段数到不了「服务名 + 地址」。缓存因此一直是空的，<code>serviceDiscovery</code> 每次走到 <code>getChildren</code>。真正选出地址的是下面这段。</p>
+<p>默认均衡是轮询。<code>choose</code> 从 <code>-1</code> 开始，第一次取到下标 0。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">balance</span><span class="params">(List&lt;String&gt; addressList)</span> &#123;</span><br><span class="line">    choose++;</span><br><span class="line">    choose = choose % addressList.size();</span><br><span class="line">    <span class="keyword">return</span> addressList.get(choose);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>随机均衡是 <code>new Random().nextInt(addressList.size())</code>。换实现只改 <code>ZKServiceCenter</code> 构造里的 <code>this.loadBalancer</code>。</p>
+<p>一致性哈希给每个真实地址挂 10 个虚拟节点，名字是 <code>地址#序号</code>，放进 <code>TreeMap</code>。查找时对一个随机整数做哈希，顺着环取下一个节点，到尾部就回到第一个，再截掉 <code>#</code> 后面的序号。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">randomNumStr</span> <span class="operator">=</span> String.valueOf(RandomUtil.randomInt());</span><br><span class="line"><span class="type">String</span> <span class="variable">address</span> <span class="operator">=</span> getServer(getHash.apply(randomNumStr), addressList);</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> String <span class="title function_">getServer</span><span class="params">(Integer nodeHashNum, List&lt;String&gt; addressList)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (MapUtil.isEmpty(HASH_2_VIRTUAL_NODES)) &#123;</span><br><span class="line">        init(addressList);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        refresh(addressList);</span><br><span class="line">    &#125;</span><br><span class="line">    TreeMap&lt;Integer, String&gt; subMap = (TreeMap&lt;Integer, String&gt;) HASH_2_VIRTUAL_NODES.tailMap(nodeHashNum);</span><br><span class="line">    <span class="type">Integer</span> <span class="variable">key</span> <span class="operator">=</span> subMap.isEmpty() ? HASH_2_VIRTUAL_NODES.firstKey() : subMap.firstKey();</span><br><span class="line">    <span class="type">String</span> <span class="variable">selectedAddress</span> <span class="operator">=</span> HASH_2_VIRTUAL_NODES.get(key);</span><br><span class="line">    <span class="keyword">return</span> selectedAddress.substring(<span class="number">0</span>, selectedAddress.indexOf(<span class="string">&quot;#&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>哈希输入是随机数，同一次调用的参数不会把流量粘在固定节点上。10 个虚拟节点把随机点摊到各真实地址。构造方法必须传入 <code>Function&lt;String, Integer&gt;</code>，它会覆盖类上那份 FNV-1a 初值。</p>
+<h2 id="8-服务端先限流，再反射"><a href="#8-服务端先限流，再反射" class="headerlink" title="8. 服务端先限流，再反射"></a>8. 服务端先限流，再反射</h2><p>包到了 <code>NettyRpcServerHandler</code>。先按接口名查本地表，再按方法名和参数类型找到 <code>Method</code>，取到令牌才 <code>invoke</code>。写完响应立刻关掉连接，关闭放在写出完成之后，避免对端还没读到字节连接已经断了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">channelRead0</span><span class="params">(ChannelHandlerContext ctx, RpcRequest rpcRequest)</span> &#123;</span><br><span class="line">    <span class="type">RpcResponse</span> <span class="variable">rpcResponse</span> <span class="operator">=</span> getResponse(rpcRequest);</span><br><span class="line">    ctx.writeAndFlush(rpcResponse).addListener(ChannelFutureListener.CLOSE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> RpcResponse <span class="title function_">getResponse</span><span class="params">(RpcRequest rpcRequest)</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">service</span> <span class="operator">=</span> serverProvider.getService(rpcRequest.getInterfaceName());</span><br><span class="line">    <span class="keyword">if</span> (service == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> RpcResponse.fail(<span class="string">&quot;服务未找到: &quot;</span> + rpcRequest.getInterfaceName());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">Method</span> <span class="variable">method</span> <span class="operator">=</span> service.getClass().getMethod(rpcRequest.getMethodName(), rpcRequest.getParamsType());</span><br><span class="line">        <span class="type">RateLimiter</span> <span class="variable">rateLimiter</span> <span class="operator">=</span> serverProvider.getRateLimiter()</span><br><span class="line">                .getRateLimit(rpcRequest.getInterfaceName(), method.getName());</span><br><span class="line">        <span class="keyword">if</span> (!rateLimiter.getToken()) &#123;</span><br><span class="line">            <span class="keyword">return</span> RpcResponse.fail(<span class="string">&quot;服务限流&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">Object</span> <span class="variable">invoke</span> <span class="operator">=</span> method.invoke(service, rpcRequest.getParams());</span><br><span class="line">        <span class="keyword">return</span> RpcResponse.success(invoke, method.getReturnType());</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="keyword">return</span> RpcResponse.fail(<span class="string">&quot;服务端异常&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>令牌桶按 <code>接口名#方法名</code> 懒创建，参数是 <code>(补充间隔毫秒, 容量)</code>，也就是 100 毫秒、容量 10。一开始桶是满的，连续 10 次直接减库存放行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">getToken</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (curCapacity &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        curCapacity--;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">long</span> <span class="variable">current</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">if</span> (current - lastTimeStamp &gt;= RATE) &#123;</span><br><span class="line">        <span class="keyword">if</span> ((current - lastTimeStamp) / RATE &gt;= <span class="number">2</span>) &#123;</span><br><span class="line">            curCapacity += (<span class="type">int</span>) ((current - lastTimeStamp) / RATE) - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (curCapacity &gt; CAPACITY) &#123;</span><br><span class="line">            curCapacity = CAPACITY;</span><br><span class="line">        &#125;</span><br><span class="line">        lastTimeStamp = current;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<div class="mermaid">
+flowchart TD
+  Req["getToken"]
+  Has{"curCapacity > 0 ?"}
+  Dec["减 1，放行"]
+  Wait{"距离上次放行 >= 100ms ?"}
+  Gap{"间隔数 >= 2 ?"}
+  Add["补上 间隔数减 1，封顶 10"]
+  Pass["本次放行，不扣刚补进的令牌"]
+  Deny["返回 false，文案是服务限流"]
+  Req --> Has
+  Has -->|是| Dec
+  Has -->|否| Wait
+  Wait -->|否| Deny
+  Wait -->|是| Gap
+  Gap -->|是| Add --> Pass
+  Gap -->|否| Pass
+  classDef ok fill:#dcfce7,stroke:#16a34a,color:#14532d
+  classDef no fill:#fee2e2,stroke:#dc2626,color:#7f1d1d
+  classDef q fill:#fef9c3,stroke:#ca8a04,color:#713f12
+  class Dec,Add,Pass ok
+  class Deny no
+  class Has,Wait,Gap q
+</div>
+
+<p>库存到 0 之后，不满 100 毫秒就拒绝。满 1 个间隔，本次放行，库存仍是 0。满 2 个及以上间隔，把「间隔数 − 1」补进桶里并封顶 10，本次另外放行。<code>getToken</code> 没有加锁，同一方法上的并发请求会一起改 <code>curCapacity</code>。</p>
+<h2 id="9-从这条连接上拿回结果"><a href="#9-从这条连接上拿回结果" class="headerlink" title="9. 从这条连接上拿回结果"></a>9. 从这条连接上拿回结果</h2><p>客户端的 <code>Bootstrap</code> 和 <code>EventLoopGroup</code> 是静态的，channel 每次新建。连上、写出、等到连接关闭，再从 channel 的 attribute 里取响应。一次调用一条连接。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> RpcResponse <span class="title function_">sendRequest</span><span class="params">(RpcRequest rpcRequest)</span> &#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">ChannelFuture</span> <span class="variable">channelFuture</span> <span class="operator">=</span> bootstrap</span><br><span class="line">                .connect(<span class="built_in">this</span>.serviceCenter.serviceDiscovery(rpcRequest.getInterfaceName()))</span><br><span class="line">                .sync();</span><br><span class="line">        <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> channelFuture.channel();</span><br><span class="line">        channel.writeAndFlush(rpcRequest).addListener((ChannelFutureListener) future -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (!future.isSuccess()) &#123;</span><br><span class="line">                channel.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        channel.closeFuture().sync();</span><br><span class="line">        AttributeKey&lt;RpcResponse&gt; key = AttributeKey.valueOf(<span class="string">&quot;rpcResponse&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> channel.attr(key).get();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        <span class="keyword">return</span> RpcResponse.fail(<span class="string">&quot;发送异常&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>服务端把响应写进这条连接之后，客户端 handler 只做两件事：塞进同一个 attribute，然后关闭 channel。<code>sendRequest</code> 堵在 <code>closeFuture</code> 上，关完就能 <code>attr.get()</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">channelRead0</span><span class="params">(ChannelHandlerContext ctx, RpcResponse msg)</span> &#123;</span><br><span class="line">    AttributeKey&lt;RpcResponse&gt; key = AttributeKey.valueOf(<span class="string">&quot;rpcResponse&quot;</span>);</span><br><span class="line">    ctx.channel().attr(key).set(msg);</span><br><span class="line">    ctx.channel().close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>重试单独放在 <code>GuavaRetryHandler</code>。异常就重试；结果是 null，或者 code 和成功枚举对不上，也重试。固定等 2 秒，一共调用 3 次。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Retryer&lt;RpcResponse&gt; retryer = RetryerBuilder.&lt;RpcResponse&gt;newBuilder()</span><br><span class="line">        .retryIfException()</span><br><span class="line">        .retryIfResult(rpcResponse -&gt; Objects.isNull(rpcResponse)</span><br><span class="line">                || ObjectUtil.notEqual(RespCodeEnum.SUCCESS, rpcResponse.getCode()))</span><br><span class="line">        .withWaitStrategy(WaitStrategies.fixedWait(<span class="number">2</span>, TimeUnit.SECONDS))</span><br><span class="line">        .withStopStrategy(StopStrategies.stopAfterAttempt(<span class="number">3</span>))</span><br><span class="line">        .build();</span><br><span class="line"><span class="keyword">return</span> retryer.call(() -&gt; <span class="built_in">this</span>.rpcClient.sendRequest(rpcRequest));</span><br></pre></td></tr></table></figure>
+
+<p><code>notEqual</code> 比较的是枚举 <code>RespCodeEnum.SUCCESS</code> 和响应里的 <code>Integer</code> code，两者对不上，非空响应也会进入重试。默认代理调用的是 <code>sendRequest</code>，这条重试要自己接上 <code>RpcClient</code> 才会生效。</p>
+<h2 id="10-跑通-UserService"><a href="#10-跑通-UserService" class="headerlink" title="10. 跑通 UserService"></a>10. 跑通 UserService</h2><p>接口和实现都很小。实现不读入参，固定返回一个用户，方便你确认字节确实走了一个来回。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    User <span class="title function_">getUserById</span><span class="params">(Integer id)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> User <span class="title function_">getUserById</span><span class="params">(Integer id)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> User.builder().id(<span class="number">1</span>).name(<span class="string">&quot;test&quot;</span>).build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>先起 ZooKeeper，再起服务端。<code>start</code> 会阻塞，这个测试方法不会自己结束。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">UserService</span> <span class="variable">userService</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UserServiceImpl</span>();</span><br><span class="line"><span class="type">ServerProvider</span> <span class="variable">serverProvider</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ServerProvider</span>(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">9999</span>);</span><br><span class="line">serverProvider.provideServiceInterface(userService);</span><br><span class="line"></span><br><span class="line"><span class="type">RpcServer</span> <span class="variable">rpcServer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NettyRpcServer</span>(serverProvider);</span><br><span class="line">rpcServer.start(<span class="number">9999</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这时 ZooKeeper 上会出现：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/JotaroRpc/com.jotaro.api.UserService/127.0.0.1:9999</span><br></pre></td></tr></table></figure>
+
+<p>前半段是永久节点，最后一段是临时节点。客户端再拿代理调用：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">NettyClientProxy</span> <span class="variable">proxy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NettyClientProxy</span>();</span><br><span class="line"><span class="type">UserService</span> <span class="variable">userService</span> <span class="operator">=</span> proxy.getProxy(UserService.class);</span><br><span class="line"><span class="type">User</span> <span class="variable">user</span> <span class="operator">=</span> userService.getUserById(<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这一次会向 ZooKeeper 要 <code>com.jotaro.api.UserService</code> 的子节点，轮询选中 <code>127.0.0.1:9999</code>，发出一条 JSON 帧。服务端反射进 <code>getUserById</code>，把 <code>User</code> 写回后关闭连接。<code>user</code> 就是 <code>id = 1</code>、<code>name = test</code>。</p>
+<p>ZooKeeper 不在本机 2181 时，在 classpath 放 <code>zk.propertis</code>：</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">jrpc.zk.address</span>=<span class="string">127.0.0.1:2181</span></span><br></pre></td></tr></table></figure>
+
+<p>换均衡器，改 <code>ZKServiceCenter</code> 里的 <code>this.loadBalancer</code>。换序列化，改两端 pipeline 里 <code>JotaroEncoder</code> 的参数。帧头上的类型会跟着变，解码器按这个类型选实现。</p>
+
+                    
+                </div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">源码阅读</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/JRpc/">JRpc</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/RPC/">RPC</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/Netty/">Netty</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/ZooKeeper/">ZooKeeper</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                    </div>
+                </div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/2026/10/03/memcached-threading-model/"
+                                   title="Memcached 多线程模型：监听、CQ、Worker 与共享缓存"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">Memcached 多线程模型：监听、CQ、Worker 与共享缓存</span>
+                                        <span class="post-nav-item">Next posts</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+
+
+                
+            </div>
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="copyright-info info-item">
+    &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2026
+    
+            &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">JotaroRD</a>
+        
+    </div>
+
+    <div class="theme-info info-item">
+        Powered by&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;&&nbsp;Theme&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+    </div>
+
+    
+
+    
+
+    
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="post-tools-list border-box">
+        <!-- PC encrypt again -->
+        
+
+        <!-- PC TOC show toggle -->
+        
+
+        <!-- PC go comment -->
+        
+
+        <!-- PC full screen -->
+        <li class="tools-item flex-center full-screen">
+            <i class="fa-solid fa-expand"></i>
+        </li>
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <!-- toggle mode -->
+        
+            <li class="tools-item tool-toggle-theme-mode flex-center">
+                <i class="fas fa-moon"></i>
+            </li>
+        
+
+        <!-- rss -->
+        
+
+        <!-- to bottom -->
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+</main>
+
+
+
+
+
+<!-- common js -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/toggle-theme.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/code-block.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/libs/anime.min.js"></script>
+
+<!-- local search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/local-search.js"></script>
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    <!-- home page -->
+    
+
+    <!-- post page -->
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.2.5/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+
+        <!-- copyright-info -->
+        
+
+        <!-- share -->
+        
+    
+
+    <!-- categories page -->
+    
+
+    <!-- links page -->
+    
+
+    <!-- photos page -->
+    
+
+    <!-- tools page -->
+    
+</div>
+
+<!-- mermaid -->
+
+    
+<script src="//cdn.jsdelivr.net/npm/mermaid@10.5.0/dist/mermaid.min.js"></script>
+
+
+
+
+
+
+<!-- pjax -->
+
+
+
+    
+        
+    
+        
+            
+<script class="custom-inject-js" src="/js/selection-comments-v2.js" data-pjax></script>
+
+        
+    
+
+</body>
+</html>
